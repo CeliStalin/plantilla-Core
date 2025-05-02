@@ -7,7 +7,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "strict": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
