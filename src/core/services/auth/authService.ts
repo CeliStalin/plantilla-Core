@@ -2,8 +2,8 @@ import { AuthProvider } from './authProviderMsal';
 import { IUser } from '../../interfaces/IUserAz';
 import { UsuarioAd } from '../../interfaces/IUsuarioAD';
 import { RolResponse } from '../../interfaces/IRol';
-import { mapRawToUsuarioAd } from '../../Utils/MapperRawToUsuarioAd';
-import { mapRawArrayToRolResponseArray } from '../../Utils/MapperRawToRol';
+import { mapRawToUsuarioAd } from '../../utils/MapperRawToUsuarioAd';
+import { mapRawArrayToRolResponseArray } from '../../utils/MapperRawToRol';
 
 export class AuthService {
   public static async getMe(): Promise<IUser> {

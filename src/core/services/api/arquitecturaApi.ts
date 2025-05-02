@@ -9,7 +9,7 @@ import {
   mapRawArrayToRolResponseArray, 
   mapRawToUsuarioAd, 
   mapRawArrayToElementMenuArray 
-} from '../../Utils/mappers';
+} from '../../utils/mappers';
 
 export class ArquitecturaApi {
 

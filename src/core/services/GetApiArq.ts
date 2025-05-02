@@ -1,11 +1,11 @@
-import { GetApiArquitectura, GetSistema,FetchWithTimeout,GetNameApiKey,GetKeyApiKey} from '../Utils/GetEnvVariables'
+import { GetApiArquitectura, GetSistema,FetchWithTimeout,GetNameApiKey,GetKeyApiKey} from '../utils/GetEnvVariables'
 import { RolResponse } from '../interfaces/IRol'
 import { UsuarioAd } from '../interfaces/IUsuarioAD'
 import { RawUsuarioAD } from '../interfaces/IRawUsuarioAD'
-import { mapRawToUsuarioAd } from '../Utils/MapperRawToUsuarioAd'
-import { mapRawArrayToRolResponseArray } from '../Utils/MapperRawToRol'
+import { mapRawToUsuarioAd } from '../utils/MapperRawToUsuarioAd'
+import { mapRawArrayToRolResponseArray } from '../utils/MapperRawToRol'
 import { RawMenusElemento } from '../interfaces/IRawMenusElmento'
-import { mapRawArrayToElementMenuArray } from '../Utils/MapperRawMenus'
+import { mapRawArrayToElementMenuArray } from '../utils/MapperRawMenus'
 import { ElementMenu } from '../interfaces/IMenusElementos'
 
 const ApiRoles = async(mail: string): Promise<RolResponse[]> => {

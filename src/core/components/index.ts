@@ -1,6 +1,15 @@
 export * from './Button';
 export * from './Card';
+export { Counter } from './Counter';
+export * from './Dashboard';
 export * from './ErrorBoundary';
+export * from './ErrorMessage';
 export * from './Layout';
 export * from './Loading';
+export * from './MainPage';
 export * from './NavMenu';
+export * from './UserLogin';
+export { default as NotFound } from './NotFound';
+export { default as Unauthorized } from './Unauthorized';
+export { default as HomePage } from './HomePage';
+export { default as SecureLayout } from './SecureLayout/SecureLayout';
