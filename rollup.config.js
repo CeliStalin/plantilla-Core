@@ -40,4 +40,4 @@ export default {
     terser(),
   ],
   external: ['react', 'react-dom', 'react-router-dom', '@azure/msal-browser', 'bulma', 'axios'],
-};
+}
