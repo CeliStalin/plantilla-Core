@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider as MsalAuthProvider } from './core/services/auth/authProviderMsal';
 import { AuthProvider } from './core/context/AuthContext';
+import { MenuConfigProvider } from './core/context/MenuConfigContext';
 import { ErrorBoundary } from './core/components/ErrorBoundary';
 import { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
 import { PrivateRoute } from './core/routes/PrivateRoute';
@@ -115,47 +116,50 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <AuthProvider>
-        <Router>
-          <Suspense fallback={<LoadingOverlay show message="Cargando aplicación..." />}>
-            <Routes>
-              {/* Ruta raíz redirecciona a /home */}
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              
-              {/* Rutas públicas */}
-              {routes
-                .filter(route => route.public)
-                .map(route => (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={
-                      <PublicRoute>
-                        <route.component />
-                      </PublicRoute>
-                    }
-                  />
-                ))}
-              
-              {/* Rutas privadas */}
-              {routes
-                .filter(route => !route.public)
-                .map(route => (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={
-                      <PrivateRoute allowedRoles={route.roles || []}>
-                        <route.component />
-                      </PrivateRoute>
-                    }
-                  />
-                ))}
-              
-              {/* Ruta 404 */}
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </Suspense>
-        </Router>
+        {/* Usa el MenuConfigProvider sin configuración específica para usar valores por defecto */}
+        <MenuConfigProvider>
+          <Router>
+            <Suspense fallback={<LoadingOverlay show message="Cargando aplicación..." />}>
+              <Routes>
+                {/* Ruta raíz redirecciona a /home */}
+                <Route path="/" element={<Navigate to="/home" replace />} />
+                
+                {/* Rutas públicas */}
+                {routes
+                  .filter(route => route.public)
+                  .map(route => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <PublicRoute>
+                          <route.component />
+                        </PublicRoute>
+                      }
+                    />
+                  ))}
+                
+                {/* Rutas privadas */}
+                {routes
+                  .filter(route => !route.public)
+                  .map(route => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <PrivateRoute allowedRoles={route.roles || []}>
+                          <route.component />
+                        </PrivateRoute>
+                      }
+                    />
+                  ))}
+                
+                {/* Ruta 404 */}
+                <Route path="*" element={<Navigate to="/404" replace />} />
+              </Routes>
+            </Suspense>
+          </Router>
+        </MenuConfigProvider>
       </AuthProvider>
     </ErrorBoundary>
   );

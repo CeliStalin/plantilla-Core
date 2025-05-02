@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { ApiGetMenus } from "../../services/GetApiArq";
 import { ElementMenu } from "../../interfaces/IMenusElementos";
 import useAuth from "../../hooks/useAuth";
+import { useMenuConfig } from "../../context/MenuConfigContext";
 import { navMenuStyles } from './styles/navMenu.styles';
 import { MenuItem } from './components/MenuItem';
 import { MenuSection } from './components/MenuSection';
@@ -15,9 +16,10 @@ interface NavMenuAppProps {
 
 const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
   const { roles, isSignedIn } = useAuth();
+  const { enableDynamicMenu } = useMenuConfig(); // Usar el hook para acceder a la configuración
   const location = useLocation();
   const [menuItems, setMenuItems] = useState<ElementMenu[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(enableDynamicMenu);
   
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   
@@ -44,6 +46,13 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
 
   useEffect(() => {
     const fetchMenu = async () => {
+      // Si la carga dinámica está deshabilitada, no hacer la llamada a la API
+      if (!enableDynamicMenu) {
+        setMenuItems([]);
+        setLoading(false);
+        return;
+      }
+
       try {
         if (roles.length === 0) {
           setMenuItems([]);
@@ -68,7 +77,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     };
   
     fetchMenu();
-  }, [hasDevelopersRole, roles]);
+  }, [hasDevelopersRole, roles, enableDynamicMenu]);
 
   const handleToggle = () => {
     const newState = !isCollapsed;
@@ -78,9 +87,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     }
   };
 
-  // Esta función construye correctamente la URL para cada elemento del menú
   const buildMenuItemPath = (controlador: string, accion: string): string => {
-    // Convertir primera letra a minúscula para controlador si es necesario
     const formattedControlador = controlador.charAt(0).toLowerCase() + controlador.slice(1);
     return `/${formattedControlador}/${accion}`;
   };
@@ -125,7 +132,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     );
   }
 
-  // Si no está autenticado, no mostrar el menú
   if (!isSignedIn) {
     return null;
   }
@@ -176,19 +182,17 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                 />
               </MenuSection>
 
-              {/* Menú de Aplicaciones - Solo visible para rol Developers */}
-              {hasDevelopersRole && menuItems.length > 0 && (
+              {/* Menú Dinámico - Solo visible si está habilitado y hay elementos */}
+              {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
                 <MenuSection title="Aplicaciones">
-                  {/* Mostrar solo los elementos que vienen de la API */}
                   {menuItems.map((item) => {
-                    // Construir la ruta correctamente usando controlador y acción
                     const itemPath = buildMenuItemPath(item.Controlador, item.Accion);
                     
                     return (
                       <MenuItem 
                         key={item.Id}
                         to={itemPath}
-                        label={item.Descripcion} // Usar la descripción como etiqueta del menú
+                        label={item.Descripcion}
                         isActive={isPathActive(itemPath)}
                       />
                     );
