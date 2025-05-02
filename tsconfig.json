@@ -1,19 +1,23 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-
   "compilerOptions": {
-    "strictNullChecks": false, // Opcional: solo si los errores persisten
-    "noImplicitAny": false,     // Opcional: solo si los errores persisten
-    "jsx": "react-jsx",
+    "target": "ES2018",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "jsx": "react",
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx", "src/main.tsx", "src/App.tsx"]
 }
