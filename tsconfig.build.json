@@ -1,0 +1,25 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "dist",
+      "declaration": true,
+      "declarationDir": "dist",
+      "sourceMap": true,
+      "noEmit": false,
+      "isolatedModules": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "exclude": [
+      "node_modules",
+      "dist",
+      "src/**/*.test.ts",
+      "src/**/*.test.tsx",
+      "src/**/*.stories.tsx",
+      "src/App.tsx",
+      "src/main.tsx"
+    ],
+    "include": ["src"]
+  }

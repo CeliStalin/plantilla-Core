@@ -1,0 +1,39 @@
+# Archivos de desarrollo y configuración
+src
+tests
+.vscode
+.github
+.idea
+.git
+node_modules
+
+# Archivos de configuración de herramientas
+jest.config.cjs
+babel.config.cjs
+.eslintrc.js
+.eslint.config.js
+.prettierrc
+.babelrc
+vite.config.ts
+tsconfig.json
+tsconfig.*.json
+!tsconfig.build.json
+
+# Archivos de logs y errores
+npm-debug.log
+yarn-error.log
+logs
+*.log
+
+# Archivos generados en desarrollo
+coverage
+*.local
+.env
+.env.*
+!.env.example
+
+# Excepciones: archivos que quieres incluir
+!dist
+!package.json
+!README.md
+!LICENSE

@@ -1,95 +1,168 @@
-# Plantilla React Consalud
+# @consalud/core
 
-Este proyecto es una plantilla de React utilizando TypeScript, React Router y autenticación con Azure AD.
-
-## Requisitos previos
-
-- Node.js (versión 18.x o superior)
-- npm (versión 9.x o superior)
+Biblioteca core para aplicaciones React de Consalud, proporcionando componentes, hooks, servicios y utilidades comunes para todas las aplicaciones.
 
 ## Instalación
 
-1. Clona este repositorio:
 ```bash
-git clone [https://devops.consalud.net/Consalud/PlantillaReact/_git/PlantillaReactConsalud]
-cd PlantillaReactConsalud
+npm install @consalud/core
+
+# o usando yarn
+yarn add @consalud/core
+
+# o usando pnpm
+pnpm add @consalud/core
 ```
 
-2. Instala las dependencias:
-```bash
-npm install
+## Requisitos
+
+Esta biblioteca tiene como peerDependencies:
+
+- React 19.x
+- React DOM 19.x
+- React Router DOM 7.x
+- @azure/msal-browser 4.x
+- Bulma CSS 1.x
+
+Asegúrate de tener estas dependencias instaladas en tu proyecto.
+
+## Uso
+
+### Configuración básica
+
+Para configurar tu aplicación con el core, necesitas envolver tu aplicación con los providers necesarios:
+
+```jsx
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider, MenuConfigProvider } from '@consalud/core';
+
+function App() {
+  return (
+    <AuthProvider>
+      <MenuConfigProvider config={{ enableDynamicMenu: true }}>
+        <BrowserRouter>
+          {/* Tu aplicación */}
+        </BrowserRouter>
+      </MenuConfigProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;
 ```
 
+### Componentes
 
-## Desarrollo
+El core proporciona varios componentes reutilizables:
 
-Para iniciar el servidor de desarrollo:
+```jsx
+import { 
+  Button, 
+  Card, 
+  Layout, 
+  NavMenuApp, 
+  ErrorBoundary, 
+  LoadingOverlay 
+} from '@consalud/core';
 
-```bash
-npm run dev
+// Ejemplo de uso
+function MyComponent() {
+  return (
+    <ErrorBoundary>
+      <Layout>
+        <Card title="Mi Tarjeta">
+          <p>Contenido de la tarjeta</p>
+          <Button variant="primary">Click Me</Button>
+        </Card>
+      </Layout>
+    </ErrorBoundary>
+  );
+}
 ```
 
-## Construcción
+### Hooks
 
-Para crear una versión de producción:
+El core proporciona hooks para la autenticación y otras funcionalidades:
 
-```bash
-npm run build
+```jsx
+import { useAuth, useLocalStorage } from '@consalud/core';
+
+function MyComponent() {
+  const { isSignedIn, roles, login, logout } = useAuth();
+  const [preferences, setPreferences] = useLocalStorage('user-preferences', {});
+
+  // Usa los hooks...
+}
 ```
 
-Para previsualizar la versión de producción:
+### Rutas protegidas
 
-```bash
-npm run preview
+Puedes usar los componentes de rutas para proteger páginas por autenticación y roles:
+
+```jsx
+import { Route } from 'react-router-dom';
+import { PrivateRoute, PublicRoute } from '@consalud/core';
+import HomePage from './pages/Home';
+import LoginPage from './pages/Login';
+import AdminPage from './pages/Admin';
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={
+        <PublicRoute>
+          <LoginPage />
+        </PublicRoute>
+      } />
+      
+      <Route path="/" element={
+        <PrivateRoute>
+          <HomePage />
+        </PrivateRoute>
+      } />
+      
+      <Route path="/admin" element={
+        <PrivateRoute allowedRoles={['ADMIN']}>
+          <AdminPage />
+        </PrivateRoute>
+      } />
+    </Routes>
+  );
+}
 ```
 
-## Tests
+## Personalización
 
-Para ejecutar los tests:
+### Configuración del menú
 
-```bash
-npm test
+Puedes habilitar o deshabilitar el menú dinámico en cada aplicación:
+
+```jsx
+import { MenuConfigProvider } from '@consalud/core';
+
+// Para habilitar el menú dinámico (carga desde API)
+<MenuConfigProvider config={{ enableDynamicMenu: true }}>
+  {/* Tu aplicación */}
+</MenuConfigProvider>
+
+// Para deshabilitar el menú dinámico (solo menú básico)
+<MenuConfigProvider>
+  {/* Tu aplicación */}
+</MenuConfigProvider>
 ```
 
-## Tecnologías principales
+## Contribución
 
-- React 19
-- TypeScript
-- Vite 6
-- React Router DOM 7
-- Jest + React Testing Library
-- Microsoft Graph Toolkit
-- Bulma CSS
+Para contribuir a esta biblioteca, por favor sigue estos pasos:
 
-## Estructura del proyecto
+1. Clona el repositorio
+2. Instala las dependencias: `npm install`
+3. Haz tus cambios
+4. Ejecuta las pruebas: `npm test`
+5. Construye la biblioteca: `npm run build:lib`
+6. Envía un pull request
 
-```
-PlantillaReactConsalud/
-├── public/             # Archivos estáticos
-├── src/
-│   ├── components/     # Componentes React
-│   ├── hooks/          # Hooks personalizados
-│   ├── utils/          # Utilidades
-│   ├── App.tsx         # Componente principal
-│   └── main.tsx        # Punto de entrada
-├── test/
-│   ├── components/     # Tests de componentes
-│   ├── hooks/          # Tests de hooks
-│   ├── utils/          # Tests de utilidades
-│   └── test-utils.tsx  # Utilidades para testing
-├── .env                # Variables de entorno (no incluido en repositorio)
-├── .gitignore
-├── jest.config.cjs     # Configuración de Jest
-├── package.json
-├── tsconfig.json       # Configuración de TypeScript
-└── vite.config.ts      # Configuración de Vite
-```
+## Licencia
 
-## Scripts disponibles
-
-- `npm run dev`: Inicia el servidor de desarrollo
-- `npm run build`: Crea una versión de producción
-- `npm run lint`: Ejecuta el linter
-- `npm run preview`: Previsualiza la versión de producción
-- `npm test`: Ejecuta los tests
-
+Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.

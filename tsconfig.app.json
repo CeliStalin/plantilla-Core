@@ -32,5 +32,5 @@
     /* Añadido para TypeScript reconozca import.meta */
     "types": ["vite/client","node"]
   },
-  "include": ["src", "src/vite-env.d.ts"]
+  "include": ["src", "src/vite-env.d.ts", "tsconfig.build.json"]
 }

@@ -4,6 +4,7 @@ import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
+import path from 'path';
 
 export default {
   input: 'src/index.ts',
@@ -21,11 +22,22 @@ export default {
   ],
   plugins: [
     peerDepsExternal(),
-    resolve(),
+    resolve({
+      extensions: ['.js', '.jsx', '.ts', '.tsx']
+    }),
     commonjs(),
-    typescript({ tsconfig: './tsconfig.json' }),
-    postcss(),
+    typescript({ 
+      tsconfig: './tsconfig.json',
+      declaration: true,
+      declarationDir: 'dist',
+      exclude: ['**/__tests__', '**/*.test.ts', '**/*.test.tsx']
+    }),
+    postcss({
+      extensions: ['.css'],
+      minimize: true,
+      extract: path.resolve('dist/styles.css')
+    }),
     terser(),
   ],
-  external: ['react', 'react-dom'],
+  external: ['react', 'react-dom', 'react-router-dom', '@azure/msal-browser', 'bulma', 'axios'],
 };

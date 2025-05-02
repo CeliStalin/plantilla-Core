@@ -56,3 +56,5 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle }) => {
     </div>
   );
 };
+
+export default Layout;
