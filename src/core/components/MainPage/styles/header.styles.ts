@@ -1,4 +1,4 @@
-import { theme } from '../../styles/theme';
+import { theme } from '@/core/styles/theme';
 
 export const headerStyles = {
   backgroundColor: theme.colors.primary,

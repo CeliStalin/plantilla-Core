@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from './Header';
 import logoIcon from '@/assets/Logo.png';
-import { theme } from '@/styles/theme';
+import { theme } from '@/core/styles/theme';
 
 interface AuthLayoutProps {
   children: React.ReactNode;

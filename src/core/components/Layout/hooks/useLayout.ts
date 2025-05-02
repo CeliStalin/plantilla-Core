@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import useLocalStorage from '@/hooks/useLocalStorage'; 
+import useLocalStorage from '@/core/hooks/useLocalStorage';
 
 interface UseLayoutReturn {
   isCollapsed: boolean;
