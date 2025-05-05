@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// Eliminamos la importación de useHistory o useNavigate
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { Header } from './components/Header';
@@ -11,12 +10,11 @@ import { theme } from '../../styles/theme';
 import logoIcon from '../../../assets/Logo.png';
 
 const Login: React.FC = () => {
-  // Eliminamos useHistory/useNavigate
   // Usamos window.location para obtener los datos de la URL actual
   const location = {
     pathname: window.location.pathname,
     search: window.location.search,
-    state: history.state // Esto podría no funcionar exactamente igual que location.state
+    state: history.state
   };
   
   const { 
@@ -109,7 +107,6 @@ const Login: React.FC = () => {
       const apiUrl = import.meta.env.VITE_API_ARQUITECTURA_URL || import.meta.env.VITE_APP_API_ARQUITECTURA_URL;
       
       // Usar un endpoint que devuelva una respuesta rápida, como /health o similar
-      // Si no existe un endpoint específico, usa cualquier endpoint conocido
       const testUrl = `${apiUrl}/Usuario/test`;
       
       const controller = new AbortController();
@@ -241,7 +238,29 @@ const Login: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                  ) : !isSignedIn ? (
+                  ) : isSignedIn ? (
+                    // Si el usuario está autenticado, mostrar un estado de "redirigiendo" 
+                    <div className="field" style={{ width: '100%' }}>
+                      <div className="control">
+                        <button 
+                          className="button is-fullwidth is-primary"
+                          style={{
+                            ...styles.primaryButton,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            minHeight: '48px'
+                          }}
+                          disabled={true}
+                        >
+                          <LoadingDots size="small" />
+                          <span style={{ marginLeft: '8px' }}>
+                            Redirigiendo...
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
                     <div className="field" style={{ width: '100%' }}>
                       <div className="control">
                         <button 
@@ -257,23 +276,6 @@ const Login: React.FC = () => {
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>
                     </div>
-                  ) : (
-                    <>
-                      <UserInfo usuario={usuario} usuarioAD={usuarioAD} roles={roles} />
-                      
-                      <div className="field" style={{ width: '100%', marginTop: '24px' }}>
-                        <div className="control">
-                          <button 
-                            className="button is-fullwidth is-primary"
-                            style={styles.primaryButton}
-                            onClick={handleLogout}
-                            disabled={loading}
-                          >
-                            Cerrar sesión
-                          </button>
-                        </div>
-                      </div>
-                    </>
                   )}
                   
                   <ErrorMessages 

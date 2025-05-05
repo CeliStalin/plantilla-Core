@@ -101,11 +101,14 @@ export const useAuth = (): UseAuthReturn => {
       setErrorRoles(null);
       return;
     }
-
-    if (usuario && usuario.id && cache.current.has(usuario.id)) {
+    
+    // Si ya tenemos todos los datos, no volvemos a cargarlos
+    if (usuario && usuarioAD && roles.length > 0) {
+      console.log("Datos de usuario ya cargados, omitiendo carga");
       return;
     }
 
+    console.log("Iniciando carga de datos de usuario...");
     setLoading(true);
 
     try {
@@ -126,29 +129,39 @@ export const useAuth = (): UseAuthReturn => {
           setUsuario(null);
         }
       } else {
+        console.log("Datos de usuario obtenidos correctamente:", userData.displayName);
         setUsuario(userData);
         cache.current.set(userData.id, userData);
         
-        if (userData.mail) {
+        if (userData.mail || userData.userPrincipalName) {
+          const email = userData.mail || userData.userPrincipalName;
+          console.log("Usando email para obtener datos adicionales:", email);
 
           // Obtener datos de AD
           try {
-            const adData = await getUsuarioAD(userData.mail);
+            console.log("Obteniendo datos de AD...");
+            const adData = await getUsuarioAD(email);
+            console.log("Datos de AD obtenidos correctamente");
             setUsuarioAD(adData);
             setErrorAD(null);
           } catch (error) {
+            console.error('[useAuth] Error al obtener datos de AD:', error);
             setErrorAD(error instanceof Error ? error.message : String(error));
           }
 
           // Obtener roles
           try {
-            const rolesData = await getRoles(userData.mail);
+            console.log("Obteniendo roles...");
+            const rolesData = await getRoles(email);
+            console.log(`Roles obtenidos: ${rolesData.length}`);
             setRoles(rolesData);
             setErrorRoles(null);
           } catch (error) {
             console.error('[useAuth] Error al obtener roles:', error);
             setErrorRoles(error instanceof Error ? error.message : String(error));
           }
+        } else {
+          console.warn("El usuario no tiene email o userPrincipalName para obtener datos adicionales");
         }
       }
     } catch (err) {
@@ -156,11 +169,14 @@ export const useAuth = (): UseAuthReturn => {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
+      console.log("Carga de datos de usuario completada");
     }
   }, [isSignedIn]);
 
+  // Asegurarnos de que loadUserData se llame cuando el usuario inicie sesión
   useEffect(() => {
-    if (isSignedIn) {
+    if (isSignedIn && !loading) {
+      console.log("Usuario autenticado, cargando datos...");
       loadUserData();
     }
   }, [isSignedIn, loadUserData]);

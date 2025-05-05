@@ -2,30 +2,58 @@ import React, { useState, useEffect, useRef } from 'react';
 import { IUser } from '../../interfaces/IUserAz';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
+import { LoadingDots } from '../Login/components/LoadingDots';
 import logoutIcon from '../../../assets/Group.png';
 
 const UserLoginApp: React.FC = () => {
   const [localUserData, setLocalUserData] = useState<IUser | null>(null);
   const [showInfo, setShowInfo] = useState<boolean>(false);
-  const { logout, usuario, isLoggingOut } = useAuth();
+  const { logout, usuario, isLoggingOut, loadUserData } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
   const [isProcessingLogout, setIsProcessingLogout] = useState<boolean>(false);
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
     if (usuario) {
+      console.log("Usuario encontrado en contexto:", usuario.displayName);
       setLocalUserData(usuario);
       return;
     }
+    
     try {
       const userString = localStorage.getItem('usuario');
       if (userString) {
         const parsedUser = JSON.parse(userString);
+        console.log("Usuario encontrado en localStorage:", parsedUser.displayName);
         setLocalUserData(parsedUser);
+      } else {
+        console.log("No se encontró información de usuario en localStorage");
+        // Si no hay datos en localStorage pero debería haberlos, intentar cargarlos
+        if (loadUserData) {
+          setDataLoading(true);
+          loadUserData().finally(() => setDataLoading(false));
+        }
       }
     } catch (e) {
       console.error('Error al parsear los datos del usuario:', e);
     }
-  }, [usuario]);
+  }, [usuario, loadUserData]);
+
+  // Función para verificar que los datos están completos
+  const verifyUserData = React.useCallback(() => {
+    const effectiveUserData = usuario || localUserData;
+    if (!effectiveUserData || !effectiveUserData.displayName) {
+      console.log("Datos de usuario incompletos, intentando cargar...");
+      setDataLoading(true);
+      // Intentar cargar los datos de nuevo
+      loadUserData && loadUserData().finally(() => setDataLoading(false));
+    }
+  }, [usuario, localUserData, loadUserData]);
+
+  // Llamar a verificar datos cuando cambia el usuario
+  useEffect(() => {
+    verifyUserData();
+  }, [usuario, localUserData, verifyUserData]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -58,7 +86,6 @@ const UserLoginApp: React.FC = () => {
   const avatarSrc = effectiveUserData?.photo || 'https://www.gravatar.com/avatar?d=mp';
   
   const handleLogout = async () => {
-
     // Evitar múltiples clicks
     if (isProcessingLogout || isLoggingOut) {
       return;
@@ -94,8 +121,8 @@ const UserLoginApp: React.FC = () => {
     }
   };
 
-   // Obtener nombre y apellido de displayName
-   const getNameAndSurname = () => {
+  // Obtener nombre y apellido de displayName
+  const getNameAndSurname = () => {
     if (effectiveUserData?.displayName) {
       const parts = effectiveUserData.displayName.split(' ');
       if (parts.length >= 3) {
@@ -121,36 +148,43 @@ const UserLoginApp: React.FC = () => {
       }}
       ref={menuRef}
     >
-      <div 
-        onClick={handleToggleMenu}
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          cursor: 'pointer',
-          padding: '5px',
-          borderRadius: '5px',
-          backgroundColor: showInfo ? 'rgba(0, 0, 0, 0.1)' : 'transparent' 
-        }}
-      >
-        <img
-          src={avatarSrc}
-          alt="Usuario"
-          style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            border: '2px solid #ffffff',
-            boxShadow: '0 0 6px rgba(0, 0, 0, 0.1)',
-            marginRight: '10px',
+      {dataLoading ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <LoadingDots size="small" color="white" />
+          <span style={{ color: 'white', fontSize: '0.9rem' }}>Cargando...</span>
+        </div>
+      ) : (
+        <div 
+          onClick={handleToggleMenu}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            cursor: 'pointer',
+            padding: '5px',
+            borderRadius: '5px',
+            backgroundColor: showInfo ? 'rgba(0, 0, 0, 0.1)' : 'transparent' 
           }}
-        />
-        
-        {effectiveUserData && (
-          <div style={{ color: '#ffffff', fontSize: '0.9rem' }}>
-            <div>{getNameAndSurname()}</div>
-          </div>
-        )}
-      </div>
+        >
+          <img
+            src={avatarSrc}
+            alt="Usuario"
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              border: '2px solid #ffffff',
+              boxShadow: '0 0 6px rgba(0, 0, 0, 0.1)',
+              marginRight: '10px',
+            }}
+          />
+          
+          {effectiveUserData && effectiveUserData.displayName && (
+            <div style={{ color: '#ffffff', fontSize: '0.9rem' }}>
+              <div>{getNameAndSurname()}</div>
+            </div>
+          )}
+        </div>
+      )}
 
       <button
         onClick={handleLogout}
@@ -179,7 +213,7 @@ const UserLoginApp: React.FC = () => {
         }}
       >
         <img 
-           src={logoutIcon}
+          src={logoutIcon}
           alt="logout icon"
           style={{
             width: '30px',
@@ -207,7 +241,7 @@ const UserLoginApp: React.FC = () => {
           }}
         >
           <p>{effectiveUserData.displayName}</p>
-          <p>{effectiveUserData.mail}</p>
+          <p>{effectiveUserData.mail || effectiveUserData.userPrincipalName}</p>
         </div>
       )}
     </div>

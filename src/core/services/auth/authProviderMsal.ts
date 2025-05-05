@@ -1,5 +1,7 @@
 import { PublicClientApplication, Configuration, AuthenticationResult, AccountInfo, PopupRequest, RedirectRequest } from '@azure/msal-browser';
 
+
+
 // Configuración de MSAL
 const msalConfig: Configuration = {
   auth: {
