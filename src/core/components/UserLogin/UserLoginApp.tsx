@@ -95,6 +95,13 @@ const UserLoginApp: React.FC = () => {
     setLocalUserData(null);
     setShowInfo(false);
     
+    // Limpiar localStorage/sessionStorage primero
+    localStorage.removeItem('isLogin');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('usuarioAD');
+    localStorage.removeItem('roles');
+    sessionStorage.removeItem('authMethod');
+    
     try {
       // Verificar método de autenticación usado
       const authMethod = sessionStorage.getItem('authMethod');
@@ -106,35 +113,17 @@ const UserLoginApp: React.FC = () => {
         // Si no, usar el método normal
         await logout();
       }
+      
+      // Redirección manual en caso de que el método de MSAL no funcione
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1000);
     } catch (error) {
-      //  si hay un error, intentar limpiar datos locales
-      try {
-        sessionStorage.clear();
-        localStorage.removeItem('isLogin');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('usuarioAD');
-        localStorage.removeItem('roles');
-      } catch (e) {
-        console.error('[UserLoginApp] Error al limpiar datos locales:', e);
-      }
+      console.error('Error durante logout:', error);
+      // Redirección al login en caso de error
+      window.location.href = '/login';
       setIsProcessingLogout(false);
     }
-  };
-
-  // Obtener nombre y apellido de displayName
-  const getNameAndSurname = () => {
-    if (effectiveUserData?.displayName) {
-      const parts = effectiveUserData.displayName.split(' ');
-      if (parts.length >= 3) {
-        // Si tiene 3 o más partes, tomamos el primer nombre y el tercer elemento (primer apellido)
-        return `${parts[0]} ${parts[2]}`;
-      } else if (parts.length >= 2) {
-        // Si tiene exactamente 2 partes, las mostramos tal cual
-        return `${parts[0]} ${parts[1]}`;
-      }
-      return effectiveUserData.displayName;
-    }
-    return '';
   };
   
   return (
@@ -246,6 +235,22 @@ const UserLoginApp: React.FC = () => {
       )}
     </div>
   );
+
+  // Obtener nombre y apellido de displayName
+  function getNameAndSurname() {
+    if (effectiveUserData?.displayName) {
+      const parts = effectiveUserData.displayName.split(' ');
+      if (parts.length >= 3) {
+        // Si tiene 3 o más partes, tomamos el primer nombre y el tercer elemento (primer apellido)
+        return `${parts[0]} ${parts[2]}`;
+      } else if (parts.length >= 2) {
+        // Si tiene exactamente 2 partes, las mostramos tal cual
+        return `${parts[0]} ${parts[1]}`;
+      }
+      return effectiveUserData.displayName;
+    }
+    return '';
+  }
 };
 
 export default UserLoginApp;

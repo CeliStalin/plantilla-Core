@@ -185,15 +185,29 @@ const Login: React.FC = () => {
   // Función específica para manejar el logout teniendo en cuenta el método utilizado
   const handleLogout = async () => {
     try {
+      // Limpiar estado local primero
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuarioAD');
+      localStorage.removeItem('roles');
+      sessionStorage.removeItem('authMethod');
+      
       // Usar método adecuado según cómo se autenticó
       if (redirectMethodUsed) {
         await AuthProvider.logoutRedirect();
       } else {
         await logout();
       }
+      
+      // Fallback: Redirigir manualmente a /login si los métodos de MSAL fallan
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1000);
     } catch (error) {
       console.error('Error durante logout en componente Login:', error);
       setLocalError(error instanceof Error ? error.message : String(error));
+      // Fallback: Redirigir manualmente al login en caso de error
+      window.location.href = '/login';
     }
   };
 
@@ -239,24 +253,18 @@ const Login: React.FC = () => {
                       </div>
                     </div>
                   ) : isSignedIn ? (
-                    // Si el usuario está autenticado, mostrar un estado de "redirigiendo" 
+                    // Si el usuario está autenticado, mostrar botón para cerrar sesión 
                     <div className="field" style={{ width: '100%' }}>
                       <div className="control">
                         <button 
-                          className="button is-fullwidth is-primary"
+                          className="button is-fullwidth is-danger"
                           style={{
                             ...styles.primaryButton,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            minHeight: '48px'
+                            backgroundColor: theme.colors.danger,
                           }}
-                          disabled={true}
+                          onClick={handleLogout}
                         >
-                          <LoadingDots size="small" />
-                          <span style={{ marginLeft: '8px' }}>
-                            Redirigiendo...
-                          </span>
+                          Cerrar sesión
                         </button>
                       </div>
                     </div>

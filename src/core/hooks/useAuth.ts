@@ -224,6 +224,14 @@ export const useAuth = (): UseAuthReturn => {
     
     try {
       setLoading(true);
+      
+      // Limpiar estado local ANTES del logout de MSAL
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuarioAD');
+      localStorage.removeItem('roles');
+      sessionStorage.removeItem('authMethod');
+      
       // Determinar si estamos usando el flujo de redirección
       const isRedirectFlow = AuthProvider.isUsingRedirectFlow();
       
@@ -244,6 +252,8 @@ export const useAuth = (): UseAuthReturn => {
       setIsSignedIn(false);
       cache.current.clear();
       
+      // Redirección manual al login después del logout
+      window.location.href = '/login';
     } catch (err) {
       console.error('[useAuth] Error en proceso de logout:', err);
       setError(err instanceof Error ? err.message : String(err));
@@ -256,6 +266,9 @@ export const useAuth = (): UseAuthReturn => {
         localStorage.removeItem('usuarioAD');
         localStorage.removeItem('roles');
         setIsSignedIn(false);
+        
+        // Redirección al login en caso de error
+        window.location.href = '/login';
       } catch (e) {
         console.error('[useAuth] Error en limpieza manual:', e);
       }

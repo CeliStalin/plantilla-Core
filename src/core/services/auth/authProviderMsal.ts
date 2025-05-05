@@ -1,7 +1,5 @@
 import { PublicClientApplication, Configuration, AuthenticationResult, AccountInfo, PopupRequest, RedirectRequest } from '@azure/msal-browser';
 
-
-
 // Configuración de MSAL
 const msalConfig: Configuration = {
   auth: {
@@ -219,10 +217,17 @@ export class AuthProvider {
       const instance = await getMsalInstance();
       const account = await this.getActiveAccount();
       
+      // Limpiar estado local ANTES del logout de MSAL
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuarioAD');
+      localStorage.removeItem('roles');
+      sessionStorage.removeItem('authMethod');
+      
       if (account) {
         const logoutRequest = {
           account: account,
-          postLogoutRedirectUri: window.location.origin
+          postLogoutRedirectUri: `${window.location.origin}/login`  // Redirigir directamente al login
         };
         
         // Usar el mismo tipo de flujo que se utilizó para el inicio de sesión
@@ -230,21 +235,23 @@ export class AuthProvider {
           await instance.logoutRedirect(logoutRequest);
         } else {
           await instance.logoutPopup(logoutRequest);
+          // Forzar redirección manual después del popup
+          window.location.href = `${window.location.origin}/login`;
         }
-        
-        // Limpiar estado de autenticación
-        localStorage.removeItem('isLogin');
       } else {
         console.warn('No hay cuenta activa para cerrar sesión');
-        // Limpieza manual de caché
-        sessionStorage.clear();
-        localStorage.removeItem('isLogin');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('usuarioAD');
-        localStorage.removeItem('roles');
+        // Redirección manual al login
+        window.location.href = `${window.location.origin}/login`;
       }
     } catch (error) {
       console.error('Error durante logout:', error);
+      // Asegurar la limpieza y redirección incluso en caso de error
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuarioAD');
+      localStorage.removeItem('roles');
+      sessionStorage.removeItem('authMethod');
+      window.location.href = `${window.location.origin}/login`;
       throw error;
     }
   }
@@ -255,33 +262,34 @@ export class AuthProvider {
       const instance = await getMsalInstance();
       const account = await this.getActiveAccount();
       
+      // Limpiar estado local ANTES del logout de MSAL
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuarioAD');
+      localStorage.removeItem('roles');
+      sessionStorage.removeItem('authMethod');
+      
       if (account) {
         const logoutRequest = {
           account: account,
-          postLogoutRedirectUri: window.location.origin
+          postLogoutRedirectUri: `${window.location.origin}/login`  // Redirigir directamente al login
         };
         
         await instance.logoutRedirect(logoutRequest);
       } else {
         console.warn('No hay cuenta activa para cerrar sesión');
-        // Limpieza manual de caché
-        sessionStorage.clear();
-        localStorage.removeItem('isLogin');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('usuarioAD');
-        localStorage.removeItem('roles');
-        // Redirigir manualmente
-        window.location.href = window.location.origin;
+        // Redirección manual al login
+        window.location.href = `${window.location.origin}/login`;
       }
     } catch (error) {
       console.error('Error durante logoutRedirect:', error);
-      // Intentar limpieza manual y redirección si falla el logout normal
-      sessionStorage.clear();
+      // Asegurar la limpieza y redirección incluso en caso de error
       localStorage.removeItem('isLogin');
       localStorage.removeItem('usuario');
       localStorage.removeItem('usuarioAD');
       localStorage.removeItem('roles');
-      window.location.href = window.location.origin;
+      sessionStorage.removeItem('authMethod');
+      window.location.href = `${window.location.origin}/login`;
       throw error;
     }
   }
