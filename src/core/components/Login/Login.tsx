@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { Header } from './components/Header';
@@ -17,7 +17,8 @@ interface LocationState {
 }
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
+  // Usar useHistory en lugar de useNavigate para compatibilidad con react-router v5
+  const history = useHistory();
   const location = useLocation();
   const { 
     isSignedIn, 
@@ -52,6 +53,17 @@ const Login: React.FC = () => {
     }
   }, [location.search, redirectMethodUsed]);
 
+  // Redirigir al usuario automáticamente si ya está autenticado
+  useEffect(() => {
+    if (isSignedIn && !isInitializing && !loading) {
+      const state = location.state as LocationState;
+      // Redirigir a la ruta original o a /home por defecto
+      const from = state?.from?.pathname || '/home';
+      console.log(`Usuario ya autenticado en Login, redirigiendo a: ${from}`);
+      history.replace(from);
+    }
+  }, [isSignedIn, isInitializing, loading, history, location]);
+
   // Limpiar cache al cargar
   useEffect(() => {
     // Función para limpiar sesiones anteriores
@@ -78,16 +90,6 @@ const Login: React.FC = () => {
     
     clearSessions();
   }, [isSignedIn, isInitializing, redirectMethodUsed]);
-
-  // Redirigir si ya está autenticado
-  useEffect(() => {
-    if (isSignedIn && !isInitializing && !loading) {
-      const state = location.state as LocationState;
-      // redirigir a /home por defecto
-      const from = state?.from?.pathname || '/home';
-      navigate(from, { replace: true });
-    }
-  }, [isSignedIn, isInitializing, loading, navigate, location]);
 
   // Función para verificar acceso a la red corporativa
   const checkNetworkAccess = async (): Promise<boolean> => {
@@ -140,7 +142,7 @@ const Login: React.FC = () => {
     }
   };
 
-  // Función que usa redirección para login con verificación de red
+  // Función mejorada para login con redirección
   const handleLoginRedirect = async () => {
     setIsLoggingIn(true);
     setLocalError(null);
@@ -155,22 +157,21 @@ const Login: React.FC = () => {
         return;
       }
 
-      // Continuar con el flujo normal de login
+      // Establecer método de redirección
       AuthProvider.setUseRedirectFlow(true);
       setRedirectMethodUsed(true);
       
-      // Limpiar sessionStorage para forzar una autenticación limpia
-      sessionStorage.clear();
-      
-      // Establecer en sessionStorage que estamos usando el método de redirección
+      // Guardar explícitamente el método en sessionStorage
       sessionStorage.setItem('authMethod', 'redirect');
+      
+      // Registrar la URL actual para redirección posterior
+      const currentPath = location.pathname;
+      sessionStorage.setItem('loginRedirectPath', currentPath);
       
       // Usar loginRedirect
       await AuthProvider.loginRedirect();
-      
-      // La navegación se maneja automáticamente por redireccionamiento
     } catch (error) {
-      console.error('Error durante login redirect en componente Login:', error);
+      console.error('Error durante login redirect:', error);
       setLocalError(error instanceof Error ? error.message : String(error));
       setIsLoggingIn(false);
     }

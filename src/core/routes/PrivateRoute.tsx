@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Redirect, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -14,20 +13,20 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   allowedRoles = [],
   redirectPath = '/login'
 }) => {
-  // Eliminamos 'roles' de la desestructuración ya que no se usa directamente
   const { isSignedIn, isInitializing, loading, hasAnyRole } = useAuth();
   const location = useLocation();
-  const [isVerifying, setIsVerifying] = useState(true);
   
   useEffect(() => {
-    // Solo verificamos una vez que la autenticación esté completa
+    // Registrar evento de verificación de autenticación
     if (!isInitializing && !loading) {
-      setIsVerifying(false);
+      console.log("PrivateRoute: Estado de autenticación -", 
+                  isSignedIn ? "Autenticado" : "No autenticado", 
+                  "Ruta:", location.pathname);
     }
-  }, [isInitializing, loading]);
+  }, [isInitializing, loading, isSignedIn, location.pathname]);
   
-  // Si está cargando o inicializando, mostrar un indicador de carga simple
-  if (isInitializing || loading || isVerifying) {
+  // Si está cargando o inicializando, mostrar un indicador de carga
+  if (isInitializing || loading) {
     return (
       <div style={{
         display: 'flex',
@@ -43,7 +42,11 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
 
   // Si no está autenticado, redirigir al login
   if (!isSignedIn) {
-    return <Navigate to={redirectPath} state={{ from: location }} replace />;
+    console.log("Usuario no autenticado, redirigiendo a login desde:", location.pathname);
+    return <Redirect to={{
+      pathname: redirectPath,
+      state: { from: location }
+    }} />;
   }
 
   // Si se requieren roles específicos, verificar si el usuario tiene al menos uno
@@ -53,7 +56,11 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
     
     if (!userHasPermission) {
       // Redirigir a página de no autorizado si no tiene los roles
-      return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+      console.log("Usuario sin roles necesarios, redirigiendo a no autorizado");
+      return <Redirect to={{
+        pathname: "/unauthorized",
+        state: { from: location }
+      }} />;
     }
   }
 

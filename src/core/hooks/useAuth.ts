@@ -61,11 +61,19 @@ export const useAuth = (): UseAuthReturn => {
         
         if (!mounted) return;
 
-        // Verificar si está autenticado usando la nueva implementación
-        const signedIn = await AuthProvider.isAuthenticated();
+        // Verificar si hay redirección pendiente
+        const redirectResponse = await AuthProvider.handleRedirectPromise();
         
-        if (signedIn !== isSignedIn) {
-          setIsSignedIn(signedIn);
+        if (redirectResponse && redirectResponse.account) {
+          console.log("Respuesta de redirección procesada en useAuth");
+          setIsSignedIn(true);
+        } else {
+          // Verificar estado de autenticación usando método mejorado
+          const signedIn = await AuthProvider.isAuthenticated();
+          
+          if (signedIn !== isSignedIn) {
+            setIsSignedIn(signedIn);
+          }
         }
       } catch (error) {
         console.error('[useAuth] Error en inicialización:', error);

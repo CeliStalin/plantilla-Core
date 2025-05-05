@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider as MsalAuthProvider } from './core/services/auth/authProviderMsal';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { AuthProvider } from './core/context/AuthContext';
 import { MenuConfigProvider } from './core/context/MenuConfigContext';
 import { ErrorBoundary } from './core/components/ErrorBoundary';
@@ -8,6 +7,7 @@ import { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
 import { PrivateRoute } from './core/routes/PrivateRoute';
 import { PublicRoute } from './core/routes/PublicRoute';
 import { routes } from './core/routes/routes.config';
+import { AuthProvider as MsalProvider } from './core/services/auth/authProviderMsal';
 import './App.css';
 
 // Componente de error genérico
@@ -29,10 +29,9 @@ const App: React.FC = () => {
   useEffect(() => {
     const initMsal = async () => {
       try {
-        await MsalAuthProvider.initialize();
+        await MsalProvider.initialize();
         console.log("MSAL inicializado correctamente en App");
       } catch (error) {
-        // Evitamos imprimir el objeto de error directamente
         console.error("Error al inicializar MSAL en App:", 
           error instanceof Error ? error.message : 'Error desconocido');
       }
@@ -48,13 +47,32 @@ const App: React.FC = () => {
         setIsHandlingRedirect(true);
         console.log("Verificando si hay redirecciones pendientes...");
         
-        const response = await MsalAuthProvider.handleRedirectPromise();
+        const response = await MsalProvider.handleRedirectPromise();
+        console.log("Respuesta de handleRedirectPromise:", response ? "Recibida" : "No hay respuesta");
+        
         if (response) {
           // Determinar si es login o logout y guardar estado
           const isLoginRedirect = response.account !== null;
+          console.log("¿Es login de redirección?", isLoginRedirect);
+          
           if (isLoginRedirect) {
             localStorage.setItem('isLogin', 'true');
             sessionStorage.setItem('authMethod', 'redirect');
+            
+            // Si estamos en login, redirigir a la página principal
+            if (window.location.pathname.includes('/login')) {
+              console.log("Redirigiendo a home después de autenticación");
+              // Recuperar la ruta original si existe
+              const savedPath = sessionStorage.getItem('loginRedirectPath');
+              const targetPath = savedPath && savedPath !== '/login' ? savedPath : '/home';
+              
+              // Pequeño retraso para permitir que el estado se actualice
+              setTimeout(() => {
+                window.location.href = targetPath;
+              }, 100);
+              
+              return; // Evitar que se establezca isHandlingRedirect a false hasta que se complete la redirección
+            }
           }
         }
       } catch (error) {
@@ -116,13 +134,12 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <AuthProvider>
-        {/* Usa el MenuConfigProvider sin configuración específica para usar valores por defecto */}
         <MenuConfigProvider>
           <Router>
             <Suspense fallback={<LoadingOverlay show message="Cargando aplicación..." />}>
-              <Routes>
+              <Switch>
                 {/* Ruta raíz redirecciona a /home */}
-                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route exact path="/" render={() => <Redirect to="/home" />} />
                 
                 {/* Rutas públicas */}
                 {routes
@@ -131,11 +148,11 @@ const App: React.FC = () => {
                     <Route
                       key={route.path}
                       path={route.path}
-                      element={
-                        <PublicRoute>
-                          <route.component />
+                      render={(props) => (
+                        <PublicRoute redirectPath="/home">
+                          <route.component {...props} />
                         </PublicRoute>
-                      }
+                      )}
                     />
                   ))}
                 
@@ -146,17 +163,17 @@ const App: React.FC = () => {
                     <Route
                       key={route.path}
                       path={route.path}
-                      element={
+                      render={(props) => (
                         <PrivateRoute allowedRoles={route.roles || []}>
-                          <route.component />
+                          <route.component {...props} />
                         </PrivateRoute>
-                      }
+                      )}
                     />
                   ))}
                 
                 {/* Ruta 404 */}
-                <Route path="*" element={<Navigate to="/404" replace />} />
-              </Routes>
+                <Route render={() => <Redirect to="/404" />} />
+              </Switch>
             </Suspense>
           </Router>
         </MenuConfigProvider>

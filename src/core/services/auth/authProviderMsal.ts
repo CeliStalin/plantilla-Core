@@ -84,7 +84,12 @@ export class AuthProvider {
     try {
       const instance = await getMsalInstance();
       const accounts = instance.getAllAccounts();
-      return accounts.length > 0;
+      
+      // Verificar tanto cuentas MSAL como localStorage
+      const hasAccounts = accounts.length > 0;
+      const isLoginInStorage = localStorage.getItem('isLogin') === 'true';
+      
+      return hasAccounts || isLoginInStorage;
     } catch (error) {
       console.error('Error al verificar autenticación:', error);
       return false;
@@ -152,6 +157,11 @@ export class AuthProvider {
         });
         
         console.log('Login exitoso con respuesta:', loginResponse);
+        
+        // Guardar estado de autenticación en localStorage
+        if (loginResponse && loginResponse.account) {
+          localStorage.setItem('isLogin', 'true');
+        }
       }
     } catch (error) {
       console.error('Error durante login:', error);
@@ -183,7 +193,18 @@ export class AuthProvider {
   public static async handleRedirectPromise(): Promise<AuthenticationResult | null> {
     try {
       const instance = await getMsalInstance();
-      return await instance.handleRedirectPromise();
+      const response = await instance.handleRedirectPromise();
+      
+      // Si obtenemos una respuesta válida, asegurémonos de guardar el estado
+      if (response && response.account) {
+        console.log("Autenticación por redirección completada, cuenta:", response.account.username);
+        localStorage.setItem('isLogin', 'true');
+        
+        // Guardar método de autenticación para consistencia
+        sessionStorage.setItem('authMethod', 'redirect');
+      }
+      
+      return response;
     } catch (error) {
       console.error('Error al manejar redirección:', error);
       return null;
@@ -208,6 +229,9 @@ export class AuthProvider {
         } else {
           await instance.logoutPopup(logoutRequest);
         }
+        
+        // Limpiar estado de autenticación
+        localStorage.removeItem('isLogin');
       } else {
         console.warn('No hay cuenta activa para cerrar sesión');
         // Limpieza manual de caché
