@@ -5,7 +5,6 @@ const msalConfig: Configuration = {
   auth: {
     clientId: import.meta.env.VITE_APP_CLIENT_ID || '',
     authority: import.meta.env.VITE_APP_AUTHORITY || '',
-    // Usar la ruta /login explícitamente como se hacía antes
     redirectUri: `${window.location.origin}/login`,
     postLogoutRedirectUri: window.location.origin,
     navigateToLoginRequestUrl: true,
@@ -25,24 +24,28 @@ const loginRequest: PopupRequest | RedirectRequest = {
 // Crear e inicializar la instancia de MSAL
 let msalInstance: PublicClientApplication | null = null;
 let initializationPromise: Promise<void> | null = null;
-let useRedirectFlow = false; // Nuevo flag para controlar el flujo
+let useRedirectFlow = false; // Flag para controlar el flujo
 
 // Inicializar MSAL como una promesa
 function initializeMsal(): Promise<void> {
   if (!initializationPromise) {
     initializationPromise = (async () => {
       try {
+        // Verificar que la configuración sea válida
+        if (!msalConfig.auth.clientId || !msalConfig.auth.authority) {
+          console.error('Error: No se encontró configuración válida para MSAL. Verifica las variables de entorno.');
+          throw new Error('Configuración de autenticación incompleta');
+        }
+        
         msalInstance = new PublicClientApplication(msalConfig);
         // Importante: esperar a que MSAL se inicialice completamente
         await msalInstance.initialize();
         
-
         // Esto ayudará a mantener consistencia entre loginRedirect y logoutRedirect
         const cachedAuthMethod = sessionStorage.getItem('authMethod');
         if (cachedAuthMethod === 'redirect') {
           useRedirectFlow = true;
         }
-
       } catch (error) {
         console.error('Error al inicializar MSAL:', error);
         msalInstance = null;
@@ -149,7 +152,6 @@ export class AuthProvider {
         });
         
         console.log('Login exitoso con respuesta:', loginResponse);
-
       }
     } catch (error) {
       console.error('Error durante login:', error);
