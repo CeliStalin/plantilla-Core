@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { Redirect, useLocation, useHistory } from 'react-router-dom';
-import { useAuth } from '@/core/hooks/useAuth';
-import { LoadingOverlay } from '@/core/components/Loading/LoadingOverlay';
+import useAuth from '../hooks/useAuth';
 
 interface PublicRouteProps {
   children: React.ReactNode;
@@ -13,29 +11,44 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
   redirectPath = '/home'
 }) => {
   const { isSignedIn, isInitializing } = useAuth();
-  const location = useLocation();
-  const history = useHistory();
-
+  
   useEffect(() => {
-    // Si el usuario está autenticado y estamos en una ruta pública, registrar evento
+    // Si está autenticado y no está inicializando, redirigir
     if (isSignedIn && !isInitializing) {
-      console.log("Usuario autenticado en ruta pública, redirigiendo a:", redirectPath);
+      // Verificar si hay una ruta guardada para redirigir
+      const savedPath = sessionStorage.getItem('redirectAfterLogin');
+      const targetPath = savedPath || redirectPath;
+      
+      // Limpiar la ruta guardada
+      if (savedPath) {
+        sessionStorage.removeItem('redirectAfterLogin');
+      }
+      
+      window.location.href = targetPath;
     }
   }, [isSignedIn, isInitializing, redirectPath]);
-
+  
+  // Mostrar un indicador de carga mientras verifica
   if (isInitializing) {
-    return <LoadingOverlay show message="Cargando..." />;
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}>
+        <div>Cargando...</div>
+      </div>
+    );
   }
-
-  if (isSignedIn) {
-    // Obtener la ruta original o usar el redirectPath predeterminado
-    const state = location.state as any;
-    const from = state?.from?.pathname || redirectPath;
-    
-    return <Redirect to={from} />;
+  
+  // Si no está autenticado, mostrar el contenido
+  if (!isSignedIn) {
+    return <>{children}</>;
   }
-
-  return <>{children}</>;
+  
+  // No mostrar nada mientras se procesa la redirección
+  return null;
 };
 
 export default PublicRoute;

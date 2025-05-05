@@ -1,31 +1,36 @@
 import React, { useEffect } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
   allowedRoles?: string[];
-  redirectPath?: string;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   children,
-  allowedRoles = [],
-  redirectPath = '/login'
+  allowedRoles = []
 }) => {
   const { isSignedIn, isInitializing, loading, hasAnyRole } = useAuth();
-  const location = useLocation();
   
   useEffect(() => {
-    // Registrar evento de verificación de autenticación
-    if (!isInitializing && !loading) {
-      console.log("PrivateRoute: Estado de autenticación -", 
-                  isSignedIn ? "Autenticado" : "No autenticado", 
-                  "Ruta:", location.pathname);
+    // Si no está inicializando y no está autenticado, redirigir a login
+    if (!isInitializing && !loading && !isSignedIn) {
+      const currentPath = window.location.pathname;
+      // Guardar la ruta actual para redireccionar después del login
+      sessionStorage.setItem('redirectAfterLogin', currentPath);
+      window.location.href = '/login';
     }
-  }, [isInitializing, loading, isSignedIn, location.pathname]);
+    
+    // Verificar roles si es necesario
+    if (!isInitializing && !loading && isSignedIn && allowedRoles.length > 0) {
+      const userHasPermission = hasAnyRole(allowedRoles);
+      if (!userHasPermission) {
+        window.location.href = '/unauthorized';
+      }
+    }
+  }, [isSignedIn, isInitializing, loading, hasAnyRole, allowedRoles]);
   
-  // Si está cargando o inicializando, mostrar un indicador de carga
+  // Mostrar un indicador de carga mientras verifica
   if (isInitializing || loading) {
     return (
       <div style={{
@@ -39,33 +44,14 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
       </div>
     );
   }
-
-  // Si no está autenticado, redirigir al login
-  if (!isSignedIn) {
-    console.log("Usuario no autenticado, redirigiendo a login desde:", location.pathname);
-    return <Redirect to={{
-      pathname: redirectPath,
-      state: { from: location }
-    }} />;
+  
+  // Si está autenticado y tiene los roles necesarios, mostrar el contenido
+  if (isSignedIn && (allowedRoles.length === 0 || hasAnyRole(allowedRoles))) {
+    return <>{children}</>;
   }
-
-  // Si se requieren roles específicos, verificar si el usuario tiene al menos uno
-  if (allowedRoles.length > 0) {
-    // Verificación mejorada de roles utilizando hasAnyRole del hook
-    const userHasPermission = hasAnyRole(allowedRoles);
-    
-    if (!userHasPermission) {
-      // Redirigir a página de no autorizado si no tiene los roles
-      console.log("Usuario sin roles necesarios, redirigiendo a no autorizado");
-      return <Redirect to={{
-        pathname: "/unauthorized",
-        state: { from: location }
-      }} />;
-    }
-  }
-
-  // Si pasó todas las verificaciones, mostrar el contenido protegido
-  return <>{children}</>;
+  
+  // No mostrar nada mientras se procesa la redirección
+  return null;
 };
 
 export default PrivateRoute;

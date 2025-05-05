@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+// Eliminamos la importación de useHistory o useNavigate
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { Header } from './components/Header';
@@ -10,16 +10,15 @@ import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
 import logoIcon from '../../../assets/Logo.png';
 
-interface LocationState {
-  from?: {
-    pathname: string;
-  };
-}
-
 const Login: React.FC = () => {
-  // Usar useHistory en lugar de useNavigate para compatibilidad con react-router v5
-  const history = useHistory();
-  const location = useLocation();
+  // Eliminamos useHistory/useNavigate
+  // Usamos window.location para obtener los datos de la URL actual
+  const location = {
+    pathname: window.location.pathname,
+    search: window.location.search,
+    state: history.state // Esto podría no funcionar exactamente igual que location.state
+  };
+  
   const { 
     isSignedIn, 
     usuario, 
@@ -56,13 +55,22 @@ const Login: React.FC = () => {
   // Redirigir al usuario automáticamente si ya está autenticado
   useEffect(() => {
     if (isSignedIn && !isInitializing && !loading) {
-      const state = location.state as LocationState;
-      // Redirigir a la ruta original o a /home por defecto
-      const from = state?.from?.pathname || '/home';
-      console.log(`Usuario ya autenticado en Login, redirigiendo a: ${from}`);
-      history.replace(from);
+      // Intentar obtener el estado guardado en sessionStorage
+      const savedRedirectPath = sessionStorage.getItem('redirectAfterLogin');
+      
+      // Redirigir a la ruta guardada o a /home por defecto
+      const redirectTo = savedRedirectPath || '/home';
+      console.log(`Usuario ya autenticado en Login, redirigiendo a: ${redirectTo}`);
+      
+      // Limpiar el path guardado
+      if (savedRedirectPath) {
+        sessionStorage.removeItem('redirectAfterLogin');
+      }
+      
+      // Usar window.location.href para la redirección
+      window.location.href = redirectTo;
     }
-  }, [isSignedIn, isInitializing, loading, history, location]);
+  }, [isSignedIn, isInitializing, loading]);
 
   // Limpiar cache al cargar
   useEffect(() => {
@@ -180,7 +188,6 @@ const Login: React.FC = () => {
   // Función específica para manejar el logout teniendo en cuenta el método utilizado
   const handleLogout = async () => {
     try {
-      
       // Usar método adecuado según cómo se autenticó
       if (redirectMethodUsed) {
         await AuthProvider.logoutRedirect();
