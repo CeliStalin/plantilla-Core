@@ -1,10 +1,9 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import { terser } from 'rollup-plugin-terser';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
-import url from '@rollup/plugin-url';
+import image from '@rollup/plugin-image';
 import path from 'path';
 
 export default {
@@ -29,6 +28,8 @@ export default {
     commonjs({
       include: 'node_modules/**',
     }),
+    // El plugin de imagen convierte imágenes a base64
+    image(),
     typescript({ 
       tsconfig: './tsconfig.json',
       declaration: true,
@@ -41,13 +42,7 @@ export default {
       minimize: true,
       extract: path.resolve('dist/styles.css')
     }),
-    url({
-      include: ['**/*.png', '**/*.jpg', '**/*.gif', '**/*.svg'],
-      limit: 0, 
-      fileName: '[dirname][name][extname]',
-      publicPath: 'dist/assets/'
-    }),
-    terser(),
+    // Eliminamos terser que está causando problemas
   ],
   external: [
     'react', 

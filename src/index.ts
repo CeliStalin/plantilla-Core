@@ -6,4 +6,5 @@ export * from './core/interfaces';
 export * from './core/services';
 export * from './core/utils';
 export * from './core/routes';
-export * from './core/styles';
+export { default as LogoImage } from './assets/Logo.png';
+export { default as LogoutIcon } from './assets/Group.png';
