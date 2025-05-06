@@ -1,38 +1,30 @@
-# @consalud/core
+# Consalud Core Library
 
-Una biblioteca central de componentes, hooks y utilidades para aplicaciones React en Consalud.
+Una biblioteca de componentes y utilidades para proyectos React en Consalud, diseñada para facilitar el desarrollo de aplicaciones front-end con un conjunto consistente de herramientas y estilos.
 
-![Versión](https://img.shields.io/badge/versión-0.1.0-blue)
-![Licencia](https://img.shields.io/badge/licencia-Privada-red)
+## 🌟 Características
 
-## 📋 Contenido
+- **Componentes Reutilizables**: Botones, tarjetas, formularios, diseños y más
+- **Autenticación**: Integración con Microsoft Azure AD mediante MSAL
+- **Enrutamiento**: Rutas protegidas y públicas con control de acceso basado en roles
+- **Manejo de Estado**: Hooks personalizados para gestión de estado y almacenamiento local
+- **Estilos**: Sistema de diseño con temas y estilos predefinidos
+- **Seguridad**: Prácticas recomendadas para implementaciones seguras
+- **Utilidades**: Herramientas comunes para manejo de API, fechas, y más
 
-- [Instalación](#instalación)
-- [Estructura](#estructura)
-- [Componentes](#componentes)
-- [Hooks](#hooks)
-- [Servicios](#servicios)
-- [Contextos](#contextos)
-- [Autenticación](#autenticación)
-- [Routing](#routing)
-- [Theming](#theming)
-- [Desarrollo](#desarrollo)
-- [Producción](#producción)
-
-## 🚀 Instalación
-
-Para instalar la biblioteca en tu proyecto:
+## 📦 Instalación
 
 ```bash
-npm install --save @consalud/core
+# Usando npm
+npm install @consalud/core
 
-# O usando yarn
+# Usando yarn
 yarn add @consalud/core
 ```
 
 ### Dependencias
 
-Esta biblioteca requiere las siguientes dependencias peer:
+Esta biblioteca requiere las siguientes dependencias en tu proyecto:
 
 ```json
 "peerDependencies": {
@@ -44,100 +36,148 @@ Esta biblioteca requiere las siguientes dependencias peer:
 }
 ```
 
-Asegúrate de tenerlas instaladas en tu proyecto.
+## 🚀 Uso Rápido
 
-## 📂 Estructura
+```jsx
+import React from 'react';
+import { 
+  AuthProvider, 
+  Button, 
+  Card, 
+  Layout, 
+  useAuth 
+} from '@consalud/core';
 
-La biblioteca está organizada en los siguientes módulos principales:
+// Configuración de autenticación
+const App = () => {
+  return (
+    <AuthProvider>
+      <Layout>
+        <Card title="Ejemplo de Uso">
+          <Button variant="primary">Botón de Ejemplo</Button>
+        </Card>
+      </Layout>
+    </AuthProvider>
+  );
+};
 
+export default App;
 ```
-@consalud/core/
-├── components/     # Componentes reutilizables
-├── hooks/          # Hooks personalizados
-├── services/       # Servicios para API, autenticación, etc.
-├── utils/          # Utilidades y helpers
-├── context/        # Providers y contextos
-├── interfaces/     # Interfaces y tipos TypeScript
-├── routes/         # Componentes para enrutamiento
-└── styles/         # Estilos y temas
+
+## 🔒 Autenticación
+
+La biblioteca proporciona una integración completa con Microsoft Azure AD a través de MSAL:
+
+```jsx
+import { 
+  AuthProvider, 
+  Login, 
+  PrivateRoute, 
+  PublicRoute 
+} from '@consalud/core';
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
+          <Route path="/dashboard" element={
+            <PrivateRoute allowedRoles={['ADMIN', 'USER']}>
+              <DashboardPage />
+            </PrivateRoute>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+};
 ```
 
-## 🧩 Componentes
+## 📚 Componentes Principales
 
 ### Layout
 
-Componentes de diseño y estructura de la aplicación:
-
 ```jsx
-import { Layout, Header } from '@consalud/core';
+import { Layout } from '@consalud/core';
 
-const MyPage = () => (
-  <Layout pageTitle="Mi Página">
-    <div>Contenido de la página</div>
-  </Layout>
-);
+const HomePage = () => {
+  return (
+    <Layout pageTitle="Página de Inicio">
+      {/* Contenido de la página */}
+    </Layout>
+  );
+};
 ```
 
-### UI Components
-
-Componentes de interfaz de usuario:
+### SecureLayout
 
 ```jsx
-import { Button, Card, ErrorMessage } from '@consalud/core';
+import { SecureLayout } from '@consalud/core';
 
-const MyComponent = () => (
-  <Card title="Ejemplo">
-    <p>Contenido de la tarjeta</p>
-    <Button variant="primary" onClick={() => alert('Hola')}>
-      Haz clic
-    </Button>
-    <ErrorMessage message="Mensaje de error" type="warning" />
-  </Card>
-);
+const DashboardPage = () => {
+  return (
+    <SecureLayout 
+      pageTitle="Dashboard" 
+      allowedRoles={['ADMIN']}
+    >
+      {/* Contenido protegido */}
+    </SecureLayout>
+  );
+};
 ```
 
-### Navigation
+### NavMenu
 
 ```jsx
 import { NavMenuApp } from '@consalud/core';
 
-const MySidebar = () => (
-  <NavMenuApp onToggle={(collapsed) => console.log('Menu colapsado:', collapsed)} />
-);
+const SidebarContent = () => {
+  return <NavMenuApp />;
+};
 ```
 
-### Authentication
+### Otros Componentes
 
-```jsx
-import { UserLoginApp } from '@consalud/core';
+- `Button`: Botones con diferentes variantes y estilos
+- `Card`: Tarjetas para mostrar contenido con diferentes estilos
+- `ErrorBoundary`: Captura errores en componentes hijos
+- `LoadingOverlay`: Indicador de carga con superposición
+- `ErrorMessage`: Mensajes de error estilizados
 
-const MyHeader = () => (
-  <header>
-    <h1>Mi Aplicación</h1>
-    <UserLoginApp />
-  </header>
-);
-```
-
-## 🪝 Hooks
+## 🛠️ Hooks Personalizados
 
 ### useAuth
-
-Hook para gestión de autenticación:
 
 ```jsx
 import { useAuth } from '@consalud/core';
 
-const ProfilePage = () => {
-  const { isSignedIn, usuario, logout, hasRole } = useAuth();
-  
-  if (!isSignedIn) return <p>Debe iniciar sesión</p>;
-  
+const UserProfile = () => {
+  const { 
+    isSignedIn, 
+    usuario, 
+    roles, 
+    logout, 
+    hasRole 
+  } = useAuth();
+
   return (
     <div>
-      <h1>Bienvenido, {usuario?.displayName}</h1>
-      {hasRole('ADMIN') && <p>Has iniciado sesión como administrador</p>}
-      <button onClick={logout}>Cerrar Sesión</button>
+      {isSignedIn ? (
+        <>
+          <p>Bienvenido, {usuario?.displayName}</p>
+          {hasRole('ADMIN') && (
+            <p>Tienes permisos de administrador</p>
+          )}
+          <button onClick={logout}>Cerrar Sesión</button>
+        </>
+      ) : (
+        <p>Por favor inicia sesión</p>
+      )}
     </div>
   );
 };
@@ -145,226 +185,163 @@ const ProfilePage = () => {
 
 ### useLocalStorage
 
-Hook para persistir datos en localStorage:
-
 ```jsx
 import { useLocalStorage } from '@consalud/core';
 
-const PreferencesComponent = () => {
+const SettingsComponent = () => {
   const [theme, setTheme] = useLocalStorage('theme', 'light');
-  
+
   return (
     <div>
       <p>Tema actual: {theme}</p>
-      <button onClick={() => setTheme('dark')}>Cambiar a oscuro</button>
-      <button onClick={() => setTheme('light')}>Cambiar a claro</button>
+      <button onClick={() => setTheme('dark')}>
+        Cambiar a tema oscuro
+      </button>
     </div>
   );
 };
 ```
 
-## 🔌 Servicios
+## 🎨 Temas y Personalización
 
-### API Client
-
-Cliente HTTP para llamadas a la API:
-
-```jsx
-import { apiClient } from '@consalud/core';
-
-const fetchData = async () => {
-  try {
-    const data = await apiClient.get('/endpoint');
-    console.log(data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-```
-
-### Auth Service
-
-Servicio para operaciones de autenticación:
-
-```jsx
-import { AuthProvider, getMe } from '@consalud/core';
-
-const initializeAuth = async () => {
-  await AuthProvider.initialize();
-  const isAuthenticated = await AuthProvider.isAuthenticated();
-  
-  if (isAuthenticated) {
-    const userData = await getMe();
-    console.log('Usuario actual:', userData);
-  }
-};
-```
-
-## 🔄 Contextos
-
-### AuthContext
-
-Proveedor de contexto para autenticación:
-
-```jsx
-import { AuthProvider } from '@consalud/core';
-
-const App = () => (
-  <AuthProvider>
-    <MyApp />
-  </AuthProvider>
-);
-```
-
-### MenuConfigContext
-
-Configuración del menú de navegación:
-
-```jsx
-import { MenuConfigProvider } from '@consalud/core';
-
-const App = () => (
-  <MenuConfigProvider config={{ enableDynamicMenu: true }}>
-    <MyApp />
-  </MenuConfigProvider>
-);
-```
-
-## 🔒 Autenticación
-
-La biblioteca incluye una implementación completa de autenticación con Azure AD:
-
-```jsx
-import { Login, SecureLayout } from '@consalud/core';
-
-// Componente de login
-const LoginPage = () => <Login />;
-
-// Layout seguro que verifica autenticación y roles
-const ProtectedPage = () => (
-  <SecureLayout allowedRoles={['ADMIN', 'USER']}>
-    <div>Esta página requiere autenticación y roles específicos</div>
-  </SecureLayout>
-);
-```
-
-## 🛣️ Routing
-
-Componentes para gestión de rutas protegidas:
-
-```jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { PrivateRoute, PublicRoute } from '@consalud/core';
-
-const AppRoutes = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/login" element={
-        <PublicRoute>
-          <LoginPage />
-        </PublicRoute>
-      } />
-      
-      <Route path="/dashboard" element={
-        <PrivateRoute allowedRoles={['ADMIN']}>
-          <DashboardPage />
-        </PrivateRoute>
-      } />
-    </Routes>
-  </BrowserRouter>
-);
-```
-
-## 🎨 Theming
-
-Sistema de temas para mantener una apariencia consistente:
+La biblioteca incluye un sistema de temas que puedes personalizar:
 
 ```jsx
 import { theme } from '@consalud/core';
 
-const CustomComponent = () => (
-  <div style={{ 
-    color: theme.colors.primary,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    boxShadow: theme.shadows.sm
-  }}>
-    Componente con estilos del tema
-  </div>
-);
+// Usando el tema predeterminado
+console.log(theme.colors.primary); // #04A59B
+
+// Personalizando componentes con el tema
+const CustomComponent = () => {
+  return (
+    <div style={{ 
+      backgroundColor: theme.colors.primary,
+      borderRadius: theme.borderRadius.md,
+      padding: theme.spacing.md
+    }}>
+      Contenido personalizado
+    </div>
+  );
+};
 ```
 
-## 💻 Desarrollo
+## 📋 Variables de entorno requeridas
 
-Para contribuir al desarrollo de esta biblioteca:
+La biblioteca espera ciertas variables de entorno para funcionar correctamente:
 
-1. Clona el repositorio:
+```
+VITE_APP_AMBIENTE=Desarrollo
+VITE_APP_SISTEMA=NombreSistema
+VITE_APP_NOMBRE_SISTEMA=Nombre Completo del Sistema
+VITE_APP_API_ARQUITECTURA_URL=http://soter.arquitectura.des
+VITE_APP_TIMEOUT=10000
+VITE_APP_NAME_API_KEY=X-API-CONSALUD-SEGURIDAD
+VITE_APP_KEY_PASS_API_ARQ=TuClave
+VITE_APP_CLIENT_ID=tu-client-id-azure
+VITE_APP_AUTHORITY=https://login.microsoftonline.com/tu-tenant-id
+```
+
+## 🔧 Solución de problemas comunes
+
+### Problema con tipos de Babel
+
+Si encuentras errores relacionados con los tipos de Babel:
+
+1. Instala los tipos de Babel:
    ```bash
-   git clone https://github.com/consalud/core.git
-   cd core
+   npm install --save-dev @types/babel__core
    ```
 
-2. Instala las dependencias:
-   ```bash
-   npm install
+2. Crea un archivo `babel.d.ts` en la raíz del proyecto con el siguiente contenido:
+   ```typescript
+   declare module '@babel/core';
+   declare module '@babel/preset-env';
+   declare module '@babel/preset-react';
+   declare module '@babel/preset-typescript';
+   declare module '@babel/plugin-transform-runtime';
    ```
 
-3. Ejecuta en modo desarrollo:
-   ```bash
-   npm run dev
+3. Asegúrate de que tu `tsconfig.json` incluya:
+   ```json
+   {
+     "compilerOptions": {
+       // ... otras opciones
+       "skipLibCheck": true,
+       "typeRoots": ["./node_modules/@types", "./"]
+     },
+     "include": ["src/**/*.ts", "src/**/*.tsx", "*.d.ts"],
+   }
    ```
 
-4. Para construir la biblioteca:
-   ```bash
-   npm run build:lib
+### Problema con tipos de node_modules
+
+Si encuentras errores relacionados con definiciones de tipos para 'node_modules':
+
+1. Crea un archivo `node-modules.d.ts` en la raíz del proyecto con el siguiente contenido:
+   ```typescript
+   declare module 'node_modules/*';
    ```
 
-### Testing
+2. Actualiza tu `tsconfig.json` para incluir:
+   ```json
+   {
+     "compilerOptions": {
+       // ... otras opciones
+       "skipLibCheck": true,
+       "typeRoots": ["./node_modules/@types", "./"],
+       "types": ["node"],
+       "noImplicitAny": false
+     },
+     "include": ["src/**/*.ts", "src/**/*.tsx", "*.d.ts"],
+     "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
+   }
+   ```
 
-Para ejecutar las pruebas:
+3. Reinicia el servidor de TypeScript en tu editor para que los cambios surtan efecto.
+
+### Problema con la autenticación MSAL
+
+Si tienes problemas con la autenticación:
+
+1. Verifica que las variables de entorno para Azure AD sean correctas
+2. Asegúrate de que el usuario tenga permiso para acceder a la aplicación en Azure
+3. Si usas el flujo de redirección, verifica que la URL de redirección esté configurada correctamente en Azure
+
+```javascript
+// Depuración de autenticación
+import { MsalAuthProvider } from '@consalud/core';
+
+// Verificar estado de autenticación
+const checkAuth = async () => {
+  try {
+    const authenticated = await MsalAuthProvider.isAuthenticated();
+    console.log('Estado de autenticación:', authenticated);
+  } catch (error) {
+    console.error('Error al verificar autenticación:', error);
+  }
+};
+```
+
+## 🤝 Contribución
+
+Si deseas contribuir a este proyecto:
+
+1. Clona el repositorio
+2. Instala las dependencias: `npm install`
+3. Ejecuta el entorno de desarrollo: `npm run dev`
+4. Construye la biblioteca: `npm run build:lib`
+
+### Scripts disponibles
 
 ```bash
-npm test
+npm run dev        # Inicia el entorno de desarrollo
+npm run build      # Construye la aplicación para producción
+npm run build:lib  # Construye la biblioteca para su uso como dependencia
+npm run lint       # Ejecuta el linter
+npm run test       # Ejecuta las pruebas
 ```
 
-## 🏭 Producción
+## 📄 Licencia
 
-### Publicación
-
-Para publicar una nueva versión:
-
-1. Actualiza la versión en `package.json`
-2. Ejecuta:
-   ```bash
-   npm run build:lib
-   npm publish
-   ```
-
-### Uso en Proyectos
-
-Para usar esta biblioteca en otros proyectos de Consalud:
-
-1. Instala la biblioteca
-2. Importa los componentes y utilidades necesarios
-3. Configura los providers en el punto de entrada de tu aplicación:
-
-```jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { AuthProvider, MenuConfigProvider } from '@consalud/core';
-import App from './App';
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <MenuConfigProvider>
-        <App />
-      </MenuConfigProvider>
-    </AuthProvider>
-  </React.StrictMode>
-);
-```
-
-## 📝 Licencia
-
-Este proyecto es propiedad de Consalud y su uso está restringido según las políticas internas de la empresa.
+Este proyecto es propiedad de Consalud y su uso está restringido a proyectos internos autorizados.
