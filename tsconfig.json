@@ -16,8 +16,16 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx", "src/main.tsx", "src/App.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "*.d.ts"],
+  "exclude": [
+    "node_modules", 
+    "dist", 
+    "**/*.test.ts", 
+    "**/*.test.tsx", 
+    "src/main.tsx", 
+    "src/App.tsx"
+  ]
 }
