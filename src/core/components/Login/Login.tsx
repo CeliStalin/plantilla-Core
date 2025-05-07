@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { Header } from './components/Header';
-import { UserInfo } from './components/UserInfo';
 import { ErrorMessages } from './components/ErrorMessages';
 import { LoadingDots } from './components/LoadingDots';
-import { NetworkWarning } from '../NetworkWarning';
 import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
 import logoIcon from '../../../assets/Logo.png';
@@ -302,12 +300,19 @@ const Login: React.FC<LoginProps> = ({
                         </button>
                       </div>
                       {networkAccess === false ? (
-                      <NetworkWarning />
+                      <div style={styles.networkWarning.container}>
+                        <div style={styles.networkWarning.title}>
+                          <span style={styles.networkWarning.icon}>⚠️</span>
+                          Sin acceso a la red corporativa
+                        </div>
+                        <p style={styles.networkWarning.message}>
+                          Para acceder, debes estar conectado a la red de Consalud o usar VPN.
+                        </p>
+                      </div>
                     ) : (
-                      <p className="help mt-2" style={{ 
-                        textAlign: 'center', 
-                        fontSize: '12px', 
-                        color: textColor ? textColor : '#666' 
+                      <p className="help mt-2" style={{
+                        ...styles.networkWarning.note,
+                        color: textColor || styles.networkWarning.note.color
                       }}>
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>
