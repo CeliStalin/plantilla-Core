@@ -1,7 +1,7 @@
 export * from './Button';
 export * from './Card';
-export * from './Login'; // Exporta los componentes hijos y estilos
-export { default as Login } from './Login/Login'; // Exporta el componente Login directamente
+export * from './Login'; // componentes hijos y estilos
+export { default as Login } from './Login/Login'; //  componente Login directamente
 export { Counter } from './Counter';
 export * from './Loading'; 
 export * from './Dashboard';
@@ -15,3 +15,4 @@ export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { default as HomePage } from './HomePage';
 export { default as SecureLayout } from './SecureLayout/SecureLayout';
+export * from './NetworkWarning';

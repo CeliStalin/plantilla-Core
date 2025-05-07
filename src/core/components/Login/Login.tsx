@@ -1,5 +1,3 @@
-// src/core/components/Login/Login.tsx
-
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
@@ -7,23 +5,22 @@ import { Header } from './components/Header';
 import { UserInfo } from './components/UserInfo';
 import { ErrorMessages } from './components/ErrorMessages';
 import { LoadingDots } from './components/LoadingDots';
+import { NetworkWarning } from '../NetworkWarning';
 import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
 import logoIcon from '../../../assets/Logo.png';
 
-// Añadir la interfaz para las props
 interface LoginProps {
-  backgroundColor?: string; // Nueva prop para el color de fondo
-  boxBackgroundColor?: string; // Opcional: para el cuadro de login
-  textColor?: string; // Opcional: para personalizar el color del texto
+  backgroundColor?: string; 
+  boxBackgroundColor?: string;
+  textColor?: string;
 }
 
 const Login: React.FC<LoginProps> = ({ 
-  backgroundColor = '#ffffff', // Valor predeterminado blanco
-  boxBackgroundColor, // Si no se proporciona, se usará el predeterminado 
+  backgroundColor = '#ffffff',
+  boxBackgroundColor,
   textColor 
 }) => {
-  // Usar la función location existente o crear una nueva
   const location = {
     pathname: window.location.pathname,
     search: window.location.search,
@@ -46,11 +43,108 @@ const Login: React.FC<LoginProps> = ({
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const [redirectMethodUsed, setRedirectMethodUsed] = useState<boolean>(() => {
-    // Verifica si ya está guardado en sessionStorage
     const savedMethod = sessionStorage.getItem('authMethod');
     return savedMethod === 'redirect';
   });
   const [isCheckingNetwork, setIsCheckingNetwork] = useState(false);
+  const [networkAccess, setNetworkAccess] = useState<boolean | null>(null);
+
+  // Verificar si estamos en medio de un flujo de redirección
+  const isInRedirectFlow = () => {
+    return window.location.href.includes("code=") || 
+           window.location.href.includes("error=") ||
+           window.location.href.includes("state=");
+  };
+
+  // Limpiar caché al cargar, pero respetando los flujos de redirección
+  useEffect(() => {
+    const cleanupCacheIfNeeded = async () => {
+      if (!isInRedirectFlow()) {
+        // Solo limpiar localStorage/sessionStorage si no estamos en medio de un flujo de redirección
+        // ya que podríamos estar volviendo de una redirección de autenticación
+        try {
+          console.log("Limpiando caché local...");
+          
+          // Mantener solo algunas claves específicas que no deben limpiarse
+          const keysToKeep = ['theme', 'language', 'sidebar-collapsed'];
+          
+          // Limpiar localStorage selectivamente
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && !keysToKeep.includes(key)) {
+              localStorage.removeItem(key);
+            }
+          }
+          
+          // Limpiar sessionStorage selectivamente (mantener redirectAfterLogin)
+          const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+          sessionStorage.clear();
+          if (redirectPath) {
+            sessionStorage.setItem('redirectAfterLogin', redirectPath);
+          }
+          
+          // Limpiar cuentas en MSAL
+          await AuthProvider.clearAccounts();
+          
+          console.log("Caché limpiada correctamente");
+        } catch (error) {
+          console.error("Error al limpiar caché:", error);
+        }
+      } else {
+        console.log("Se detectó flujo de redirección, omitiendo limpieza de caché");
+      }
+    };
+
+    cleanupCacheIfNeeded();
+  }, []);
+
+  // Verificar acceso a red corporativa
+  useEffect(() => {
+    const checkNetworkAccess = async () => {
+      if (!isInRedirectFlow() && !isSignedIn) {
+        setIsCheckingNetwork(true);
+        try {
+          // Función para verificar acceso a la red corporativa
+          console.log("Verificando acceso a la red corporativa...");
+          
+          // Intentar hacer una solicitud simple a un endpoint de la API
+          // Este endpoint debería ser accesible solo desde la red corporativa o VPN
+          const apiUrl = `${import.meta.env.VITE_API_ARQUITECTURA_URL}/health`;
+          
+          // Usar un endpoint que devuelva una respuesta rápida, como /health o similar
+          const response = await fetch(apiUrl, {
+            method: 'HEAD',
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
+          });
+          
+          // Si llegamos aquí, podemos acceder a la API
+          setNetworkAccess(true);
+          console.log("Acceso a red corporativa verificado");
+          
+        } catch (error) {
+          if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+            console.warn("Sin acceso a la red corporativa:", error);
+            setNetworkAccess(false);
+          } else if (error instanceof TypeError && error.message.includes('CORS')) {
+            // Si es un error de CORS, podríamos estar en la red correcta pero con restricciones
+            // En ese caso, consideramos que hay acceso a la red
+            console.warn("Error CORS, pero posiblemente en red corporativa:", error);
+            setNetworkAccess(true);
+          } else {
+            console.error("Error al verificar acceso a red:", error);
+            setNetworkAccess(null); // Estado indeterminado
+          }
+        } finally {
+          setIsCheckingNetwork(false);
+        }
+      }
+    };
+
+    checkNetworkAccess();
+  }, [isSignedIn]);
 
   // Redirigir al usuario automáticamente si ya está autenticado
   useEffect(() => {
@@ -130,13 +224,12 @@ const Login: React.FC<LoginProps> = ({
   // Aplicar los estilos personalizados
   const containerStyles = {
     ...styles.heroWrapper,
-    backgroundColor, // Usar la prop proporcionada
+    backgroundColor,
   };
 
-  // Corregir el acceso a las propiedades del objeto styles.loginBox
   const loginBoxStyles = {
     ...styles.loginBox,
-    background: boxBackgroundColor || styles.loginBox.background, // Usar 'background' en lugar de 'backgroundColor'
+    background: boxBackgroundColor || styles.loginBox.background,
   };
 
   return (
@@ -158,8 +251,6 @@ const Login: React.FC<LoginProps> = ({
                       administrador de devolución a herederos
                     </span>
                   </h1>
-                  
-                  {/* Implementar el contenido del login según corresponda */}
                   
                   {loading || isLoggingIn || isInitializing || isCheckingNetwork ? (
                     <div className="field" style={{ width: '100%' }}>
@@ -205,11 +296,14 @@ const Login: React.FC<LoginProps> = ({
                           className="button is-fullwidth is-primary"
                           style={styles.primaryButton}
                           onClick={handleLoginRedirect}
-                          disabled={isLoggingIn}
+                          disabled={isLoggingIn || networkAccess === false}
                         >
                           Iniciar sesión con Azure AD
                         </button>
                       </div>
+                      {networkAccess === false ? (
+                      <NetworkWarning />
+                    ) : (
                       <p className="help mt-2" style={{ 
                         textAlign: 'center', 
                         fontSize: '12px', 
@@ -217,6 +311,7 @@ const Login: React.FC<LoginProps> = ({
                       }}>
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>
+                    )}
                     </div>
                   )}
                   
