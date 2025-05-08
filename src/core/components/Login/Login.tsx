@@ -44,8 +44,10 @@ const Login: React.FC<LoginProps> = ({
     const savedMethod = sessionStorage.getItem('authMethod');
     return savedMethod === 'redirect';
   });
-  const [isCheckingNetwork, setIsCheckingNetwork] = useState(false);
-  const [networkAccess, setNetworkAccess] = useState<boolean | null>(null);
+  
+  // Comentamos toda la funcionalidad relacionada con la verificación de API/Red
+  // const [isCheckingNetwork, setIsCheckingNetwork] = useState(false);
+  // const [networkAccess, setNetworkAccess] = useState<boolean | null>(null);
 
   // Verificar si estamos en medio de un flujo de redirección
   const isInRedirectFlow = () => {
@@ -96,7 +98,8 @@ const Login: React.FC<LoginProps> = ({
     cleanupCacheIfNeeded();
   }, []);
 
-  // Verificar acceso a red corporativa
+  // Comentamos la verificación de acceso a red corporativa
+  /*
   useEffect(() => {
     const checkNetworkAccess = async () => {
       if (!isInRedirectFlow() && !isSignedIn) {
@@ -143,6 +146,7 @@ const Login: React.FC<LoginProps> = ({
 
     checkNetworkAccess();
   }, [isSignedIn]);
+  */
 
   // Redirigir al usuario automáticamente si ya está autenticado
   useEffect(() => {
@@ -250,7 +254,7 @@ const Login: React.FC<LoginProps> = ({
                     </span>
                   </h1>
                   
-                  {loading || isLoggingIn || isInitializing || isCheckingNetwork ? (
+                  {loading || isLoggingIn || isInitializing /* || isCheckingNetwork */ ? (
                     <div className="field" style={{ width: '100%' }}>
                       <div className="control">
                         <button 
@@ -266,7 +270,7 @@ const Login: React.FC<LoginProps> = ({
                         >
                           <LoadingDots size="small" />
                           <span style={{ marginLeft: '8px' }}>
-                            {isCheckingNetwork ? 'Verificando red...' : 'Cargando...'}
+                            {/* isCheckingNetwork ? 'Verificando red...' : */ 'Cargando...'}
                           </span>
                         </button>
                       </div>
@@ -294,29 +298,38 @@ const Login: React.FC<LoginProps> = ({
                           className="button is-fullwidth is-primary"
                           style={styles.primaryButton}
                           onClick={handleLoginRedirect}
-                          disabled={isLoggingIn || networkAccess === false}
+                          disabled={isLoggingIn /* || networkAccess === false */}
                         >
                           Iniciar sesión con Azure AD
                         </button>
                       </div>
+                      {/* Comentamos el aviso de red
                       {networkAccess === false ? (
-                      <div style={styles.networkWarning.container}>
-                        <div style={styles.networkWarning.title}>
-                          <span style={styles.networkWarning.icon}>⚠️</span>
-                          Sin acceso a la red corporativa
+                        <div style={styles.networkWarning.container}>
+                          <div style={styles.networkWarning.title}>
+                            <span style={styles.networkWarning.icon}>⚠️</span>
+                            Sin acceso a la red corporativa
+                          </div>
+                          <p style={styles.networkWarning.message}>
+                            Para acceder, debes estar conectado a la red de Consalud o usar VPN.
+                          </p>
                         </div>
-                        <p style={styles.networkWarning.message}>
-                          Para acceder, debes estar conectado a la red de Consalud o usar VPN.
+                      ) : (
+                        <p className="help mt-2" style={{
+                          ...styles.networkWarning.note,
+                          color: textColor || styles.networkWarning.note.color
+                        }}>
+                          Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                         </p>
-                      </div>
-                    ) : (
+                      )}
+                      */}
+                      {/* En lugar del aviso de red condicional, siempre mostramos la nota */}
                       <p className="help mt-2" style={{
                         ...styles.networkWarning.note,
                         color: textColor || styles.networkWarning.note.color
                       }}>
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>
-                    )}
                     </div>
                   )}
                   

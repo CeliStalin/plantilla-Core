@@ -29,27 +29,85 @@ let useRedirectFlow = false; // Flag para controlar el flujo
 // Inicializar MSAL como una promesa
 function initializeMsal(): Promise<void> {
   if (!initializationPromise) {
+    // Agregar logs detallados para depuración
+    console.log("Iniciando inicialización de MSAL...");
+    console.log("Variables de entorno disponibles:", {
+      CLIENT_ID: import.meta.env.VITE_APP_CLIENT_ID || 'No disponible',
+      AUTHORITY: import.meta.env.VITE_APP_AUTHORITY || 'No disponible',
+      CLIENT_ID_ALT: import.meta.env.VITE_CLIENT_ID || 'No disponible',
+      AUTHORITY_ALT: import.meta.env.VITE_AUTHORITY || 'No disponible',
+      REDIRECT_URI: import.meta.env.VITE_REDIRECT_URI || 'No disponible',
+      ENVIRONMENT: import.meta.env.MODE || 'No disponible'
+    });
+    
+    // Verificar si hay alguna variable de entorno disponible en general
+    console.log("Todas las variables de entorno:", import.meta.env);
+
     initializationPromise = (async () => {
       try {
         // Verificar que la configuración sea válida
         if (!msalConfig.auth.clientId || !msalConfig.auth.authority) {
           console.error('Error: No se encontró configuración válida para MSAL. Verifica las variables de entorno.');
+          console.error('Valores actuales de configuración:', {
+            clientId: msalConfig.auth.clientId || 'No disponible',
+            authority: msalConfig.auth.authority || 'No disponible',
+            redirectUri: msalConfig.auth.redirectUri || 'No disponible'
+          });
           throw new Error('Configuración de autenticación incompleta');
         }
         
+        console.log("Configuración MSAL válida, procediendo a crear instancia...");
         msalInstance = new PublicClientApplication(msalConfig);
-        // Importante: esperar a que MSAL se inicialice completamente
-        await msalInstance.initialize();
+        
+        console.log("Instancia MSAL creada, iniciando inicialización...");
+        try {
+          // Importante: esperar a que MSAL se inicialice completamente
+          await msalInstance.initialize();
+          console.log("Inicialización de MSAL completada exitosamente");
+        } catch (initErrorUnknown) {
+          // Añadir anotación de tipo para manejar el error desconocido
+          const initError = initErrorUnknown as Error;
+          console.error("Error durante la inicialización de MSAL:", initError);
+          console.error("Detalles del error:", {
+            name: initError.name || 'No disponible',
+            message: initError.message || 'No disponible',
+            stack: initError.stack || 'No disponible'
+          });
+          throw initError; // Re-lanzar para mantener el flujo original
+        }
         
         // Esto ayudará a mantener consistencia entre loginRedirect y logoutRedirect
         const cachedAuthMethod = sessionStorage.getItem('authMethod');
+        console.log("Método de autenticación detectado en caché:", cachedAuthMethod || 'No disponible');
+        
         if (cachedAuthMethod === 'redirect') {
           useRedirectFlow = true;
+          console.log("Se usará flujo de redirección basado en caché");
         }
-      } catch (error) {
+      } catch (errorUnknown) {
+        // Añadir anotación de tipo para manejar el error desconocido
+        const error = errorUnknown as Error;
         console.error('Error al inicializar MSAL:', error);
+        
+        // Agregamos más información detallada sobre el error
+        console.error('Nombre del error:', error.name || 'No disponible');
+        console.error('Mensaje del error:', error.message || 'No disponible');
+        console.error('Stack trace:', error.stack || 'No disponible');
+        
+        // Verificar si es un error relacionado con la red
+        if (error.message?.includes('network') || error.message?.includes('conexión') || 
+            error.message?.includes('connection') || error.message?.includes('red')) {
+          console.error('Parece ser un error de red. Verifica la conexión a internet o VPN');
+        }
+        
+        // Verificar si es un error de formato de URL
+        if (error.message?.includes('URL') || error.message?.includes('uri') || 
+            error.message?.includes('redirect')) {
+          console.error('Posible error en el formato de la URL de redirección');
+        }
+        
         msalInstance = null;
-        throw new Error('No se pudo inicializar la autenticación');
+        throw new Error('No se pudo inicializar la autenticación: ' + (error.message || String(errorUnknown)));
       }
     })();
   }
