@@ -22,9 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Otros archivos y directorios que no deben estar en el paquete publicado
-coverage
-.env
-.env.*
-!.env.example
