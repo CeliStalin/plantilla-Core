@@ -7,5 +7,5 @@ export * from './core/services';
 export * from './core/utils';
 export * from './core/routes';
 export * from './core/context';
-export { default as LogoImage } from './assets/Logo.png';
-export { default as LogoutIcon } from './assets/Group.png';
+export * from './assets';
+export { default as Assets } from './assets';
