@@ -1,21 +1,23 @@
 import { Configuration, LogLevel } from '@azure/msal-browser';
 
+// Configuración mejorada para seguridad
 export const msalConfig: Configuration = {
   auth: {
-    clientId: import.meta.env.VITE_APP_CLIENT_ID,
-    authority: import.meta.env.VITE_APP_AUTHORITY,
+    clientId: import.meta.env.VITE_APP_CLIENT_ID || import.meta.env.VITE_CLIENT_ID || '',
+    authority: import.meta.env.VITE_APP_AUTHORITY || import.meta.env.VITE_AUTHORITY || '',
     redirectUri: window.location.origin,
     postLogoutRedirectUri: window.location.origin,
     navigateToLoginRequestUrl: true,
   },
   cache: {
-    cacheLocation: 'sessionStorage', // Más seguro que localStorage
-    storeAuthStateInCookie: true, // Para IE11 o navegadores antiguos
+    cacheLocation: 'memory', 
+    storeAuthStateInCookie: false, 
   },
   system: {
+    tokenRenewalOffsetSeconds: 300, // 5 minutos Santes de expiración
     loggerOptions: {
       loggerCallback: (level, message, containsPii) => {
-        if (containsPii) return;
+        if (containsPii) return; // No registrar datos personales
         if (import.meta.env.DEV) {
           switch (level) {
             case LogLevel.Error:
@@ -33,7 +35,7 @@ export const msalConfig: Configuration = {
           }
         }
       },
-      piiLoggingEnabled: false,
+      piiLoggingEnabled: false, // Desactivar logging de información personal
     },
     windowHashTimeout: 60000,
     iframeHashTimeout: 6000,
@@ -41,10 +43,12 @@ export const msalConfig: Configuration = {
   },
 };
 
+// Scopes para la solicitud de login
 export const loginRequest = {
   scopes: ['user.read', 'openid', 'profile', 'email', 'offline_access'],
 };
 
+// Scopes para acceder a APIs
 export const apiRequest = {
-  scopes: [`api://${import.meta.env.VITE_API_CLIENT_ID}/access_api`],
+  scopes: [`api://${import.meta.env.VITE_API_CLIENT_ID || import.meta.env.VITE_APP_CLIENT_ID}/access_api`],
 };
