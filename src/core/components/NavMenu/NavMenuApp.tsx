@@ -11,6 +11,7 @@ import { MenuSection } from './components/MenuSection';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import './styles/NavMenu.css'; 
+import AppIcon from '../../../assets/app.svg';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
@@ -241,10 +242,18 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
 
               {/* Menú Dinámico - Solo visible si está habilitado y hay elementos */}
               {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
-                <MenuSection title="Aplicaciones">
+                <MenuSection title={
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <img 
+                      src={AppIcon} 
+                      alt="Aplicaciones"
+                      style={{ width: '16px', height: '16px' }}
+                    />
+                    Aplicaciones
+                  </span>
+                }>
                   {menuItems.map((item) => {
                     const itemPath = buildMenuItemPath(item.Controlador, item.Accion);
-                    
                     return (
                       <MenuItem 
                         key={item.Id}

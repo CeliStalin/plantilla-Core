@@ -3,7 +3,7 @@ import { navMenuStyles } from '../styles/navMenu.styles';
 import { theme } from '../../../styles/theme';
 
 interface MenuSectionProps {
-  title?: string;
+  title?: string | React.ReactNode; 
   children: React.ReactNode;
 }
 
@@ -25,8 +25,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
         className="menu-label mt-3" 
         style={{
           ...navMenuStyles.sectionTitle,
-          backgroundColor: isHovered ? '#f0f0f0' : 'transparent', // Solo cambia a gris en hover
-          padding: '8px 12px', // Mismo padding que los ítems del menú para consistencia
+          backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+          padding: '8px 12px',
           borderRadius: '4px',
         }}
         onClick={toggleSection}
@@ -35,10 +35,18 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
       >
         <span>{title}</span>
         <span style={{
+          // Estilo mejorado para la flecha
           fontSize: '10px',
           transition: 'transform 0.3s ease',
           transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
           color: theme.colors.primary,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '16px',
+          height: '16px',
+          borderRadius: '50%',
+          backgroundColor: isExpanded ? 'rgba(4, 165, 155, 0.1)' : 'transparent',
         }}>
           ▶
         </span>

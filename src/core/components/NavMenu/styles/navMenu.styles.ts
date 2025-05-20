@@ -92,20 +92,27 @@ export const navMenuStyles = {
     fontWeight: '600',
     borderRadius: '4px',
     marginBottom: '0.5rem',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
     transition: 'background-color 0.2s ease',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    }
+    '&:hover': {backgroundColor: 'rgba(0, 0, 0, 0.05)'},
+    '& img': {marginRight: '6px',  }
   },
   
   sectionArrow: (isExpanded: boolean) => ({
     fontSize: '10px',
-    transition: 'transform 0.3s ease',
+    transition: 'all 0.3s ease',
     transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
     color: theme.colors.primary,
+    width: '20px',
+    height: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    backgroundColor: isExpanded ? 'rgba(4, 165, 155, 0.1)' : 'transparent',
   }),
-  
+
+
   sectionContent: (isExpanded: boolean) => ({
     overflow: 'hidden',
     transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
