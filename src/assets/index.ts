@@ -4,6 +4,7 @@ import LogoutIcon from './Group.png';
 import DocumentsFileCheckmarkSvg from './documents-file-checkmark.svg';
 import MapsSvg from './Maps.svg';
 import appSvg from './app.svg';
+import RowSvg from './Row.svg';
 
 // Exportar individualmente para mantener compatibilidad
 export {
@@ -12,6 +13,7 @@ export {
   DocumentsFileCheckmarkSvg,
   MapsSvg,
   appSvg,
+  RowSvg,
   
 };
 
@@ -25,7 +27,8 @@ export const Icons = {
   Logout: LogoutIcon,
   DocumentsFileCheckmark: DocumentsFileCheckmarkSvg,
   MapsIcon :MapsSvg,
-  AppIcon :appSvg
+  AppIcon :appSvg,
+  RrowIcon: RowSvg
   // Agregar más iconos aquí
 };
 
