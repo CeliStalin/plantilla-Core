@@ -1,4 +1,3 @@
-// src/core/components/NavMenu/NavMenuApp.tsx
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { ApiGetMenus } from "../../services/GetApiArq";
@@ -249,7 +248,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                       alt="Aplicaciones"
                       style={{ width: '16px', height: '16px' }}
                     />
-                    Aplicaciones
+                    Aplicaciones {/* Cambiado de "APLICACIONES" a "Aplicaciones" */}
                   </span>
                 }>
                   {menuItems.map((item) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { navMenuStyles } from '../styles/navMenu.styles';
 import { theme } from '../../../styles/theme';
+import { RowSvg } from '../../../../assets';
 
 interface MenuSectionProps {
   title?: string | React.ReactNode; 
@@ -35,10 +36,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
       >
         <span>{title}</span>
         <span style={{
-          // Estilo mejorado para la flecha
-          fontSize: '10px',
           transition: 'transform 0.3s ease',
-          transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+          transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
           color: theme.colors.primary,
           display: 'flex',
           alignItems: 'center',
@@ -48,7 +47,16 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
           borderRadius: '50%',
           backgroundColor: isExpanded ? 'rgba(4, 165, 155, 0.1)' : 'transparent',
         }}>
-          ▶
+          <img 
+            src={RowSvg} 
+            alt="Expand/Collapse"
+            style={{
+              width: '10px',
+              height: '10px',
+              transition: 'transform 0.3s ease',
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+            }} 
+          />
         </span>
       </p>
       <div style={navMenuStyles.sectionContent(isExpanded)}>
