@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import NavMenuApp from '../NavMenu/NavMenuApp';
@@ -20,9 +20,19 @@ const pageTitles: { [key: string]: string } = {
   '/MnHerederos/ingresoDoc': 'Ingreso Documentos'
 };
 
-export const Layout: React.FC<LayoutProps> = ({ children, pageTitle,backgroundColor = '#ffffff'  }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundColor = '#ffffff' }) => {
+  //Estado inicial a false para tener el menú desplegado
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
   const location = useLocation();
+  
+  // Cargar la preferencia del usuario al montar el componente
+  useEffect(() => {
+    const savedPreference = localStorage.getItem('menu-collapsed-state');
+    if (savedPreference !== null) {
+      setIsMenuCollapsed(savedPreference === 'true');
+    }
+    // Si no hay preferencia guardada, el valor por defecto es false (menú desplegado)
+  }, []);
   
   const handleMenuToggle = (collapsed: boolean) => {
     setIsMenuCollapsed(collapsed);

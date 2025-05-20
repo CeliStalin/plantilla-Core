@@ -11,8 +11,9 @@ export const navMenuStyles = {
     overflow: 'hidden',
     backgroundColor: '#f9f9f9', 
     zIndex: 100,
-    padding: isCollapsed ? '0' : '1rem',
+    padding: 0, 
     boxShadow: isCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
+    border: 'none', 
   }),
   
   menuLabel: {
@@ -26,6 +27,10 @@ export const navMenuStyles = {
     fontWeight: 500,
     backgroundColor: 'transparent', 
     borderRadius: '4px',
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    }
   },
   
   menuIcon: (isCollapsed: boolean) => ({
@@ -35,16 +40,23 @@ export const navMenuStyles = {
     fontSize: '20px',
     width: '24px',
     height: '24px',
-    transition: 'transform 0.3s ease',
-    transform: isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)',
+    transition: 'all 0.3s ease',
+    // Rotación para mantener el ícono horizontal siempre
     color: theme.colors.primary,
+    // Cambia el color o la opacidad para indicar el estado
+    opacity: isCollapsed ? 0.8 : 1,
+    // aplica un ligero efecto de escala cuando está desplegado
+    transform: isCollapsed ? 'scale(1)' : 'scale(1.1)',
   }),
   
   menuContent: (isCollapsed: boolean) => ({
     opacity: isCollapsed ? 0 : 1,
     visibility: isCollapsed ? 'hidden' as const : 'visible' as const,
     transition: 'opacity 0.3s ease, visibility 0.3s ease',
-    padding: isCollapsed ? '0' : '0 0.5rem',
+    padding: isCollapsed ? '0' : '1rem',
+    paddingTop: '0.5rem',
+    height: isCollapsed ? '0' : 'auto',
+    overflow: 'hidden',
   }),
   
   // Estilo para elementos activos del menú
@@ -62,7 +74,7 @@ export const navMenuStyles = {
     color: '#444',
     transition: 'all 0.2s ease-in-out',
     borderLeft: '3px solid transparent',
-    backgroundColor: 'transparent', // Transparente para que se vea el fondo del menú
+    backgroundColor: 'transparent', 
     borderRadius: '4px',
   },
   
@@ -80,7 +92,11 @@ export const navMenuStyles = {
     fontWeight: '600',
     borderRadius: '4px',
     marginBottom: '0.5rem',
-    backgroundColor: 'transparent', // Transparente para que se vea el fondo del menú
+    backgroundColor: 'transparent', 
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    }
   },
   
   sectionArrow: (isExpanded: boolean) => ({

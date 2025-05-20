@@ -83,3 +83,35 @@ html, body {
   left: -700px;
   max-width: 300%;
 }
+
+/* Regla global para eliminar contornos de enfoque en los botones del menú */
+.menu-toggle-button,
+.menu-toggle-button:focus,
+.menu-toggle-button:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important; /* Soluciona el problema en dispositivos móviles */
+}
+
+/* Para navegadores basados en WebKit (Chrome, Safari) */
+.menu-toggle-button:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* Eliminar borde nativo en Firefox */
+.menu-toggle-button::-moz-focus-inner {
+  border: 0;
+}
+
+/* Para navegadores que respetan la propiedad CSS :focus-visible */
+.menu-toggle-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Regla para mantener la accesibilidad pero con un estilo diferente */
+.menu-toggle-button:focus-visible {
+  background-color: #f0f0f0;
+  outline: none;
+}

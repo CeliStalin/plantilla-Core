@@ -1,0 +1,167 @@
+button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+  
+  /* Estilos para Firefox */
+  .menu-toggle-button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+    /* Variables para personalización */
+  :root {
+    --menu-icon-size: 24px;          /* Tamaño del contenedor del ícono */
+    --menu-svg-size: 28px;           /* Tamaño del SVG */
+    --menu-text-size: 16px;          /* Tamaño del texto "Menú" */
+    --menu-button-padding: 12px 15px; /* Padding del botón */
+    --menu-text-spacing: 12px;       /* Espacio entre ícono y texto */
+    --menu-font-weight: 500;         /* Peso de la fuente */
+    --menu-letter-spacing: 0.5px;    /* Espaciado entre letras */
+    --menu-rotation-duration: 0.7s;  /* Duración de la animación de rotación */
+    --menu-rotation-easing: cubic-bezier(0.25, 0.1, 0.25, 1); /* Tipo de aceleración para una animación suave */
+  }
+  
+  /* Animaciones de rotación en ambas direcciones */
+  @keyframes rotateCW {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes rotateCCW {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+  }
+  
+  /* Clases para las diferentes rotaciones */
+  .menu-rotate-cw {
+    animation: rotateCW var(--menu-rotation-duration) var(--menu-rotation-easing);
+    transform-origin: center; /* Rotación desde el centro */
+    perspective: 1000px;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  
+  .menu-rotate-ccw {
+    animation: rotateCCW var(--menu-rotation-duration) var(--menu-rotation-easing);
+    transform-origin: center; /* Rotación desde el centro */
+    perspective: 1000px;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  .menu-hamburger {
+    position: relative;
+    width: var(--menu-icon-size, 36px); /* Usar la variable con valor por defecto */
+    height: var(--menu-icon-size, 36px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .menu-hamburger svg {
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    color: #04A59B; /* Color principal del tema */
+    width: var(--menu-svg-size, 28px);
+    height: var(--menu-svg-size, 28px);
+    /* Centrar perfectamente para la rotación */
+    transform-origin: center center;
+    will-change: transform; 
+  }
+  
+  .expanded .menu-hamburger svg {
+    color: #04A59B; /* Mantener el color del ícono cuando está expandido */
+  }
+  
+  .menu-hamburger:hover svg {
+    transform: scale(1.1);
+  }
+  
+  .menu-hamburger:active svg {
+    transform: scale(0.95);
+  }
+  
+  /* Efecto de pulso cuando se hace clic */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .menu-pulse {
+    animation: pulse 0.3s ease-in-out;
+  }
+  
+  /* Estilo mejorado para el botón de menú */
+  .menu-toggle-button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: var(--menu-button-padding, 12px 15px); /* Usar la variable */
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+    outline: none; 
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    margin: 0;
+    /* Color de fondo del menú */
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo para el texto del menú */
+  .menu-text {
+    margin-left: var(--menu-text-spacing, 12px);
+    color: #555;
+    font-size: var(--menu-text-size, 18px);
+    font-weight: var(--menu-font-weight, 500);
+    letter-spacing: var(--menu-letter-spacing, 0.5px);
+  }
+  
+  /* Elimina el contorno en todos los estados, incluido :focus */
+  .menu-toggle-button:focus,
+  .menu-toggle-button:active,
+  .menu-toggle-button:focus-visible,
+  .menu-toggle-button:focus-within {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .menu-toggle-button:hover {
+    background-color: #f0f0f0; 
+  }
+  
+  .menu-toggle-button.expanded {
+    background-color: #f9f9f9; 
+    color: #04A59B; /* Color primario para indicar estado activo */
+  }
+  
+  /* Estilos para diferentes tamaños de pantalla */
+  @media (max-width: 768px) {
+    .menu-toggle-button {
+      padding: 6px 8px;
+    }
+    
+    .menu-hamburger {
+      width: 20px;
+      height: 20px;
+    }
+  }
