@@ -5,6 +5,9 @@ import DocumentsFileCheckmarkSvg from './documents-file-checkmark.svg';
 import MapsSvg from './Maps.svg';
 import appSvg from './app.svg';
 import RowSvg from './Row.svg';
+import logoMiintranet from './logoMiintranet.svg';
+
+
 
 // Exportar individualmente para mantener compatibilidad
 export {
@@ -14,6 +17,7 @@ export {
   MapsSvg,
   appSvg,
   RowSvg,
+  logoMiintranet,
   
 };
 
@@ -28,7 +32,8 @@ export const Icons = {
   DocumentsFileCheckmark: DocumentsFileCheckmarkSvg,
   MapsIcon :MapsSvg,
   AppIcon :appSvg,
-  RrowIcon: RowSvg
+  RrowIcon: RowSvg,
+  logoIntranet :logoMiintranet
   // Agregar más iconos aquí
 };
 

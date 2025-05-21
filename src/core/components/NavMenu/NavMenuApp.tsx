@@ -242,7 +242,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
               {/* Menú Dinámico - Solo visible si está habilitado y hay elementos */}
               {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
                 <MenuSection title={
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
                     <img 
                       src={AppIcon} 
                       alt="Aplicaciones"
