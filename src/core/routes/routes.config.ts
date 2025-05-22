@@ -8,7 +8,7 @@ const MainPage = lazy(() => import('../components/MainPage'));
 const Dashboard = lazy(() => import('../components/Dashboard/DashboardPage')); 
 const NotFound = lazy(() => import('../components/NotFound'));
 const Unauthorized = lazy(() => import('../components/Unauthorized'));
-const HomePage = lazy(() => import('../components/HomePage')); 
+const HomePage = lazy(() => import('../components/HomePage/HomePage')); 
 
 export const routes: RouteConfig[] = [
   // Rutas públicas
