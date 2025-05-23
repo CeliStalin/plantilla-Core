@@ -5,7 +5,7 @@ import DocumentsFileCheckmarkSvg from './documents-file-checkmark.svg';
 import MapsSvg from './Maps.svg';
 import appSvg from './app.svg';
 import RowSvg from './Row.svg';
-import logoMiintranet from './logoMiintranet.svg';
+import logoMiintranet from './logo-miintranet.png';
 
 
 

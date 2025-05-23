@@ -1,5 +1,5 @@
 import { ExternalLink } from '../types';
-import miIntranetLogo from '@/assets/logoMiintranet.svg';
+import miIntranetLogo from '@/assets/logo-miintranet.png';
 import consaludLogo from '@/assets/Logo.png';
 
 export const EXTERNAL_LINKS: ExternalLink[] = [
