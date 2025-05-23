@@ -10,7 +10,10 @@ import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styl
 import { HomePageProps } from './types';
 import './styles/animations.css';
 
-export const HomePage: React.FC<HomePageProps> = ({ className = '' }) => {
+export const HomePage: React.FC<HomePageProps> = ({ 
+  className = '',
+  externalLinks // Recibir como prop
+}) => {
   // Hooks
   const { usuario } = useAuth();
   const { menuItems, loading } = useMenuItems();
@@ -66,6 +69,7 @@ export const HomePage: React.FC<HomePageProps> = ({ className = '' }) => {
             <DirectAccessGrid
               loading={loading}
               onExternalLinkClick={openExternalLink}
+              externalLinks={externalLinks} // Pasar la prop
             />
           </div>
         </div>

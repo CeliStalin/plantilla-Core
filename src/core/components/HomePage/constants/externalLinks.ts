@@ -1,12 +1,11 @@
 import { ExternalLink } from '../types';
-import miIntranetLogo from '@/assets/logo-miintranet.png';
-import consaludLogo from '@/assets/Logo.png';
 
+// URLs por defecto usando placeholders o CDNs públicos
 export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'mi-intranet',
     title: 'Mi Intranet',
-    logoSrc: miIntranetLogo,
+    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Mi+Intranet',
     url: 'https://www.consalud.cl',
     alt: 'Mi Intranet',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Mi+Intranet'
@@ -14,7 +13,7 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'portal-consalud',
     title: 'Portal Consalud',
-    logoSrc: consaludLogo,
+    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Portal+Consalud',
     url: 'https://www.consalud.cl',
     alt: 'Portal Consalud',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Portal+Consalud'
@@ -22,7 +21,7 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'consalud-somos-cdc',
     title: 'Consalud Somos CDC',
-    logoSrc: miIntranetLogo,
+    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Consalud+CDC',
     url: 'https://www.consalud.cl',
     alt: 'Consalud Somos CDC',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Consalud+Somos+CDC'

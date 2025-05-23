@@ -9,7 +9,8 @@ import { EXTERNAL_LINKS, ANIMATION_DELAYS } from '../../constants';
 export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({ 
   loading, 
   onExternalLinkClick,
-  className = ''
+  className = '',
+  externalLinks = EXTERNAL_LINKS // Usar valor por defecto si no se proporciona
 }) => {
   return (
     <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>
@@ -28,7 +29,7 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
             <LoadingCard height="120px" />
           </>
         ) : (
-          EXTERNAL_LINKS.map((link, index) => (
+          externalLinks.map((link, index) => (
             <AccessCard
               key={link.id}
               title={link.title}
