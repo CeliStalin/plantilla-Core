@@ -9,7 +9,7 @@ import { MenuItem } from './components/MenuItem';
 import { MenuSection } from './components/MenuSection';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
-import './styles/NavMenu.css'; 
+import { injectMenuStyles } from './utils/styleInjector';
 import AppIcon from '../../../assets/app.svg';
 
 interface NavMenuAppProps {
@@ -18,15 +18,17 @@ interface NavMenuAppProps {
 
 const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
   const { roles, isSignedIn } = useAuth();
-  const { enableDynamicMenu } = useMenuConfig(); // Usar el hook para acceder a la configuración
+  const { enableDynamicMenu } = useMenuConfig();
   const location = useLocation();
   const [menuItems, setMenuItems] = useState<ElementMenu[]>([]);
   const [loading, setLoading] = useState<boolean>(enableDynamicMenu);
-  
-  // Inicia el menú como desplegado (isCollapsed = false)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  
   const prevPathRef = useRef(location.pathname);
+
+  // Inyectar estilos al montar el componente
+  useEffect(() => {
+    injectMenuStyles();
+  }, []);
 
   // Verificar si el usuario tiene el rol 
   const hasDevelopersRole = useMemo(() => {
@@ -100,25 +102,28 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     const newState = !isCollapsed;
     setIsCollapsed(newState);
     
-    // Efecto de rotación 360 grados al hacer clic, 
-    // cambiando la dirección según si estamos abriendo o cerrando
+    // Efecto de rotación mejorado con fallback
     const hamburgerSvg = document.querySelector('.menu-hamburger svg') as HTMLElement;
     if (hamburgerSvg) {
-      // Reinicia la animación quitando todas las clases de animación
+      // Limpiar clases previas
       hamburgerSvg.classList.remove('menu-rotate-cw', 'menu-rotate-ccw');
       
-      // Force reflow para permitir que la animación se reinicie
+      // Force reflow
       void hamburgerSvg.offsetWidth;
       
-      // rotamos en sentido horario, de lo contrario en sentido antihorario
+      // Aplicar animación apropiada
       if (isCollapsed) { 
-        hamburgerSvg.classList.add('menu-rotate-cw'); // Sentido horario
-      } else { // El menú está expandido y vamos a colapsarlo
-        hamburgerSvg.classList.add('menu-rotate-ccw'); // Sentido antihorario
+        hamburgerSvg.classList.add('menu-rotate-cw');
+      } else {
+        hamburgerSvg.classList.add('menu-rotate-ccw');
       }
+
+      // Fallback: remover clase después de la animación
+      setTimeout(() => {
+        hamburgerSvg.classList.remove('menu-rotate-cw', 'menu-rotate-ccw');
+      }, 700); // Duración de la animación
     }
     
-    // Guardamos la preferencia del usuario
     localStorage.setItem('menu-collapsed-state', String(newState));
     
     if (onToggle) {
@@ -180,8 +185,8 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
       <div 
         style={{
           ...navMenuStyles.container(isCollapsed),
-          outline: 'none', // Asegurarse que no hay outline en el contenedor
-          border: 'none'   // Asegurarse que no hay borde en el contenedor
+          outline: 'none',
+          border: 'none'
         }}
       >
         <aside className="menu" style={{ backgroundColor: '#f9f9f9', height: '100%' }}>
@@ -189,10 +194,18 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
             className={`menu-toggle-button ${!isCollapsed ? 'expanded' : ''}`}
             onClick={handleToggle}
             aria-label="Toggle menu"
-            tabIndex={-1} // Hacer que el botón sea indiferente al enfoque del teclado
-            style={{outline: 'none', border: 'none'}} // Aplicar estilos inline para mayor especificidad
+            tabIndex={-1}
+            style={{
+              ...navMenuStyles.menuToggleButton,
+              outline: 'none !important',
+              border: 'none !important',
+              boxShadow: 'none !important'
+            }}
           >
-            <div className="menu-hamburger">
+            <div 
+              className="menu-hamburger"
+              style={navMenuStyles.menuHamburger}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -201,18 +214,21 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                style={navMenuStyles.menuHamburgerSvg}
               >
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </div>
-            {!isCollapsed && <span className="menu-text">Menú</span>}
+            {!isCollapsed && (
+              <span style={navMenuStyles.menuText}>Menú</span>
+            )}
           </button>
           
           <div style={navMenuStyles.menuContent(isCollapsed)}>
             <ul className="menu-list" style={{ padding: 0, listStyle: 'none' }}>
-              {/* Menú Básico - Inicio (visible para todos los roles) */}
+              {/* Menú Básico - Inicio */}
               <MenuSection>
                 <MenuItem 
                   to="/home" 
@@ -239,7 +255,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                 />
               </MenuSection>
 
-              {/* Menú Dinámico - Solo visible si está habilitado y hay elementos */}
+              {/* Menú Dinámico */}
               {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
                 <MenuSection title={
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
@@ -248,7 +264,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                       alt="Aplicaciones"
                       style={{ width: '16px', height: '16px' }}
                     />
-                    Aplicaciones {/* Cambiado de "APLICACIONES" a "Aplicaciones" */}
+                    Aplicaciones
                   </span>
                 }>
                   {menuItems.map((item) => {

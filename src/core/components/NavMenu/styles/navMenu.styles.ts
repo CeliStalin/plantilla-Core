@@ -1,5 +1,46 @@
 import { theme } from '../../../styles/theme';
 
+// Estilos de animación como objetos para mejor portabilidad
+export const menuAnimations = {
+  rotateCW: {
+    animationName: 'rotateCW',
+    animationDuration: 'var(--menu-rotation-duration, 0.7s)',
+    animationTimingFunction: 'var(--menu-rotation-easing, cubic-bezier(0.25, 0.1, 0.25, 1))',
+    transformOrigin: 'center',
+    perspective: '1000px',
+    backfaceVisibility: 'hidden' as const,
+    WebkitFontSmoothing: 'subpixel-antialiased' as const,
+  },
+  rotateCCW: {
+    animationName: 'rotateCCW',
+    animationDuration: 'var(--menu-rotation-duration, 0.7s)',
+    animationTimingFunction: 'var(--menu-rotation-easing, cubic-bezier(0.25, 0.1, 0.25, 1))',
+    transformOrigin: 'center',
+    perspective: '1000px',
+    backfaceVisibility: 'hidden' as const,
+    WebkitFontSmoothing: 'subpixel-antialiased' as const,
+  }
+};
+
+// Keyframes como strings para inyección dinámica
+export const keyframes = `
+@keyframes rotateCW {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotateCCW {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+`;
+
 export const navMenuStyles = {
   container: (isCollapsed: boolean) => ({
     width: isCollapsed ? '50px' : '220px',
@@ -41,13 +82,69 @@ export const navMenuStyles = {
     width: '24px',
     height: '24px',
     transition: 'all 0.3s ease',
-    // Rotación para mantener el ícono horizontal siempre
     color: theme.colors.primary,
-    // Cambia el color o la opacidad para indicar el estado
     opacity: isCollapsed ? 0.8 : 1,
-    // aplica un ligero efecto de escala cuando está desplegado
     transform: isCollapsed ? 'scale(1)' : 'scale(1.1)',
   }),
+  
+  // Nuevos estilos para el botón hamburguesa
+  menuToggleButton: {
+    cursor: 'pointer',
+    backgroundColor: '#f9f9f9', // Solo una declaración de backgroundColor
+    border: 'none',
+    borderRadius: 0,
+    padding: 'var(--menu-button-padding, 12px 15px)',
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'background-color 0.2s ease',
+    outline: 'none',
+    width: '100%',
+    boxSizing: 'border-box' as const,
+    '&:focus, &:active, &:focus-visible, &:focus-within': {
+      outline: 'none !important',
+      border: 'none !important',
+      boxShadow: 'none !important',
+    },
+    '&:hover': {
+      backgroundColor: '#f0f0f0',
+    },
+    '&.expanded': {
+      backgroundColor: '#f9f9f9',
+      color: theme.colors.primary,
+    }
+  },
+
+  menuHamburger: {
+    position: 'relative' as const,
+    width: 'var(--menu-icon-size, 36px)',
+    height: 'var(--menu-icon-size, 36px)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  menuHamburgerSvg: {
+    transition: 'transform 0.3s ease, opacity 0.2s ease',
+    color: theme.colors.primary,
+    width: 'var(--menu-svg-size, 28px)',
+    height: 'var(--menu-svg-size, 28px)',
+    transformOrigin: 'center center',
+    willChange: 'transform',
+    '&:hover': {
+      transform: 'scale(1.1)',
+    },
+    '&:active': {
+      transform: 'scale(0.95)',
+    }
+  },
+
+  menuText: {
+    marginLeft: 'var(--menu-text-spacing, 12px)',
+    color: '#555',
+    fontSize: 'var(--menu-text-size, 18px)',
+    fontWeight: 'var(--menu-font-weight, 500)',
+    letterSpacing: 'var(--menu-letter-spacing, 0.5px)',
+  },
   
   menuContent: (isCollapsed: boolean) => ({
     opacity: isCollapsed ? 0 : 1,
