@@ -13,7 +13,7 @@ import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLink
 
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
-  externalLinks // Recibir como prop
+  externalLinks 
 }) => {
   // Hooks
   const { usuario } = useAuth();
@@ -25,10 +25,11 @@ export const HomePage: React.FC<HomePageProps> = ({
   const firstName = getFirstName(usuario?.displayName);
   const linksToUse = externalLinks || defaultExternalLinks; // Usar los links por defecto si no se proveen props
 
-  // Styles
+  // Styles - asegurar que el backgroundColor se aplique correctamente
   const containerStyle = {
     ...homePageStyles.container,
-    ...(isMobile ? responsiveHomePageStyles.mobile.container : {})
+    ...(isMobile ? responsiveHomePageStyles.mobile.container : {}),
+    backgroundColor: '#ffffff' // Asegurar que siempre sea blanco
   };
 
   const mainContentStyle = {
@@ -71,7 +72,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <DirectAccessGrid
               loading={loading}
               onExternalLinkClick={openExternalLink}
-              externalLinks={linksToUse} // Pasar la variable linksToUse
+              externalLinks={linksToUse} 
             />
           </div>
         </div>

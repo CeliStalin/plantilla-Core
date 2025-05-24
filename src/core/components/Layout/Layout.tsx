@@ -56,7 +56,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundC
         
         <main style={{ 
           marginLeft: isMenuCollapsed ? "50px" : "220px", 
-          padding: "20px", 
+          padding: "0", // Cambiado de "20px" a "0" para dar más espacio
           width: "100%",
           transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           minHeight: 'calc(100vh - 4rem)',

@@ -2,24 +2,26 @@ import { theme } from '@/core/styles/theme';
 
 export const homePageStyles = {
   container: {
-    padding: '40px 60px',
-    backgroundColor: '#f5f7fa',
-    minHeight: '100vh'
+    padding: '0', 
+    backgroundColor: '#ffffff',
+    minHeight: '100vh',
+    width: '100%' 
   },
   
   mainContent: {
     display: 'flex',
     gap: '2rem',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    padding: '0 20px' 
   },
   
   leftColumn: {
-    flex: '0 0 58.333333%', // is-7 equivalent
+    flex: '0 0 58.333333%', 
     minWidth: 0
   },
   
   rightColumn: {
-    flex: '0 0 41.666667%', // is-5 equivalent
+    flex: '0 0 41.666667%', 
     minWidth: 0
   }
 };
@@ -27,12 +29,14 @@ export const homePageStyles = {
 export const responsiveHomePageStyles = {
   mobile: {
     container: {
-      padding: '20px'
+      padding: '0', 
+      backgroundColor: '#ffffff'
     },
     
     mainContent: {
       flexDirection: 'column' as const,
-      gap: '1.5rem'
+      gap: '1.5rem',
+      padding: '0 10px' 
     },
     
     leftColumn: {

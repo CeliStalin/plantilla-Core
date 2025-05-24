@@ -4,7 +4,8 @@ export const welcomeSectionStyles = {
   container: {
     marginBottom: '40px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: '0 20px' // Añadir padding horizontal para mantener espaciado
   },
   
   iconContainer: {
@@ -41,7 +42,8 @@ export const responsiveWelcomeStyles = {
   mobile: {
     container: {
       flexDirection: 'column' as const,
-      textAlign: 'center' as const
+      textAlign: 'center' as const,
+      padding: '0 10px' // Padding más pequeño en móvil
     },
     
     iconContainer: {
