@@ -1,18 +1,15 @@
-import React, { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.css';
-import 'bulma/css/bulma.min.css';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import App from './App';
-import { AuthProvider } from './core/context/AuthContext';
-import { injectMenuStyles } from './core/components/NavMenu/utils/styleInjector';
+import './core/styles/global.css';
+import './App.css';
 
-// Inyectar estilos del menú al inicio
-injectMenuStyles();
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AuthProvider>
-      <App/>
-    </AuthProvider>
-  </StrictMode>,
-)
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

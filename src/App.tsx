@@ -9,6 +9,7 @@ import HomePage from './core/components/HomePage';
 import Login from './core/components/Login/Login';
 import Unauthorized from './core/components/Unauthorized';
 import Dashboard from './core/components/Dashboard/DashboardPage';
+import './core/styles/global.css';
 import './App.css';
 
 // Componente de error genérico

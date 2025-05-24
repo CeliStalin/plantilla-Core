@@ -73,4 +73,8 @@ export const theme = {
       fast: 'all 0.1s ease-in-out',
       slow: 'all 0.3s ease-in-out',
     },
+    animations: {
+      spin: 'spin 1s linear infinite',
+      spinKeyframes: 'spin',
+    },
   };
