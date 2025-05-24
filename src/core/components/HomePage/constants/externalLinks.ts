@@ -1,11 +1,12 @@
 import { ExternalLink } from '../types';
+import { logoMiintranet as logoIconMiintranet } from '../../../../assets';
 
 // URLs por defecto usando placeholders o CDNs públicos
 export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'mi-intranet',
     title: 'Mi Intranet',
-    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Mi+Intranet',
+    logoSrc: logoIconMiintranet,
     url: 'https://www.consalud.cl',
     alt: 'Mi Intranet',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Mi+Intranet'
@@ -13,7 +14,7 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'portal-consalud',
     title: 'Portal Consalud',
-    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Portal+Consalud',
+    logoSrc: 'https://via.placeholder.com/150x50/04A59B/FFFFFF?text=Portal+Consalud', // <--- Esta es la URL que ves en la consola
     url: 'https://www.consalud.cl',
     alt: 'Portal Consalud',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Portal+Consalud'

@@ -1,4 +1,3 @@
-// Importar archivos específicos
 import LogoImage from './Logo.png';
 import LogoutIcon from './Group.png';
 import DocumentsFileCheckmarkSvg from './documents-file-checkmark.svg';

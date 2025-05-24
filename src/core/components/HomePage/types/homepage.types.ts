@@ -2,7 +2,7 @@ import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 
 export interface HomePageProps {
   className?: string;
-  externalLinks?: ExternalLink[]; // Añadir esta prop opcional
+  externalLinks?: ExternalLink[]; 
 }
 
 export interface WelcomeSectionProps {
@@ -27,7 +27,7 @@ export interface DirectAccessGridProps {
   loading: boolean;
   onExternalLinkClick: (url: string) => void;
   className?: string;
-  externalLinks?: ExternalLink[]; // Añadir esta prop opcional
+  externalLinks?: ExternalLink[]; 
 }
 
 export interface AccessCardProps {

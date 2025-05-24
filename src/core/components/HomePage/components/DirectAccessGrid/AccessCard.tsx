@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AccessCardProps } from '../../types';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
 
@@ -11,6 +11,12 @@ export const AccessCard: React.FC<AccessCardProps> = ({
 }) => {
   const [imageError, setImageError] = useState(false);
   
+  // Resetear imageError cuando cambie logoSrc
+  useEffect(() => {
+    setImageError(false);
+  }, [logoSrc, title]);
+
+
   const handleClick = () => onClick(url);
   
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -23,6 +29,10 @@ export const AccessCard: React.FC<AccessCardProps> = ({
 
   const handleImageError = () => {
     setImageError(true);
+  };
+
+  const handleImageLoad = () => {
+    setImageError(false);
   };
 
   const getFallbackSrc = () => {
@@ -54,6 +64,7 @@ export const AccessCard: React.FC<AccessCardProps> = ({
         alt={title}
         style={directAccessGridStyles.cardImage}
         onError={handleImageError}
+        onLoad={handleImageLoad}
         loading="lazy"
       />
     </div>

@@ -9,6 +9,7 @@ import { getFirstName } from './utils';
 import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styles';
 import { HomePageProps } from './types';
 import './styles/animations.css';
+import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks'; // Importar los links por defecto
 
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
@@ -22,6 +23,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   // Derived data
   const firstName = getFirstName(usuario?.displayName);
+  const linksToUse = externalLinks || defaultExternalLinks; // Usar los links por defecto si no se proveen props
 
   // Styles
   const containerStyle = {
@@ -69,7 +71,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <DirectAccessGrid
               loading={loading}
               onExternalLinkClick={openExternalLink}
-              externalLinks={externalLinks} // Pasar la prop
+              externalLinks={linksToUse} // Pasar la variable linksToUse
             />
           </div>
         </div>
