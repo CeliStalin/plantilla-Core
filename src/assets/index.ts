@@ -5,8 +5,9 @@ import MapsSvg from './Maps.svg';
 import appSvg from './app.svg';
 import RowSvg from './Row.svg';
 import logoMiintranet from './logo-miintranet.png';
-
-
+// Agregar las nuevas imágenes
+import logoPortalConsalud from './Logo.png';
+import logoConsaludCDC from './Logo.png';
 
 // Exportar individualmente para mantener compatibilidad
 export {
@@ -17,23 +18,24 @@ export {
   appSvg,
   RowSvg,
   logoMiintranet,
-  
+  logoPortalConsalud,
+  logoConsaludCDC,
 };
 
 // Exportar por categorías para mejor organización
 export const Images = {
   Logo: LogoImage,
-  // Agregar más imágenes aquí
+  PortalConsalud: logoPortalConsalud,
+  ConsaludCDC: logoConsaludCDC,
 };
 
 export const Icons = {
   Logout: LogoutIcon,
   DocumentsFileCheckmark: DocumentsFileCheckmarkSvg,
-  MapsIcon :MapsSvg,
-  AppIcon :appSvg,
+  MapsIcon: MapsSvg,
+  AppIcon: appSvg,
   RrowIcon: RowSvg,
-  logoIntranet :logoMiintranet
-  // Agregar más iconos aquí
+  logoIntranet: logoMiintranet
 };
 
 // Objeto consolidado

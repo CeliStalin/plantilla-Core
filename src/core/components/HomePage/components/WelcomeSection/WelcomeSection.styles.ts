@@ -5,7 +5,7 @@ export const welcomeSectionStyles = {
     marginBottom: '40px',
     display: 'flex',
     alignItems: 'center',
-    padding: '0 20px' // Añadir padding horizontal para mantener espaciado
+    padding: '0', // Eliminar padding para alineación con grids
   },
   
   iconContainer: {
@@ -16,7 +16,8 @@ export const welcomeSectionStyles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: '20px'
+    marginRight: '20px',
+    flexShrink: 0 // Prevenir que se encoja
   },
   
   content: {
@@ -27,7 +28,8 @@ export const welcomeSectionStyles = {
     color: '#424242',
     marginBottom: '0.5rem',
     fontSize: '2rem',
-    fontWeight: 600
+    fontWeight: 600,
+    margin: 0
   },
   
   subtitle: {
@@ -43,12 +45,18 @@ export const responsiveWelcomeStyles = {
     container: {
       flexDirection: 'column' as const,
       textAlign: 'center' as const,
-      padding: '0 10px' // Padding más pequeño en móvil
+      padding: '0'
     },
     
     iconContainer: {
       marginRight: 0,
       marginBottom: '16px'
+    }
+  },
+  
+  tablet: {
+    container: {
+      padding: '0'
     }
   }
 };

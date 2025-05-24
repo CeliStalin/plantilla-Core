@@ -22,27 +22,30 @@ export const directAccessGridStyles = {
   grid: {
     display: 'grid',
     gridTemplateColumns: '1fr',
-    gap: '20px'
+    gap: '16px'
   },
   
   card: {
     border: '1px solid #E0E0E0',
     borderRadius: '8px',
-    padding: '30px',
+    padding: '24px',
     cursor: 'pointer',
     backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'all 0.2s ease',
-    minHeight: '120px',
+    minHeight: '100px',
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'inherit',
+    overflow: 'hidden'
   },
   
   cardImage: {
-    maxHeight: '50px',
-    maxWidth: '100%',
+    maxHeight: '60px',
+    maxWidth: '180px',
+    width: 'auto',
+    height: 'auto',
     objectFit: 'contain' as const
   }
 };

@@ -9,7 +9,7 @@ import { getFirstName } from './utils';
 import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styles';
 import { HomePageProps } from './types';
 import './styles/animations.css';
-import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks'; // Importar los links por defecto
+import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
 
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
@@ -18,33 +18,40 @@ export const HomePage: React.FC<HomePageProps> = ({
   // Hooks
   const { usuario } = useAuth();
   const { menuItems, loading } = useMenuItems();
-  const { isMobile } = useResponsive();
+  const { isMobile, isTablet } = useResponsive();
   const { navigateToApp, openExternalLink } = useNavigation();
 
   // Derived data
   const firstName = getFirstName(usuario?.displayName);
-  const linksToUse = externalLinks || defaultExternalLinks; // Usar los links por defecto si no se proveen props
+  const linksToUse = externalLinks || defaultExternalLinks;
 
-  // Styles - asegurar que el backgroundColor se aplique correctamente
+  // Styles - combinar estilos base con responsive
   const containerStyle = {
     ...homePageStyles.container,
     ...(isMobile ? responsiveHomePageStyles.mobile.container : {}),
-    backgroundColor: '#ffffff' // Asegurar que siempre sea blanco
+    ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.container : {}),
+    backgroundColor: '#ffffff',
+    // Asegurar que no haya restricciones de ancho
+    maxWidth: '100%',
+    margin: 0
   };
 
   const mainContentStyle = {
     ...homePageStyles.mainContent,
-    ...(isMobile ? responsiveHomePageStyles.mobile.mainContent : {})
+    ...(isMobile ? responsiveHomePageStyles.mobile.mainContent : {}),
+    ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.mainContent : {})
   };
 
   const leftColumnStyle = {
     ...homePageStyles.leftColumn,
-    ...(isMobile ? responsiveHomePageStyles.mobile.leftColumn : {})
+    ...(isMobile ? responsiveHomePageStyles.mobile.leftColumn : {}),
+    ...(isTablet && !isMobile ? { maxWidth: '600px' } : {})
   };
 
   const rightColumnStyle = {
     ...homePageStyles.rightColumn,
-    ...(isMobile ? responsiveHomePageStyles.mobile.rightColumn : {})
+    ...(isMobile ? responsiveHomePageStyles.mobile.rightColumn : {}),
+    ...(isTablet && !isMobile ? { maxWidth: '350px' } : {})
   };
 
   return (

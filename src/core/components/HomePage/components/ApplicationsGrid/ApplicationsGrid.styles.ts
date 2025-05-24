@@ -21,14 +21,15 @@ export const applicationsGridStyles = {
   
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '20px'
+    gridTemplateColumns: 'repeat(2, minmax(250px, 1fr))',
+    gap: '16px',
+    width: '100%'
   },
   
   card: {
     border: '1px solid #E0E0E0',
     borderRadius: '8px',
-    padding: '20px',
+    padding: '20px 24px',
     cursor: 'pointer',
     backgroundColor: 'white',
     transition: 'all 0.2s ease',
@@ -36,14 +37,16 @@ export const applicationsGridStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'inherit',
+    minHeight: '60px'
   },
   
   cardTitle: {
     fontWeight: 500,
-    color: '#505050',
+    color: '#666666',
     margin: 0,
-    fontSize: '0.95rem'
+    fontSize: '15px',
+    letterSpacing: '-0.01em'
   },
   
   emptyCard: {

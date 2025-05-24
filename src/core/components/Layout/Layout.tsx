@@ -13,6 +13,7 @@ interface LayoutProps {
 // Mapa de rutas a títulos de página
 const pageTitles: { [key: string]: string } = {
   '/': 'Inicio',
+  '/home': 'Inicio',
   '/dashboard': 'Dashboard',
   '/profile': 'Mi Perfil',
   '/admin': 'Panel de Administración',
@@ -21,7 +22,6 @@ const pageTitles: { [key: string]: string } = {
 };
 
 export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundColor = '#ffffff' }) => {
-  //Estado inicial a false para tener el menú desplegado
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
   const location = useLocation();
   
@@ -31,7 +31,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundC
     if (savedPreference !== null) {
       setIsMenuCollapsed(savedPreference === 'true');
     }
-    // Si no hay preferencia guardada, el valor por defecto es false (menú desplegado)
   }, []);
   
   const handleMenuToggle = (collapsed: boolean) => {
@@ -46,7 +45,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundC
       <Header 
         logoUrl={logoIcon}
         altText="Consalud Logo"
-        pageTitle={pageTitle}
+        pageTitle={currentPageTitle}
       />
       
       <div className="layout-body" style={{ paddingTop: "4rem", display: "flex" }}>
@@ -56,12 +55,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle, backgroundC
         
         <main style={{ 
           marginLeft: isMenuCollapsed ? "50px" : "220px", 
-          padding: "0", // Cambiado de "20px" a "0" para dar más espacio
+          padding: "0", // Sin padding para usar todo el ancho
           width: "100%",
           transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           minHeight: 'calc(100vh - 4rem)',
-          backgroundColor: '#ffffff', 
-          position: 'relative', 
+          backgroundColor: backgroundColor,
+          position: 'relative',
+          overflow: 'hidden' // Prevenir scroll horizontal
         }}>
           {children}
         </main>
