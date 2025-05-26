@@ -3,7 +3,6 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .logo {
@@ -37,15 +36,18 @@
 
 .card {
   padding: 2em;
-  font-family: inherit;
+  font-family: inherit; /* Asegura la herencia */
 }
 
 .read-the-docs {
   color: #888;
-  font-family: inherit;
+  font-family: inherit; /* Asegura la herencia */
 }
 
 /* Asegurar que todos los elementos usen Work Sans */
+/* Esta regla global con * puede ser muy agresiva y podría eliminarse si la herencia desde html/:root funciona bien. */
+/* Si se mantiene, 'inherit' es una mejor opción que re-declarar la pila de fuentes. */
 * {
-  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; */
+  font-family: inherit; /* Mejor para asegurar la herencia de la fuente definida globalmente */
 }
