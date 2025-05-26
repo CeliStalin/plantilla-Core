@@ -167,7 +167,8 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
           <LoadingDots size="small" color={theme.colors.primary} />
           <span style={{ 
             color: theme.colors.gray.dark, 
-            fontSize: theme.typography.fontSize.sm 
+            fontSize: theme.typography.fontSize.sm,
+            fontFamily: theme.typography.fontFamily.primary
           }}>
             Cargando menú...
           </span>
@@ -183,13 +184,23 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
   return (
     <div>
       <div 
+        className="nav-menu-container"
         style={{
           ...navMenuStyles.container(isCollapsed),
-          outline: 'none',
-          border: 'none'
+          outline: 'none !important',
+          border: 'none !important',
+          boxShadow: isCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
         }}
       >
-        <aside className="menu" style={{ backgroundColor: '#f9f9f9', height: '100%' }}>
+        <aside 
+          className="menu" 
+          style={{ 
+            backgroundColor: '#f9f9f9', 
+            height: '100%',
+            border: 'none !important',
+            outline: 'none !important',
+          }}
+        >
           <button 
             className={`menu-toggle-button ${!isCollapsed ? 'expanded' : ''}`}
             onClick={handleToggle}

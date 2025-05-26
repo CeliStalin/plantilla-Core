@@ -32,14 +32,16 @@ export const headerStyles = {
     color: 'white',
     margin: '0 1rem',
     fontSize: '1.5rem',
-    fontWeight: '300' as const,
+    fontWeight: theme.typography.fontWeight.light,
+    fontFamily: theme.typography.fontFamily.primary,
     opacity: 0.8,
   },
   
   pageTitle: {
     color: 'white',
     fontSize: '1.2rem',
-    fontWeight: '500' as const,
+    fontWeight: theme.typography.fontWeight.medium,
+    fontFamily: theme.typography.fontFamily.primary,
     letterSpacing: '0.5px',
   }
 };

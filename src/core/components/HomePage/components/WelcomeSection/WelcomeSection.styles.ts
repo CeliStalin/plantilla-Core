@@ -28,7 +28,8 @@ export const welcomeSectionStyles = {
     color: '#424242',
     marginBottom: '0.5rem',
     fontSize: '2rem',
-    fontWeight: 600,
+    fontWeight: theme.typography.fontWeight.semibold,
+    fontFamily: theme.typography.fontFamily.primary,
     margin: 0
   },
   
@@ -36,6 +37,8 @@ export const welcomeSectionStyles = {
     color: '#757575',
     fontSize: '0.95rem',
     lineHeight: '1.4',
+    fontFamily: theme.typography.fontFamily.primary,
+    fontWeight: theme.typography.fontWeight.normal,
     margin: 0
   }
 };

@@ -1,4 +1,4 @@
- :root {
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -114,4 +114,18 @@ html, body {
 .menu-toggle-button:focus-visible {
   background-color: #f0f0f0;
   outline: none;
+}
+
+/* Eliminar bordes del contenedor del menú */
+.menu,
+aside.menu {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Eliminar bordes del contenedor principal del nav menu */
+.nav-menu-container {
+  border: none !important;
+  outline: none !important;
 }

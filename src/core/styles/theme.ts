@@ -22,6 +22,10 @@ export const theme = {
       xl: '32px',
     },
     typography: {
+      fontFamily: {
+        primary: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        fallback: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+      },
       fontSize: {
         xs: '12px',
         sm: '14px',
@@ -30,8 +34,10 @@ export const theme = {
         xl: '24px',
       },
       fontWeight: {
+        light: 300,
         normal: 400,
         medium: 500,
+        semibold: 600,
         bold: 700,
       },
       lineHeight: {

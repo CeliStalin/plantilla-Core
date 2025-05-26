@@ -22,7 +22,9 @@ export const titleStyles = {
   fontSize: '14px', 
   lineHeight: theme.typography.lineHeight.normal,
   margin: '0 auto', 
-  padding: '0 20px', 
+  padding: '0 20px',
+  fontFamily: theme.typography.fontFamily.primary,
+  fontWeight: theme.typography.fontWeight.medium,
 };
 
 export const primaryButton = {
@@ -36,7 +38,8 @@ export const primaryButton = {
   color: theme.colors.white,
   boxShadow: theme.shadows.button,
   border: 'none',
-  fontWeight: 'bold' as const,
+  fontFamily: theme.typography.fontFamily.primary,
+  fontWeight: theme.typography.fontWeight.semibold,
 };
 
 // Nuevos estilos para advertencia de red
@@ -50,12 +53,14 @@ export const networkWarning = {
     backgroundColor: '#f8d7da',
     fontSize: '15px',
     textAlign: 'center' as const,
-    fontWeight: '500',
+    fontWeight: theme.typography.fontWeight.medium,
+    fontFamily: theme.typography.fontFamily.primary,
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
   },
   title: {
     fontSize: '16px', 
-    fontWeight: 'bold', 
+    fontWeight: theme.typography.fontWeight.semibold,
+    fontFamily: theme.typography.fontFamily.primary,
     marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
@@ -73,7 +78,9 @@ export const networkWarning = {
     textAlign: 'center' as const, 
     fontSize: '12px', 
     color: '#666',
-    marginTop: '8px'
+    marginTop: '8px',
+    fontFamily: theme.typography.fontFamily.primary,
+    fontWeight: theme.typography.fontWeight.normal,
   }
 };
 
