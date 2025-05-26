@@ -15,3 +15,4 @@ export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { default as HomePage } from './HomePage/HomePage';
 export { default as SecureLayout } from './SecureLayout/SecureLayout';
+export { default as ProtectedRoute } from './ProtectedRoute';

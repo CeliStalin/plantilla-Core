@@ -1,14 +1,13 @@
 import React, { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './core/context/AuthContext';
 import { MenuConfigProvider } from './core/context/MenuConfigContext';
 import { ErrorBoundary } from './core/components/ErrorBoundary/ErrorBoundary';
 import { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
-import NotFound from './core/components/NotFound';
-import HomePage from './core/components/HomePage';
-import Login from './core/components/Login/Login';
-import Unauthorized from './core/components/Unauthorized';
-import Dashboard from './core/components/Dashboard/DashboardPage';
+import { routes as appRoutes } from './core/routes/routes.config';
+import ProtectedRoute from './core/components/ProtectedRoute'; // Import the new component
+import NotFound from './core/components/NotFound'; // Keep direct import for catch-all
+
 import './core/styles/global.css';
 import './App.css';
 
@@ -23,82 +22,52 @@ const ErrorFallback = () => (
   </div>
 );
 
-// Componente para redirección a Home
+// Componente para redirección a Home (si / path should always go to /home)
 const RedirectToHome = () => {
   React.useEffect(() => {
+    // Using Navigate component is preferred in React Router v6+ for declarative redirects
+    // However, for a top-level redirect like this, direct navigation or a Navigate component is fine.
+    // For simplicity with existing structure, window.location.href is kept, but consider <Navigate to="/home" replace />
     window.location.href = '/home';
   }, []);
-  return null;
+  return <LoadingOverlay show message="Redirigiendo..." />; // Show loader during redirect
 };
 
-// Componentes para proteger rutas
-const ProtectedHome = () => {
-  const isAuthenticated = localStorage.getItem('isLogin') === 'true';
-  React.useEffect(() => {
-    if (!isAuthenticated) {
-      window.location.href = '/login';
-    }
-  }, [isAuthenticated]);
-  
-  return isAuthenticated ? <HomePage /> : null;
-};
-
-const ProtectedDashboard = () => {
-  const isAuthenticated = localStorage.getItem('isLogin') === 'true';
-  // Verificar roles del usuario
-  let userHasRole = false;
-  try {
-    const storedRoles = localStorage.getItem('roles');
-    if (storedRoles) {
-      const roles = JSON.parse(storedRoles);
-      const roleNames = roles.map((r: any) => r.Rol);
-      userHasRole = roleNames.some((r: string) => ['ADMIN', 'Developers'].includes(r));
-    }
-  } catch (e) {
-    console.error('Error al verificar roles:', e);
-  }
-  
-  React.useEffect(() => {
-    if (!isAuthenticated) {
-      window.location.href = '/login';
-    } else if (!userHasRole) {
-      window.location.href = '/unauthorized';
-    }
-  }, [isAuthenticated, userHasRole]);
-  
-  return (isAuthenticated && userHasRole) ? <Dashboard /> : null;
-};
-
-const PublicLogin = () => {
-  const isAuthenticated = localStorage.getItem('isLogin') === 'true';
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      window.location.href = '/home';
-    }
-  }, [isAuthenticated]);
-  
-  return !isAuthenticated ? <Login /> : null;
-};
 
 const App = () => {
-  // Crear router configurado para v7
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        {/* Ruta raíz - Redirige a home */}
+        {/* Explicit redirect for the root path to /home */}
         <Route path="/" element={<RedirectToHome />} />
+
+        {appRoutes.map((route) => {
+          // Skip the root path if it's in appRoutes, as we handle it above
+          if (route.path === '/') {
+            return null;
+          }
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={
+                <ProtectedRoute
+                  component={route.component}
+                  roles={route.roles}
+                  isPublic={route.public}
+                />
+              }
+            />
+          );
+        })}
         
-        {/* Rutas públicas */}
-        <Route path="/login" element={<PublicLogin />} />
-        <Route path="/404" element={<NotFound />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        
-        {/* Rutas privadas */}
-        <Route path="/home" element={<ProtectedHome />} />
-        <Route path="/dashboard" element={<ProtectedDashboard />} />
-        
-        {/* Ruta 404 - Captura cualquier otra ruta */}
-        <Route path="*" element={<NotFound />} />
+        {/* Ruta 404 - Captura cualquier otra ruta no definida in appRoutes */}
+        {/* Ensure NotFound is also lazy-loaded if not already, or handle its loading state */}
+        <Route path="*" element={
+          <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
+            <NotFound />
+          </Suspense>
+        } />
       </>
     )
   );
