@@ -8,7 +8,7 @@ import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
 import logoIcon from '../../../assets/Logo.png';
 
-interface LoginProps {
+export interface LoginProps { 
   backgroundColor?: string; 
   boxBackgroundColor?: string;
   textColor?: string;
@@ -45,10 +45,6 @@ const Login: React.FC<LoginProps> = ({
     return savedMethod === 'redirect';
   });
   
-  // Comentamos toda la funcionalidad relacionada con la verificación de API/Red
-  // const [isCheckingNetwork, setIsCheckingNetwork] = useState(false);
-  // const [networkAccess, setNetworkAccess] = useState<boolean | null>(null);
-
   // Verificar si estamos en medio de un flujo de redirección
   const isInRedirectFlow = () => {
     return window.location.href.includes("code=") || 
