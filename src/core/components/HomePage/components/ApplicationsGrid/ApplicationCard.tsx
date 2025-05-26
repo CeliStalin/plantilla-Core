@@ -40,10 +40,10 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
           handleClick();
         }
       }}
-      aria-label={`Abrir aplicación ${item.Nombre}`}
+      aria-label={`Abrir aplicación ${item.Descripcion || item.Nombre}`} // Usar Descripcion, con fallback a Nombre
     >
       <span style={applicationsGridStyles.cardTitle}>
-        {item.Nombre}
+        {item.Descripcion || item.Nombre} {/* Mostrar Descripcion, con fallback a Nombre */}
       </span>
       <ChevronRightIcon />
     </div>

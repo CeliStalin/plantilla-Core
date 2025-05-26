@@ -20,10 +20,6 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
     ...(isMobile ? responsiveApplicationsStyles.mobile.grid : {})
   };
 
-  // Generate empty cards if needed to fill grid
-  const emptyCardsCount = Math.max(0, 6 - menuItems.length);
-  const emptyCards = Array(emptyCardsCount).fill(0);
-
   return (
     <div className={`applications-section ${className}`} style={applicationsGridStyles.container}>
       <div style={applicationsGridStyles.sectionHeader}>
@@ -35,7 +31,7 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
       
       <div style={gridStyle}>
         {loading ? (
-          <LoadingPlaceholder rows={6} style={{ gridColumn: '1 / span 2' }} />
+          <LoadingPlaceholder rows={menuItems.length > 0 ? Math.min(menuItems.length, 6) : 2} style={{ gridColumn: '1 / span 2' }} />
         ) : (
           <>
             {menuItems.map((item, index) => (
@@ -44,21 +40,6 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
                 item={item}
                 onClick={onAppClick}
                 delay={ANIMATION_DELAYS.CARD_BASE_DELAY * (index + 1)}
-              />
-            ))}
-            
-            {emptyCards.map((_, index) => (
-              <ApplicationCard
-                key={`empty-${index}`}
-                item={{
-                  Id: -index,
-                  Nombre: `Aplicación ${index + menuItems.length + 1}`,
-                  Controlador: '',
-                  Accion: '',
-                  Descripcion: `Aplicación ${index + menuItems.length + 1}`
-                } as any}
-                onClick={() => {}} // No hacer nada para cards vacías
-                delay={ANIMATION_DELAYS.CARD_BASE_DELAY * (menuItems.length + index + 1)}
               />
             ))}
           </>
