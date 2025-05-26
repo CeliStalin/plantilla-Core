@@ -13,6 +13,9 @@ export * from './NavMenu';
 export * from './UserLogin';
 export { default as SecureLayout } from './SecureLayout/SecureLayout';
 export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as NotFound } from './NotFound';
+export { default as Unauthorized } from './Unauthorized';
+export { default as HomePage } from './HomePage/HomePage';
 
 // Lazy exports para componentes de página
 export const LazyComponents = {
