@@ -86,11 +86,7 @@
   .access-card:nth-child(2) { animation-delay: 0.4s; }
   .access-card:nth-child(3) { animation-delay: 0.5s; }
   
-  /* Hover effects */
-  .app-card:hover {
-    animation: pulse 0.4s ease-in-out;
-  }
-  
+  /* Hover effecto */
   .app-card:hover svg {
     animation: rotateChevron 0.3s forwards;
   }
