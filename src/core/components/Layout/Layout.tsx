@@ -81,12 +81,12 @@ export const Layout: React.FC<LayoutProps> = ({
           display: 'flex',
           flexDirection: 'column'
         }}>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, padding: "1rem" }}>
             {children}
           </div>
-          {showFooter && <Footer />}
         </main>
       </div>
+      {showFooter && <Footer />}
     </div>
   );
 };
