@@ -87,3 +87,24 @@ aside.menu * {
     padding-right: 80px !important;
   }
 }
+
+/* Soporte para animaciones del avatar */
+.welcome-section .icon-container {
+  /* Optimización para animaciones suaves */
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  
+  /* Mejorar rendimiento en dispositivos móviles */
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* Optimización para dispositivos con menos potencia */
+@media (max-width: 480px) {
+  .welcome-section .icon-container {
+    /* Reducir complejidad en dispositivos pequeños */
+    will-change: auto;
+  }
+}

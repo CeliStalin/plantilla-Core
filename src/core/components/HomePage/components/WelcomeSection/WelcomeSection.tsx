@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { WelcomeSectionProps } from '../../types';
 import { UserIcon } from '../../icons/HomePageIcons';
 import { welcomeSectionStyles, responsiveWelcomeStyles } from './WelcomeSection.styles';
@@ -8,16 +8,31 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   userName = 'Usuario', 
   className = '' 
 }) => {
-  const { isMobile } = useResponsive();
+  const { isMobile, isTablet } = useResponsive();
 
+  // Manejo de interacciones del avatar
+  const handleAvatarClick = useCallback(() => {
+    console.log('Avatar clicked - ready for future functionality');
+  }, []);
+
+  const handleAvatarKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleAvatarClick();
+    }
+  }, [handleAvatarClick]);
+
+  // Combinación de estilos responsivos
   const containerStyle = {
     ...welcomeSectionStyles.container,
-    ...(isMobile ? responsiveWelcomeStyles.mobile.container : {})
+    ...(isMobile ? responsiveWelcomeStyles.mobile.container : {}),
+    ...(isTablet && !isMobile ? responsiveWelcomeStyles.tablet.container : {})
   };
 
   const iconContainerStyle = {
     ...welcomeSectionStyles.iconContainer,
-    ...(isMobile ? responsiveWelcomeStyles.mobile.iconContainer : {})
+    ...(isMobile ? responsiveWelcomeStyles.mobile.iconContainer : {}),
+    ...(isTablet && !isMobile ? responsiveWelcomeStyles.tablet.iconContainer : {})
   };
 
   return (
@@ -25,7 +40,16 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
       className={`welcome-section ${className}`} 
       style={containerStyle}
     >
-      <div style={iconContainerStyle}>
+      <div 
+        className="icon-container"
+        style={iconContainerStyle}
+        onClick={handleAvatarClick}
+        onKeyDown={handleAvatarKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-label={`Avatar de ${userName}. Click para opciones de perfil`}
+        title={`Perfil de ${userName}`}
+      >
         <UserIcon />
       </div>
       <div style={welcomeSectionStyles.content}>

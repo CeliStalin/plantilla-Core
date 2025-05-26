@@ -5,7 +5,7 @@ export const welcomeSectionStyles = {
     marginBottom: '40px',
     display: 'flex',
     alignItems: 'center',
-    padding: '0', // Eliminar padding para alineación con grids
+    padding: '0', // padding para alineación con grids
   },
   
   iconContainer: {
@@ -17,7 +17,17 @@ export const welcomeSectionStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: '20px',
-    flexShrink: 0 // Prevenir que se encoja
+    flexShrink: 0, // Prevenir que se encoja
+    cursor: 'pointer',
+    position: 'relative' as const,
+    overflow: 'hidden',
+    willChange: 'transform, box-shadow',
+    // Sombra base 
+    boxShadow: '0 4px 8px rgba(4, 165, 155, 0.15), 0 2px 4px rgba(4, 165, 155, 0.1)',
+    // Transición suave para interacciones
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    // Asegurar que el avatar esté sobre otros elementos
+    zIndex: 1,
   },
   
   content: {
@@ -53,13 +63,20 @@ export const responsiveWelcomeStyles = {
     
     iconContainer: {
       marginRight: 0,
-      marginBottom: '16px'
+      marginBottom: '16px',
+      // Reducir intensidad en móviles para mejor rendimiento
+      boxShadow: '0 2px 4px rgba(4, 165, 155, 0.1)',
     }
   },
   
   tablet: {
     container: {
       padding: '0'
+    },
+    
+    iconContainer: {
+      // Efecto intermedio en tablets
+      boxShadow: '0 3px 6px rgba(4, 165, 155, 0.12)',
     }
   }
 };
