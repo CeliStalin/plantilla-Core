@@ -13,11 +13,13 @@ export default {
       file: 'dist/index.js',
       format: 'cjs',
       sourcemap: true,
+      inlineDynamicImports: true,
     },
     {
       file: 'dist/index.esm.js',
       format: 'esm',
       sourcemap: true,
+      inlineDynamicImports: true,
     },
   ],
   plugins: [
