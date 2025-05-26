@@ -5,9 +5,9 @@ import MapsSvg from './Maps.svg';
 import appSvg from './app.svg';
 import RowSvg from './Row.svg';
 import logoMiintranet from './logo-miintranet.png';
-// Agregar las nuevas imágenes
 import logoPortalConsalud from './Logo.png';
 import logoConsaludCDC from './Logo.png';
+import FooterDesktop from './FooterDesktop.png'; 
 
 // Exportar individualmente para mantener compatibilidad
 export {
@@ -20,6 +20,7 @@ export {
   logoMiintranet,
   logoPortalConsalud,
   logoConsaludCDC,
+  FooterDesktop, 
 };
 
 // Exportar por categorías para mejor organización
@@ -27,6 +28,7 @@ export const Images = {
   Logo: LogoImage,
   PortalConsalud: logoPortalConsalud,
   ConsaludCDC: logoConsaludCDC,
+  Footer: FooterDesktop, 
 };
 
 export const Icons = {
@@ -43,6 +45,7 @@ const Assets = {
   LogoImage,
   LogoutIcon,
   DocumentsFileCheckmarkSvg,
+  FooterDesktop, 
   Images,
   Icons,
 };

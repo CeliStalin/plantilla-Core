@@ -1,4 +1,4 @@
-import React from 'react'; // Added import
+import React from 'react';
 export * from './Button';
 export * from './Card';
 export * from './Login';
@@ -11,11 +11,13 @@ export * from './Layout';
 export * from './MainPage';
 export * from './NavMenu';
 export * from './UserLogin';
+export * from './Footer'; 
 export { default as SecureLayout } from './SecureLayout/SecureLayout';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { default as HomePage } from './HomePage/HomePage';
+export { default as Footer } from './Footer'; 
 
 // Lazy exports para componentes de página
 export const LazyComponents = {

@@ -108,3 +108,37 @@ aside.menu * {
     will-change: auto;
   }
 }
+
+/* Footer styles */
+.app-footer {
+  margin-top: auto;
+  z-index: 50; /* Por debajo del header y nav pero encima del contenido */
+}
+
+/* Asegurar que el layout principal use flexbox correctamente */
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-body {
+  flex: 1;
+  display: flex;
+}
+
+.layout-body main {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-body main > div:first-child {
+  flex: 1;
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 768px) {
+  .app-footer.hide-on-mobile {
+    display: none;
+  }
+}
