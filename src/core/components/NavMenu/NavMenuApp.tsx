@@ -187,8 +187,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
         className="nav-menu-container"
         style={{
           ...navMenuStyles.container(isCollapsed),
-          outline: 'none !important',
-          border: 'none !important',
           boxShadow: isCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
         }}
       >
@@ -197,8 +195,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
           style={{ 
             backgroundColor: '#f9f9f9', 
             height: '100%',
-            border: 'none !important',
-            outline: 'none !important',
           }}
         >
           <button 
@@ -208,9 +204,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
             tabIndex={-1}
             style={{
               ...navMenuStyles.menuToggleButton,
-              outline: 'none !important',
-              border: 'none !important',
-              boxShadow: 'none !important'
             }}
           >
             <div 

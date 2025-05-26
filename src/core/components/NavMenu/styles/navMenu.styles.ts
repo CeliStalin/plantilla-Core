@@ -102,13 +102,29 @@ export const navMenuStyles = {
     outline: 'none',
     width: '100%',
     boxSizing: 'border-box' as const,
-    '&:focus, &:active, &:focus-visible, &:focus-within': {
+    '&:hover': {
+      backgroundColor: '#f0f0f0',
+    },
+    '&:focus': {
       outline: 'none !important',
       border: 'none !important',
       boxShadow: 'none !important',
     },
-    '&:hover': {
-      backgroundColor: '#f0f0f0',
+    '&:active': {
+      outline: 'none !important',
+      border: 'none !important',
+      boxShadow: 'none !important',
+    },
+    '&:focusVisible': { // Changed from &:focus-visible
+      outline: 'none !important',
+      border: 'none !important',
+      boxShadow: 'none !important',
+      backgroundColor: '#f0f0f0', // Consistent with hover and index.css for focus-visible
+    },
+    '&:focusWithin': { // Changed from &:focus-within
+      outline: 'none !important',
+      border: 'none !important',
+      boxShadow: 'none !important',
     },
     '&.expanded': {
       backgroundColor: '#f9f9f9',
@@ -153,8 +169,10 @@ export const navMenuStyles = {
     opacity: isCollapsed ? 0 : 1,
     visibility: isCollapsed ? 'hidden' as const : 'visible' as const,
     transition: 'opacity 0.3s ease, visibility 0.3s ease',
-    padding: isCollapsed ? '0' : '1rem',
-    paddingTop: '0.5rem',
+    paddingTop: isCollapsed ? '0' : '0.5rem',
+    paddingRight: isCollapsed ? '0' : '1rem',
+    paddingBottom: isCollapsed ? '0' : '1rem',
+    paddingLeft: isCollapsed ? '0' : '1rem',
     height: isCollapsed ? '0' : 'auto',
     overflow: 'hidden',
   }),
