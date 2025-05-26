@@ -5,6 +5,7 @@ import { AppGridIcon } from '../../icons';
 import { LoadingPlaceholder } from '@/core/components/LoadingPlaceholder';
 import { applicationsGridStyles, responsiveApplicationsStyles } from './ApplicationsGrid.styles';
 import { useResponsive } from '../../hooks';
+import { useMenuConfig } from '@/core/context/MenuConfigContext';
 import { ANIMATION_DELAYS } from '../../constants';
 
 export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({ 
@@ -14,6 +15,7 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   className = ''
 }) => {
   const { isMobile } = useResponsive();
+  const { enableDynamicMenu } = useMenuConfig();
 
   const gridStyle = {
     ...applicationsGridStyles.grid,
@@ -30,11 +32,11 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
       </div>
       
       <div style={gridStyle}>
-        {loading ? (
+        {loading && enableDynamicMenu ? (
           <LoadingPlaceholder rows={menuItems.length > 0 ? Math.min(menuItems.length, 6) : 2} style={{ gridColumn: '1 / span 2' }} />
         ) : (
           <>
-            {menuItems.map((item, index) => (
+            {enableDynamicMenu && menuItems.map((item, index) => (
               <ApplicationCard
                 key={item.Id}
                 item={item}

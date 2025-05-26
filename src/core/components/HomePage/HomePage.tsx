@@ -10,6 +10,7 @@ import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styl
 import { HomePageProps } from './types';
 import './styles/animations.css';
 import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
+import { useMenuConfig } from '@/core/context/MenuConfigContext'; // Added import
 
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
@@ -20,8 +21,8 @@ export const HomePage: React.FC<HomePageProps> = ({
   const { menuItems, loading } = useMenuItems();
   const { isMobile, isTablet } = useResponsive();
   const { navigateToApp, openExternalLink } = useNavigation();
+  // const { enableDynamicMenu } = useMenuConfig(); // No longer needed here for this specific conditional rendering
 
-  // Derived data
   const firstName = getFirstName(usuario?.displayName);
   const linksToUse = externalLinks || defaultExternalLinks;
 
@@ -60,12 +61,12 @@ export const HomePage: React.FC<HomePageProps> = ({
         className={`homepage-container ${className}`}
         style={containerStyle}
       >
-        {/* Welcome Section */}
+        {/*Seccion bienvenida */}
         <WelcomeSection userName={firstName} />
 
-        {/* Main Content with two columns */}
+        {/* Main Content */}
         <div style={mainContentStyle}>
-          {/* Applications column */}
+          {/* Aplicaciones */}
           <div style={leftColumnStyle}>
             <ApplicationsGrid
               menuItems={menuItems}
