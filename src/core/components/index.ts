@@ -18,6 +18,7 @@ export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { default as HomePage } from './HomePage/HomePage';
 export { default as Footer } from './Footer'; 
+export * from './Typography';
 
 // Lazy exports para componentes de página
 export const LazyComponents = {

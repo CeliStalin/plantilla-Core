@@ -28,7 +28,7 @@ const GetSistema = ():Sistema => {
         nombre: import.meta.env.VITE_NOMBRE_SISTEMA! || import.meta.env.VITE_APP_NOMBRE_SISTEMA!,
     };
     return sistema;
-}
+};
 
 const FetchWithTimeout = async (resource: RequestInfo | URL,
                           options: FetchTimeoutOptions = {}):Promise<Response> =>
@@ -57,12 +57,17 @@ const FetchWithTimeout = async (resource: RequestInfo | URL,
     }
 }
 
+const GetTimeout = ():FetchTimeoutOptions => {
+    const timeout = parseInt(import.meta.env.VITE_TIMEOUT || import.meta.env.VITE_APP_TIMEOUT || '10000');
+    return { timeout };
+};
 
 export {
     GetAmbiente,
     GetApiArquitectura,
+    GetNameApiKey,
+    GetKeyApiKey,
     GetSistema,
     FetchWithTimeout,
-    GetNameApiKey,
-    GetKeyApiKey
+    GetTimeout
 }

@@ -1,4 +1,4 @@
 export * from './api/apiClient';
-export * from './auth/authProviderMsal';
+export { AuthProvider as MsalAuthProvider } from './auth/authProviderMsal';
 export * from './auth/authService';
 export * from './GetApiArq';

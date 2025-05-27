@@ -1,3 +1,11 @@
+import { 
+  FONT_SIZES, 
+  FONT_WEIGHTS, 
+  LINE_HEIGHTS, 
+  FONT_FAMILIES,
+  TYPOGRAPHY_VARIANTS 
+} from './typography';
+
 export const theme = {
     colors: {
       primary: '#04A59B',
@@ -22,29 +30,11 @@ export const theme = {
       xl: '32px',
     },
     typography: {
-      fontFamily: {
-        primary: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-        fallback: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
-      },
-      fontSize: {
-        xs: '12px',
-        sm: '14px',
-        md: '16px',
-        lg: '18px',
-        xl: '24px',
-      },
-      fontWeight: {
-        light: 300,
-        normal: 400,
-        medium: 500,
-        semibold: 600,
-        bold: 700,
-      },
-      lineHeight: {
-        normal: 1.5,
-        tight: 1.25,
-        loose: 1.75,
-      },
+      fontFamily: FONT_FAMILIES,
+      fontSize: FONT_SIZES,
+      fontWeight: FONT_WEIGHTS,
+      lineHeight: LINE_HEIGHTS,
+      variants: TYPOGRAPHY_VARIANTS,
     },
     layout: {
       headerHeight: '64px',
