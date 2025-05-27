@@ -3,7 +3,7 @@
 /* Work Sans Regular (400 Normal) */
 @font-face {
   font-family: 'Work Sans';
-  src: url('./assets/fonts/work-sans/WorkSans-Regular.woff2') format('woff2'); /* Ajusta el nombre del archivo si es diferente */
+  src: url('./assets/fonts/work-sans/WorkSans-Regular.woff2') format('woff2'); 
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -12,7 +12,7 @@
 /* Work Sans Italic (400 Italic) */
 @font-face {
   font-family: 'Work Sans';
-  src: url('./assets/fonts/work-sans/WorkSans-Italic.woff2') format('woff2'); /* Ajusta el nombre del archivo si es diferente */
+  src: url('./assets/fonts/work-sans/WorkSans-Italic.woff2') format('woff2'); 
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -21,7 +21,7 @@
 /* Work Sans Bold (700 Normal) */
 @font-face {
   font-family: 'Work Sans';
-  src: url('./assets/fonts/work-sans/WorkSans-Bold.woff2') format('woff2'); /* Ajusta el nombre del archivo si es diferente */
+  src: url('./assets/fonts/work-sans/WorkSans-Bold.woff2') format('woff2'); 
   font-weight: 700;
   font-style: normal;
   font-display: swap;
