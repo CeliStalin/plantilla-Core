@@ -9,7 +9,7 @@ interface LayoutProps {
   children: React.ReactNode;
   pageTitle?: string;
   backgroundColor?: string;
-  showFooter?: boolean; // Nueva prop para controlar la visibilidad del footer
+  showFooter?: boolean; // prop para controlar la visibilidad del footer
 }
 
 // Mapa de rutas a títulos de página
@@ -49,7 +49,7 @@ export const Layout: React.FC<LayoutProps> = ({
   
   return (
     <div className="layout" style={{ 
-      minHeight: '100vh', 
+      flex: 1, // Para que ocupe el espacio en #root
       display: 'flex', 
       flexDirection: 'column' 
     }}>
@@ -62,31 +62,33 @@ export const Layout: React.FC<LayoutProps> = ({
       <div className="layout-body" style={{ 
         paddingTop: "4rem", 
         display: "flex",
-        flex: 1, // Hacer que el contenido ocupe el espacio disponible
-        position: 'relative'
+        flex: 1, // Hacer que el contenido ocupe el espacio disponible entre Header y Footer
+        position: 'relative', // Necesario para NavMenuApp si es position:absolute/fixed relativo a este
+        overflow: 'hidden' // Para evitar que layout-body genere su propio scroll si main lo maneja
       }}>
         <NavMenuApp 
-          onToggle={handleMenuToggle}
+          onToggle={handleMenuToggle} 
         />
         
         <main style={{ 
           marginLeft: isMenuCollapsed ? "50px" : "220px", 
-          padding: "0",
-          width: "100%",
+          width: "100%", // Ocupa el ancho disponible menos el NavMenu
           transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-          minHeight: 'calc(100vh - 4rem)',
           backgroundColor: backgroundColor,
-          position: 'relative',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column'
+          overflowY: 'auto', // Main maneja su propio scroll vertical si el contenido excede
+          padding: "1rem",
+          boxSizing: 'border-box',
+          flex: 1, // Para que main ocupe el espacio vertical en layout-body
+          display: 'flex', // Para permitir que el contenido interno se comporte como flex item si es necesario
+          flexDirection: 'column' // Para que el contenido interno se apile verticalmente
         }}>
-          <div style={{ flex: 1, padding: "1rem" }}>
-            {children}
-          </div>
+          {/* El contenido (children) se renderizará aquí. 
+              Si HomePage o sus hijos tienen paddings/margins, se considerarán dentro de este main.
+              El padding de 1rem de main está incluido en su tamaño gracias a box-sizing: border-box. */}
+          {children}
         </main>
       </div>
-      {showFooter && <Footer />}
+      {showFooter && <Footer />} {/* Footer tomará su espacio natural o será empujado por flex:1 de layout-body */}
     </div>
   );
 };

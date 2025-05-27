@@ -4,11 +4,7 @@ export const homePageStyles = {
   container: {
     padding: '40px 40px', // Reducir padding lateral
     backgroundColor: '#ffffff',
-    minHeight: '100vh',
     width: '100%',
-    // Eliminar maxWidth para usar todo el ancho disponible
-    // maxWidth: '1400px', // ELIMINAR ESTA LÍNEA
-    // margin: '0 auto' // ELIMINAR ESTA LÍNEA
   },
   
   mainContent: {
@@ -20,13 +16,13 @@ export const homePageStyles = {
   },
   
   leftColumn: {
-    flex: '1 1 65%', // Cambiar a flex-grow para mejor distribución
+    flex: '1 1 65%', 
     minWidth: 0,
     maxWidth: '800px' // Limitar ancho máximo de aplicaciones
   },
   
   rightColumn: {
-    flex: '1 1 35%', // Cambiar a flex-grow
+    flex: '1 1 35%',
     minWidth: 0,
     maxWidth: '400px' // Limitar ancho máximo de accesos directos
   }
