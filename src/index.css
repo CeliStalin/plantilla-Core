@@ -1,4 +1,4 @@
-/* Definición de la fuente Work Sans localmente */
+/* Definición de la fuente Work Sans  */
 
 /* Work Sans Regular (400 Normal) */
 @font-face {
@@ -155,7 +155,7 @@ aside.menu {
   box-shadow: none !important;
 }
 
-/* Eliminar bordes del contenedor principal del nav menu */
+/* Elimina bordes del contenedor principal del nav menu */
 .nav-menu-container {
   border: none !important;
   outline: none !important;

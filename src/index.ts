@@ -8,15 +8,15 @@ export * from './core/routes';
 export * from './core/context';
 export * from './assets';
 
-// Export services with specific named exports to avoid conflicts
+// Export services 
 export { AuthService, getMe, getUsuarioAD, getRoles } from './core/services/auth/authService';
 export { apiClient } from './core/services/api/apiClient';
 export { ApiGetMenus } from './core/services/GetApiArq';
 
-// Export typography system
+// Export typography 
 export * from './core/styles/typography';
 export { theme } from './core/styles/theme';
 export { TypographyUtils } from './core/styles/typography';
 
-// Asegurar que Typography (componente) se exporte correctamente
+// Typography (componente) se exporte
 export { Typography } from './core/components/Typography';
