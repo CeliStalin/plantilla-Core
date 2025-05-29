@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 interface PublicRouteProps {
@@ -11,22 +12,29 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
   redirectPath = '/home'
 }) => {
   const { isSignedIn, isInitializing } = useAuth();
+  const navigate = useNavigate();
   
   useEffect(() => {
     // Si está autenticado y no está inicializando, redirigir
     if (isSignedIn && !isInitializing) {
-      // Verificar si hay una ruta guardada para redirigir
-      const savedPath = sessionStorage.getItem('redirectAfterLogin');
-      const targetPath = savedPath || redirectPath;
-      
-      // Limpiar la ruta guardada
-      if (savedPath) {
-        sessionStorage.removeItem('redirectAfterLogin');
+      try {
+        // Verificar si hay una ruta guardada para redirigir
+        const savedPath = sessionStorage.getItem('redirectAfterLogin');
+        const targetPath = savedPath || redirectPath;
+        
+        // Limpiar la ruta guardada
+        if (savedPath) {
+          sessionStorage.removeItem('redirectAfterLogin');
+        }
+        
+        navigate(targetPath, { replace: true });
+      } catch (error) {
+        console.error('Error during navigation:', error);
+        // Fallback a la ruta por defecto
+        navigate(redirectPath, { replace: true });
       }
-      
-      window.location.href = targetPath;
     }
-  }, [isSignedIn, isInitializing, redirectPath]);
+  }, [isSignedIn, isInitializing, redirectPath, navigate]);
   
   // Mostrar un indicador de carga mientras verifica
   if (isInitializing) {
@@ -42,13 +50,13 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
     );
   }
   
-  // Si no está autenticado, mostrar el contenido
-  if (!isSignedIn) {
-    return <>{children}</>;
+  // Si está autenticado, no mostrar contenido (se está redirigiendo)
+  if (isSignedIn) {
+    return null;
   }
   
-  // No mostrar nada mientras se procesa la redirección
-  return null;
+  // Si no está autenticado, mostrar el contenido
+  return <>{children}</>;
 };
 
 export default PublicRoute;
