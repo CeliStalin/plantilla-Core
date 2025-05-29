@@ -1,82 +1,115 @@
-# Multi-stage build optimizado para React TypeScript con Node.js 20
+# Multi-stage build para TypeScript
 
-# Etapa base común
+# Etapa base ultra-ligera
 FROM node:20-alpine AS base
-
-# Instalar dependencias del sistema y herramientas necesarias
-RUN apk add --no-cache \
-    dumb-init \
-    python3 \
-    make \
-    g++ \
-    ca-certificates \
-    && ln -sf python3 /usr/bin/python
-
-# Configurar npm para mejor rendimiento
-RUN npm config set fund false && \
-    npm config set audit-level moderate && \
-    npm config set fetch-retry-maxtimeout 60000 && \
-    npm config set fetch-retry-mintimeout 10000
-
+RUN apk add --no-cache dumb-init ca-certificates
 WORKDIR /app
 
-# Etapa 1: Instalación de dependencias
+#  cache optimizado
 FROM base AS deps
-# Copiar solo archivos de paquete para aprovechar cache de Docker
 COPY package*.json ./
-
-# Instalar dependencias de producción con optimizaciones
 RUN npm ci --only=production --no-optional --silent && \
-    npm cache clean --force
+    npm cache clean --force && \
+    rm -rf ~/.npm
 
-# Etapa 2: Dependencias de desarrollo
+# dependencias de desarrollo
 FROM base AS dev-deps
 COPY package*.json ./
-
-# Instalar todas las dependencias para el build
 RUN npm ci --include=dev --no-optional --silent && \
-    npm cache clean --force
+    npm cache clean --force && \
+    rm -rf ~/.npm
 
-# Etapa 3: Construcción de la biblioteca
+# construcción optimizada
 FROM dev-deps AS builder
-
-# Copiar código fuente
 COPY . .
-
-# Configurar variables de ambiente para el build
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV GENERATE_SOURCEMAP=false
+RUN npm run build:lib && \
+    rm -rf node_modules/.cache && \
+    rm -rf src && \
+    rm -rf public
 
-# Construir la biblioteca con optimizaciones TypeScript
-RUN npm run build:lib
-
-# Etapa 4: Imagen de producción
-FROM node:20-alpine AS production
-
-# Instalar solo lo necesario para producción
-RUN apk add --no-cache dumb-init ca-certificates
-
-WORKDIR /app
-
-# Crear usuario no-root con mejores prácticas de seguridad
+# DESARROLLO - Imagen completa con hot-reload (~300-400MB)
+FROM dev-deps AS development
+RUN apk add --no-cache git python3 make g++
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S reactuser -u 1001 -G nodejs
-
-# Copiar dependencias de producción y build
-COPY --from=deps --chown=reactuser:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=reactuser:nodejs /app/dist ./dist
-COPY --from=builder --chown=reactuser:nodejs /app/package*.json ./
-
-# Cambiar a usuario no-root
-USER reactuser
-
-# Variables de ambiente optimizadas para producción
-ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-
+    adduser -S devuser -u 1001 -G nodejs
+USER devuser
+COPY --chown=devuser:nodejs . .
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+ENV FAST_REFRESH=true
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV WATCHPACK_POLLING=true
+ENV TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
 EXPOSE 3000
+CMD ["npm", "run", "dev"]
 
-# Usar dumb-init para manejo correcto de señales
+# TEST - Imagen optimizada para testing (~150-200MB)
+FROM dev-deps AS test
+RUN apk add --no-cache chromium nss freetype
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S testuser -u 1001 -G nodejs
+USER testuser
+COPY --chown=testuser:nodejs . .
+ENV NODE_ENV=test
+ENV CI=true
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+CMD ["npm", "test", "--", "--coverage", "--watchAll=false", "--maxWorkers=2"]
+
+# PRODUCCIÓN - Nginx ultra-ligero (~50-80MB)
+FROM nginx:alpine AS production
+RUN apk add --no-cache dumb-init && \
+    addgroup -g 1001 -S nginx && \
+    adduser -S reactuser -u 1001 -G nginx
+COPY --from=builder --chown=reactuser:nginx /app/dist /usr/share/nginx/html
+COPY --chown=reactuser:nginx <<EOF /etc/nginx/nginx.conf
+user nginx;
+worker_processes auto;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+    
+    server {
+        listen 3000;
+        server_name localhost;
+        root /usr/share/nginx/html;
+        index index.html;
+        
+        location / {
+            try_files \$uri \$uri/ /index.html;
+        }
+        
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+}
+EOF
+USER reactuser
+EXPOSE 3000
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]

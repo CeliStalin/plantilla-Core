@@ -30,7 +30,11 @@
     "docker:clean": "docker-compose down --volumes --remove-orphans && docker system prune -f",
     "docker:logs:dev": "docker-compose --profile development logs -f",
     "docker:logs:prod": "docker-compose --profile production logs -f",
-    "docker:logs:test": "docker-compose --profile test logs -f"
+    "docker:logs:test": "docker-compose --profile test logs -f",
+    "docker:build:prod": "docker build --target production -t consalud-core:prod .",
+    "docker:build:dev": "docker build --target development -t consalud-core:dev .",
+    "docker:build:test": "docker build --target test -t consalud-core:test .",
+    "docker:size": "docker images consalud-core --format 'table {{.Repository}}:{{.Tag}}\\t{{.Size}}'"
   },
   "peerDependencies": {
     "@azure/msal-browser": "^4.11.0",

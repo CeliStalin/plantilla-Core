@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Servicio de PRODUCCIÓN
+  # PRODUCCIÓN - Nginx ultra-ligero (~50-80MB)
   react-prod:
     build:
       context: .
@@ -11,10 +11,9 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NODE_OPTIONS=--max-old-space-size=2048
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "sh", "-c", "nc -z localhost 3000 || exit 1"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -24,14 +23,16 @@ services:
     read_only: true
     tmpfs:
       - /tmp
+      - /var/cache/nginx
+      - /var/run
     profiles:
       - production
 
-  # Servicio de DESARROLLO
+  # DESARROLLO - Hot-reload completo (~300-400MB)
   react-dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       target: development
     ports:
       - "3001:3000"
@@ -54,11 +55,11 @@ services:
     profiles:
       - development
 
-  # Servicio de TESTING
+  # TESTING - Optimizado para CI/CD (~150-200MB)
   react-test:
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile
       target: test
     environment:
       - NODE_ENV=test
