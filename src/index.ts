@@ -18,8 +18,13 @@ export {
   Card,
   Typography,
   Footer,
-  Login
+  Login,
+  LoadingOverlay
 } from './core/components';
+
+// Route exports
+export { PublicRoute } from './core/routes/PublicRoute';
+export { PrivateRoute } from './core/routes/PrivateRoute';
 
 // Export interfaces from interfaces module
 export * from './core/interfaces';
