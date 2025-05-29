@@ -19,7 +19,8 @@ export {
   Typography,
   Footer,
   Login,
-  LoadingOverlay
+  LoadingOverlay,
+  ErrorBoundary
 } from './core/components';
 
 // Route exports

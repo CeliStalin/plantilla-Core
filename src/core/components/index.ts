@@ -7,7 +7,7 @@ export { Counter } from './Counter';
 export * from './Loading'; 
 export { LoadingOverlay } from './Loading/LoadingOverlay';
 export * from './Dashboard';
-export * from './ErrorBoundary';
+export { ErrorBoundary } from './ErrorBoundary';
 export * from './ErrorMessage';
 export * from './Layout';
 export * from './MainPage';
