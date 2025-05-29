@@ -21,13 +21,28 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      external: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        '@azure/msal-browser',
+        'bulma',
+        'axios',
+      ],
       output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react-router-dom': 'ReactRouterDOM',
+          '@azure/msal-browser': 'msal',
+          bulma: 'bulma',
+          axios: 'axios',
+        },
         manualChunks(id) {
           // Create a chunk for MSAL
           if (id.includes('node_modules/@azure/msal-browser')) {
             return 'vendor-msal'
           }
-          // Create a chunk for react and related libraries
           if (
             id.includes('node_modules/react/') ||
             id.includes('node_modules/react-dom/') ||
@@ -36,14 +51,18 @@ export default defineConfig({
           ) {
             return 'vendor-react'
           }
-          // Create a general vendor chunk for other node_modules
-          // This helps in grouping other third-party libraries
           if (id.includes('node_modules')) {
             return 'vendor-others'
           }
         },
       },
     },
-    chunkSizeWarningLimit: 600, // Optional: Adjust if you still see warnings after optimization
+    chunkSizeWarningLimit: 600,
+    sourcemap: true,
+    minify: 'esbuild',
+    target: 'es2020',
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 })

@@ -10,6 +10,5 @@ export * from './ISistema';
 export * from './IUserExterno';
 
 // Explicit re-exports to resolve conflicts
-export { IUsuarioAD } from './IUsuarioAD'; // or from './IUserAz' - choose one// IUsuarioAD type is now exported from IUserAz.ts (or choose IUsuarioAD.ts instead)
+export { IUsuarioAD } from './IUsuarioAD';
 export { IUser } from './IAuth';
-// IUser type is now exported from IAuth.ts

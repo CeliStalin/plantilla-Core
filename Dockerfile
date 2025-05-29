@@ -1,57 +1,48 @@
-# Construcción multi-etapa para aplicación React TypeScript
+# Multi-stage build para optimización
 
-# Etapa 1: Etapa de construcción
-FROM node:18-alpine AS builder
+# Etapa base
+FROM node:18-alpine AS base
 
-# Establecer directorio de trabajo
+# Etapa 1: Dependencias
+FROM base AS deps
 WORKDIR /app
 
-# Copiar archivos de paquetes primero (para mejor caché de capas)
+# Copiar archivos de paquete
 COPY package*.json ./
-COPY yarn.lock* ./
+COPY optimization.config.ts ./
 
-# Instalar dependencias
+# Instalar solo dependencias de producción basadas en libraryConfig
 RUN npm ci --only=production && npm cache clean --force
+
+# Etapa 2: Construcción
+FROM base AS builder
+WORKDIR /app
+
+# Copiar archivos de paquete e instalar todas las dependencias
+COPY package*.json ./
+RUN npm ci
 
 # Copiar código fuente
 COPY . .
 
-# Construir la aplicación
+# Construir la biblioteca
 RUN npm run build
 
-# Etapa 2: Etapa de producción
-FROM nginx:alpine AS production
+# Etapa 3: Producción
+FROM node:18-alpine AS production
+WORKDIR /app
 
-# Instalar actualizaciones de seguridad
-RUN apk update && apk upgrade && apk add --no-cache dumb-init
+# Copiar solo las dependencias de producción de la etapa de deps
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
 
 # Crear usuario no-root
-RUN addgroup -g 1001 -S nodejs && adduser -S reactuser -u 1001
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S reactuser -u 1001
 
-# Copiar archivos construidos desde la etapa builder
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Copiar configuración personalizada de nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Cambiar propiedad de directorios nginx
-RUN chown -R reactuser:nodejs /usr/share/nginx/html && \
-    chown -R reactuser:nodejs /var/cache/nginx && \
-    chown -R reactuser:nodejs /var/log/nginx && \
-    chown -R reactuser:nodejs /etc/nginx/conf.d && \
-    touch /var/run/nginx.pid && \
-    chown -R reactuser:nodejs /var/run/nginx.pid
-
-# Cambiar a usuario no-root
 USER reactuser
 
-# Exponer puerto
-EXPOSE 80
+EXPOSE 3000
 
-# Verificación de salud
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
-
-# Iniciar nginx
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]

@@ -10,41 +10,45 @@ export default {
   input: 'src/index.ts',
   output: [
     {
-      file: 'dist/index.js',
+      dir: 'dist',
       format: 'cjs',
       sourcemap: true,
-      inlineDynamicImports: true,
+      exports: 'auto',
+      entryFileNames: 'index.js',
+      chunkFileNames: '[name]-[hash].js'
     },
     {
-      file: 'dist/index.esm.js',
+      dir: 'dist',
       format: 'esm',
       sourcemap: true,
-      inlineDynamicImports: true,
+      entryFileNames: 'index.esm.js',
+      chunkFileNames: '[name]-[hash].esm.js'
     },
   ],
   plugins: [
     peerDepsExternal(),
     resolve({
-      extensions: ['.js', '.jsx', '.ts', '.tsx']
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      preferBuiltins: false
     }),
     commonjs({
       include: 'node_modules/**',
     }),
-    // El plugin de imagen convierte imágenes a base64
     image(),
     typescript({ 
       tsconfig: './tsconfig.json',
       declaration: true,
       declarationDir: 'dist',
       sourceMap: true,
-      jsx: 'react', 
+      jsx: 'react-jsx',
+      exclude: ['**/*.test.*', '**/*.stories.*', 'node_modules/**']
     }),
     postcss({
       extensions: ['.css'],
       minimize: true,
-      extract: path.resolve('dist/styles.css')
+      extract: path.resolve('dist/styles.css'),
+      sourceMap: true
     }),
-    // Eliminamos terser que está causando problemas
   ],
   external: [
     'react', 
@@ -54,5 +58,12 @@ export default {
     'bulma', 
     'axios',
     /^react\/jsx-runtime$/,
+    /^react\/jsx-dev-runtime$/,
   ],
+  onwarn(warning, warn) {
+    // Suprimir warnings específicos que no son críticos
+    if (warning.code === 'THIS_IS_UNDEFINED') return;
+    if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+    warn(warning);
+  }
 }

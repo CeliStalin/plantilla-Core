@@ -1,9 +1,12 @@
-// Core exports
-export * from './core';
-
-// Main exports - explicit exports for better tree-shaking
+// Core exports principales
 export { 
-  // Components
+  // Theme
+  theme,
+  defaultTheme
+} from './core/theme';
+
+// Component exports - Solo los más importantes
+export { 
   Layout,
   SecureLayout,
   ProtectedRoute,
@@ -15,26 +18,42 @@ export {
   Card,
   Typography,
   Footer,
-  LazyComponents
+  Login
 } from './core/components';
 
+// Export interfaces from interfaces module
+export * from './core/interfaces';
+
+// Export theme types from theme module
+export type { 
+  Theme, 
+  ThemeColors, 
+  TextColors 
+} from './core/theme';
+
+// Export typography types from typography components
+export type { 
+  TypographyProps, 
+  TypographyVariant, 
+  TypographyColor 
+} from './core/components/Typography';
+
+// Context exports
 export { 
-  // Context
   AuthProvider,
   MenuConfigProvider,
   useAuthContext,
   useMenuConfig
 } from './core/context';
 
+// Hooks exports
 export { 
-  // Hooks
   useAuth,
   useLocalStorage
 } from './core/hooks';
 
+// Services exports - Solo los esenciales
 export { 
-  // Services
-  AuthService,
   getMe,
   getUsuarioAD,
   getRoles,
@@ -42,23 +61,8 @@ export {
   ApiGetMenus
 } from './core/services';
 
-export { 
-  // Styles and Theme
-  theme,
-  TypographyUtils
-} from './core/styles';
-
-export { 
-  // Interfaces
-  IUser,
-  IAuthConfig as IAuth, // Usar IAuthConfig en lugar de IAuth
-  IRol,
-  IUsuarioAD,
-  IUserExterno
-} from './core/interfaces';
-
-// Routes - usar export * en lugar de exportación nombrada
-export * from './core/routes';
-
-// Assets
-export * from './assets';
+// Utils exports - Solo los más utilizados
+export {
+  GetApiArquitectura,
+  GetSistema
+} from './core/utils';

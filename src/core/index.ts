@@ -1,36 +1,34 @@
 // Theme exports
-export * from './theme';
 export { defaultTheme, theme } from './theme';
-
-// Component exports
-export * from './components/Login';
-export * from './components/Typography';
-
-// Type exports
 export type { Theme, TextColors, ThemeColors } from './theme';
+
+// Component exports - Solo exportar los principales
+export { Typography } from './components/Typography';
 export type { TypographyProps, TypographyVariant, TypographyColor } from './components/Typography';
 
 // Styles exports
-export * from './styles/typography';
 export { theme as styleTheme } from './styles/theme';
+export { TypographyUtils } from './styles/typography';
 
 // Hooks exports
-export * from './hooks/useTypography';
-
-// Typography component
-export { Typography } from './components/Typography';
-
-// Components exports
-export * from './components';
-
-// Hooks exports
-export * from './hooks';
+export { default as useLocalStorage } from './hooks/useLocalStorage';
+export { useAuth } from './hooks/useAuth';
 
 // Context exports
-export * from './context';
+export { AuthProvider, useAuthContext } from './context/AuthContext';
+export { MenuConfigProvider, useMenuConfig } from './context/MenuConfigContext';
 
-// Services exports
-export * from './services';
+// Services exports - Solo los esenciales
+export { AuthProvider as MsalAuthProvider } from './services/auth/authProviderMsal';
+export { getMe, getUsuarioAD, getRoles } from './services/auth/authService';
+export { apiClient } from './services/api/apiClient';
+export { ApiGetMenus } from './services/GetApiArq';
 
-// Utils exports
-export * from './utils';
+// Utils exports - Solo los más utilizados
+export { GetApiArquitectura, GetSistema, GetNameApiKey, GetKeyApiKey } from './utils/GetEnvVariables';
+
+// Interface exports - Solo las principales
+export type { IUser } from './interfaces/IAuth';
+export type { IUsuarioAD } from './interfaces/IUsuarioAD';
+export type { IRol, RolResponse } from './interfaces/IRol';
+export type { IUserExterno } from './interfaces/IUserExterno';
