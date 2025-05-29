@@ -1,0 +1,30 @@
+# Dockerfile para ambiente de desarrollo
+
+FROM node:18-alpine AS development
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache git
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de paquetes
+COPY package*.json ./
+COPY yarn.lock* ./
+
+# Instalar TODAS las dependencias (incluidas las de desarrollo)
+RUN npm install
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto para desarrollo
+EXPOSE 3000
+
+# Variables de ambiente para desarrollo
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+ENV FAST_REFRESH=true
+
+# Comando para desarrollo con hot-reload
+CMD ["npm", "start"]
