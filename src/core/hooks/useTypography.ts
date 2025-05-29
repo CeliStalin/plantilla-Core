@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { TYPOGRAPHY_VARIANTS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, LINE_HEIGHTS } from '../styles/typography';
-
-type TypographyVariant = keyof typeof TYPOGRAPHY_VARIANTS;
+import { TypographyVariant } from '../components/Typography/Typography';
 
 interface UseTypographyProps {
   variant?: TypographyVariant;

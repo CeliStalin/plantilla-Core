@@ -5,6 +5,7 @@ import {
   FONT_FAMILIES,
   TYPOGRAPHY_VARIANTS 
 } from './typography';
+import { defaultTheme } from '../theme';
 
 export const theme = {
     colors: {
@@ -16,6 +17,36 @@ export const theme = {
       info: '#17a2b8',
       white: '#FFFFFF',
       black: '#000000',
+      gray: {
+        light: '#D0D0D0',
+        medium: '#808080',
+        dark: '#333333',
+      },
+    },
+    textColors: {
+      ...defaultTheme.textColors,
+      // Agregar todos los colores básicos
+      white: '#FFFFFF',
+      black: '#000000',
+      // Agregar colores del tema principal como textColors
+      primary: '#04A59B',
+      secondary: '#6c757d',
+      success: '#28a745',
+      danger: '#dc3545',
+      warning: '#ffc107',
+      info: '#17a2b8',
+      // Manejar gray como string simple y con notación de punto
+      gray: '#808080',
+      'gray.light': '#D0D0D0',
+      'gray.medium': '#808080',
+      'gray.dark': '#333333',
+      // Colores especiales
+      inherit: 'inherit',
+      current: 'currentColor',
+      transparent: 'transparent',
+    },
+    // Agregar estructura adicional para compatibilidad
+    textColorsComplex: {
       gray: {
         light: '#D0D0D0',
         medium: '#808080',
@@ -74,3 +105,18 @@ export const theme = {
       spinKeyframes: 'spin',
     },
   };
+
+// Export individual theme pieces for easier access
+export const colors = theme.colors;
+export const textColors = theme.textColors;
+export const spacing = theme.spacing;
+export const typography = theme.typography;
+export const borderRadius = theme.borderRadius;
+export const shadows = theme.shadows;
+export const layout = theme.layout;
+export const breakpoints = theme.breakpoints;
+export const transitions = theme.transitions;
+export const animations = theme.animations;
+
+// Export types
+export type { Theme, ThemeColors, TextColors } from '../theme';
