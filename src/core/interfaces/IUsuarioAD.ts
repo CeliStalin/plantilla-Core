@@ -24,3 +24,6 @@ interface UsuarioAd{
 export type{
     UsuarioAd
 }
+
+// Export as IUsuarioAD for compatibility
+export type IUsuarioAD = UsuarioAd;

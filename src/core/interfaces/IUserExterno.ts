@@ -22,3 +22,6 @@ interface UserExterno{
 export type {
     UserExterno
 }
+
+// Also export as IUserExterno for compatibility
+export type IUserExterno = UserExterno;

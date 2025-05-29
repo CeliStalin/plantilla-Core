@@ -18,6 +18,7 @@ export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { default as HomePage } from './HomePage/HomePage';
 export { default as Footer } from './Footer'; 
+export { default as Dashboard } from './Dashboard';
 export * from './Typography';
 
 // Lazy exports para componentes de página
@@ -27,4 +28,5 @@ export const LazyComponents = {
   Unauthorized: React.lazy(() => import('./Unauthorized')),
   HomePage: React.lazy(() => import('./HomePage/HomePage')),
   MainPage: React.lazy(() => import('./MainPage')),
+  Dashboard: React.lazy(() => import('./Dashboard')),
 };

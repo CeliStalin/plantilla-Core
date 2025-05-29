@@ -1,4 +1,8 @@
-import { IUser, IUsuarioAD, IRol } from './IUserAz'
+import { IUsuarioAD } from './IUsuarioAD'
+import { IUserExterno } from './IUserExterno'
+import { RolResponse } from './IRol'
+
+export type IUser = IUsuarioAD | IUserExterno
 
 export interface IAuthConfig {
     clientId: string;
@@ -14,7 +18,7 @@ export interface IAuthConfig {
   export interface IAuthService {
     getMe(): Promise<IUser | string>;
     getUsuarioAD(email: string): Promise<IAuthResponse<IUsuarioAD>>;
-    getRoles(email: string): Promise<IAuthResponse<IRol[]>>;
+    getRoles(email: string): Promise<IAuthResponse<RolResponse[]>>;
   }
   
   export interface IUseLocalStorage<T> {
@@ -26,7 +30,7 @@ export interface IAuthConfig {
     isSignedIn: boolean;
     usuario: IUser | null;
     usuarioAD: IUsuarioAD | null;
-    roles: IRol[];
+    roles: RolResponse[];
     loading: boolean;
     error: string;
     errorAD: string;

@@ -17,3 +17,6 @@ interface RolResponse{
 export type{
     RolResponse 
 }
+
+// Export as IRol for compatibility
+export type IRol = RolResponse;

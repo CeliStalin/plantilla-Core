@@ -1,22 +1,67 @@
-export * from './core/components';
-export { AuthProvider } from './core/context/AuthContext';
-export { AuthProvider as MsalAuthProvider } from './core/services/auth/authProviderMsal';
-export * from './core/hooks';
-export * from './core/interfaces';
-export * from './core/utils';
-export * from './core/routes';
-export * from './core/context';
+// Core exports
+export * from './core';
+
+// Main exports - explicit exports for better tree-shaking
+export { 
+  // Components
+  Layout,
+  SecureLayout,
+  ProtectedRoute,
+  NotFound,
+  Unauthorized,
+  HomePage,
+  Dashboard,
+  Login,
+  Button,
+  Card,
+  Typography,
+  Footer,
+  LazyComponents
+} from './core/components';
+
+export { 
+  // Context
+  AuthProvider,
+  MenuConfigProvider,
+  useAuthContext,
+  useMenuConfig
+} from './core/context';
+
+export { 
+  // Hooks
+  useAuth,
+  useLocalStorage
+} from './core/hooks';
+
+export { 
+  // Services
+  AuthService,
+  getMe,
+  getUsuarioAD,
+  getRoles,
+  apiClient,
+  ApiGetMenus
+} from './core/services';
+
+export { 
+  // Styles and Theme
+  theme,
+  TypographyUtils
+} from './core/styles';
+
+export { 
+  // Interfaces
+  IUser,
+  IAuthConfig as IAuth, // Usar IAuthConfig en lugar de IAuth
+  IRol,
+  IUsuarioAD,
+  IUserExterno
+} from './core/interfaces';
+
+export { 
+  // Routes
+  RouteConfig
+} from './core/routes';
+
+// Assets
 export * from './assets';
-
-// Export services 
-export { AuthService, getMe, getUsuarioAD, getRoles } from './core/services/auth/authService';
-export { apiClient } from './core/services/api/apiClient';
-export { ApiGetMenus } from './core/services/GetApiArq';
-
-// Export typography 
-export * from './core/styles/typography';
-export { theme } from './core/styles/theme';
-export { TypographyUtils } from './core/styles/typography';
-
-// Typography (componente) se exporte
-export { Typography } from './core/components/Typography';
