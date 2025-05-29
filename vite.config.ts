@@ -12,6 +12,12 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
+    port: 3000,
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
     headers: {
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',
@@ -64,5 +70,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
+    force: true,
+  },
+  esbuild: {
+    target: 'es2020',
+    platform: 'node',
   },
 })

@@ -1,0 +1,50 @@
+# Dockerfile optimizado para testing con React TypeScript
+
+FROM node:20-alpine AS test
+
+# Instalar dependencias del sistema para testing
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++ \
+    ca-certificates \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    && ln -sf python3 /usr/bin/python
+
+WORKDIR /app
+
+# Configurar npm para testing
+RUN npm config set fund false && \
+    npm config set audit-level moderate
+
+# Crear usuario para testing
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S testuser -u 1001 -G nodejs
+
+# Copiar archivos de paquetes
+COPY --chown=testuser:nodejs package*.json ./
+
+# Instalar dependencias
+RUN npm ci --include=dev --no-optional --silent && \
+    npm cache clean --force
+
+# Cambiar a usuario de testing
+USER testuser
+
+# Copiar código fuente
+COPY --chown=testuser:nodejs . .
+
+# Variables de ambiente para testing
+ENV NODE_ENV=test
+ENV CI=true
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Comando por defecto para testing
+CMD ["npm", "test", "--", "--coverage", "--watchAll=false", "--maxWorkers=2"]

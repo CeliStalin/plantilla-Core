@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": false,
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -19,7 +23,14 @@
     "test": "jest --watchAll",
     "start": "vite",
     "build:lib": "rollup -c rollup.config.js",
-    "prepare": "npm run build:lib"
+    "prepare": "npm run build:lib",
+    "docker:dev": "docker-compose --profile development up --build",
+    "docker:prod": "docker-compose --profile production up --build -d",
+    "docker:test": "docker-compose --profile test up --build --abort-on-container-exit",
+    "docker:clean": "docker-compose down --volumes --remove-orphans && docker system prune -f",
+    "docker:logs:dev": "docker-compose --profile development logs -f",
+    "docker:logs:prod": "docker-compose --profile production logs -f",
+    "docker:logs:test": "docker-compose --profile test logs -f"
   },
   "peerDependencies": {
     "@azure/msal-browser": "^4.11.0",
