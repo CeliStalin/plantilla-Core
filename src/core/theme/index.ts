@@ -23,6 +23,15 @@ export interface TextColors {
   danger: string;
   warning: string;
   info: string;
+  white: string;
+  black: string;
+  gray: string;
+  'gray.light': string;
+  'gray.medium': string;
+  'gray.dark': string;
+  inherit: string;
+  current: string;
+  transparent: string;
 }
 
 export interface ThemeSpacing {
@@ -55,6 +64,49 @@ export interface ThemeTypography {
     normal: number;
     relaxed: number;
   };
+  // Extended typography utilities
+  fontSizes?: {
+    xs: string;
+    sm: string;
+    base: string;
+    md: string;
+    lg: string;
+    xl: string;
+    '2xl': string;
+    '3xl': string;
+    '4xl': string;
+    '5xl': string;
+  };
+  fontWeights?: {
+    light: number;
+    normal: number;
+    medium: number;
+    semibold: number;
+    bold: number;
+    extrabold: number;
+  };
+  lineHeights?: {
+    none: number;
+    tight: number;
+    snug: number;
+    normal: number;
+    relaxed: number;
+    loose: number;
+  };
+  letterSpacing?: {
+    tighter: string;
+    tight: string;
+    normal: string;
+    wide: string;
+    wider: string;
+    widest: string;
+  };
+  fontFamilies?: {
+    primary: string;
+    fallback: string;
+    mono: string;
+  };
+  variants?: Record<string, any>;
 }
 
 export interface Theme {
@@ -126,6 +178,15 @@ export const defaultTheme: Theme = {
     danger: '#dc3545',
     warning: '#ffc107',
     info: '#17a2b8',
+    white: '#ffffff',
+    black: '#000000',
+    gray: '#6c757d',
+    'gray.light': '#f8f9fa',
+    'gray.medium': '#6c757d',
+    'gray.dark': '#343a40',
+    inherit: 'inherit',
+    current: 'currentColor',
+    transparent: 'transparent',
   },
   spacing: {
     xs: '0.25rem',
@@ -155,6 +216,51 @@ export const defaultTheme: Theme = {
       tight: 1.2,
       normal: 1.5,
       relaxed: 1.8,
+    },
+    // Extended typography utilities
+    fontSizes: {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      md: '1.125rem',
+      lg: '1.25rem',
+      xl: '1.5rem',
+      '2xl': '1.75rem',
+      '3xl': '2rem',
+      '4xl': '2.25rem',
+      '5xl': '2.5rem',
+    },
+    fontWeights: {
+      light: 300,
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+      extrabold: 800,
+    },
+    lineHeights: {
+      none: 1,
+      tight: 1.2,
+      snug: 1.4,
+      normal: 1.5,
+      relaxed: 1.625,
+      loose: 2,
+    },
+    letterSpacing: {
+      tighter: '-0.05em',
+      tight: '-0.025em',
+      normal: '0',
+      wide: '0.025em',
+      wider: '0.05em',
+      widest: '0.1em',
+    },
+    fontFamilies: {
+      primary: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+      fallback: "'Helvetica Neue', Arial, sans-serif",
+      mono: "'Courier New', Courier, monospace",
+    },
+    variants: {
+      // Add any variant styles here
     },
   },
   borderRadius: {

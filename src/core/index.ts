@@ -32,3 +32,19 @@ export type { IUser } from './interfaces/IAuth';
 export type { IUsuarioAD } from './interfaces/IUsuarioAD';
 export type { IRol, RolResponse } from './interfaces/IRol';
 export type { IUserExterno } from './interfaces/IUserExterno';
+
+// Assets exports
+export {
+  LogoImage,
+  LogoutIcon,
+  DocumentsFileCheckmarkSvg,
+  MapsSvg,
+  appSvg,
+  RowSvg,
+  logoMiintranet,
+  logoPortalConsalud,
+  logoConsaludCDC,
+  FooterDesktop,
+  Images,
+  Icons
+} from '../assets';

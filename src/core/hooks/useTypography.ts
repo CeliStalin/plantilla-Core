@@ -67,3 +67,17 @@ export const useTypographyVariables = () => {
     variants: TYPOGRAPHY_VARIANTS,
   }), []);
 };
+
+// Exportar constantes para uso externo
+export {
+  FONT_SIZES,
+  FONT_WEIGHTS,
+  LINE_HEIGHTS,
+  FONT_FAMILIES,
+  TYPOGRAPHY_VARIANTS
+} from '../styles/typography';
+
+// Exportar tipos para uso externo
+export type {
+  UseTypographyProps
+};

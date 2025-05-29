@@ -52,6 +52,13 @@ export {
   useLocalStorage
 } from './core/hooks';
 
+// Typography hooks exports
+export {
+  useTypography,
+  useTypographyCSS,
+  useTypographyVariables
+} from './core/hooks/useTypography';
+
 // Services exports - Solo los esenciales
 export { 
   getMe,
@@ -66,3 +73,36 @@ export {
   GetApiArquitectura,
   GetSistema
 } from './core/utils';
+
+// Typography styles and utilities exports
+export {
+  FONT_FACES,
+  FONT_SIZES,
+  FONT_WEIGHTS,
+  LINE_HEIGHTS,
+  LETTER_SPACING,
+  FONT_FAMILIES,
+  TYPOGRAPHY_VARIANTS,
+  TypographyUtils,
+  generateFontFaceCSS,
+  generateTypographyVariables
+} from './core/styles/typography';
+
+// Styles exports
+export * from './core/styles';
+
+// Assets exports - Add missing SVG exports
+export {
+  LogoImage,
+  LogoutIcon,
+  DocumentsFileCheckmarkSvg,
+  MapsSvg,
+  appSvg,
+  RowSvg,
+  logoMiintranet,
+  logoPortalConsalud,
+  logoConsaludCDC,
+  FooterDesktop,
+  Images,
+  Icons
+} from './assets';
