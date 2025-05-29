@@ -12,12 +12,18 @@ export interface LoginProps {
   backgroundColor?: string; 
   boxBackgroundColor?: string;
   textColor?: string;
+  appName?: string;
+  logoSrc?: string;
+  onLoginSuccess?: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({ 
   backgroundColor = '#ffffff',
   boxBackgroundColor,
-  textColor 
+  textColor,
+  appName = 'administrador de devolución a herederos',
+  logoSrc = logoIcon,
+  onLoginSuccess = () => {}
 }) => {
   const location = {
     pathname: window.location.pathname,
@@ -219,6 +225,14 @@ const Login: React.FC<LoginProps> = ({
     }
   };
 
+  // Ejecutar onLoginSuccess cuando el usuario se autentique exitosamente
+  useEffect(() => {
+    if (isSignedIn && !isInitializing && !loading && usuario) {
+      console.log('Usuario autenticado exitosamente, ejecutando onLoginSuccess');
+      onLoginSuccess();
+    }
+  }, [isSignedIn, isInitializing, loading, usuario, onLoginSuccess]);
+
   // Aplicar los estilos personalizados
   const containerStyles = {
     ...styles.heroWrapper,
@@ -233,8 +247,8 @@ const Login: React.FC<LoginProps> = ({
   return (
     <>
       <Header 
-        logoUrl={logoIcon}
-        altText="Consalud Logo"
+        logoUrl={logoSrc}
+        altText={`${appName} Logo`}
       />
 
       <div className="hero is-fullheight" style={containerStyles}>
@@ -246,7 +260,7 @@ const Login: React.FC<LoginProps> = ({
                   <h1 className="title has-text-centered" style={styles.titleStyles}>
                     <span style={{ color: textColor || theme.colors.black }}>Ingresa al </span>
                     <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-                      administrador de devolución a herederos
+                      {appName}
                     </span>
                   </h1>
                   

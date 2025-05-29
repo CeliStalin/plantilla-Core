@@ -2,6 +2,7 @@ import React from 'react';
 export * from './Button';
 export * from './Card';
 export * from './Login';
+export { default as Login } from './Login/Login';
 export { Counter } from './Counter';
 export * from './Loading'; 
 export * from './Dashboard';

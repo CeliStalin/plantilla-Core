@@ -4,13 +4,16 @@
       "outDir": "dist",
       "declaration": true,
       "declarationDir": "dist",
+      "declarationMap": true,
       "sourceMap": true,
       "noEmit": false,
       "isolatedModules": true,
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "preserveSymlinks": false
     },
     "exclude": [
       "node_modules",

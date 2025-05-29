@@ -11,7 +11,6 @@ export {
   Unauthorized,
   HomePage,
   Dashboard,
-  Login,
   Button,
   Card,
   Typography,
@@ -58,10 +57,8 @@ export {
   IUserExterno
 } from './core/interfaces';
 
-export { 
-  // Routes
-  RouteConfig
-} from './core/routes';
+// Routes - usar export * en lugar de exportación nombrada
+export * from './core/routes';
 
 // Assets
 export * from './assets';
