@@ -1,17 +1,13 @@
-# ⚡ Guía de 2 Minutos
+# ⚡ Guía 
 
-## 1️⃣ Instalar Docker
-- Descargar: https://www.docker.com/products/docker-desktop/
-- Instalar y abrir Docker Desktop
-
-## 2️⃣ Ejecutar Proyecto
+## 1️⃣ Ejecutar Proyecto
 ```bash
 # En terminal/Git Bash
 chmod +x docker-scripts.sh
 ./docker-scripts.sh dev
 ```
 
-## 3️⃣ Abrir Navegador
+## 2️ Abrir Navegador
 http://localhost:3001
 
 ## ✅ ¡Terminado!

@@ -323,7 +323,7 @@ const checkAuth = async () => {
 };
 ```
 
-## 🤝 Contribución
+## 🤝 Contribución 
 
 Si deseas contribuir a este proyecto:
 
@@ -354,7 +354,6 @@ Esta plantilla te permite ejecutar una aplicación React usando Docker con difer
 
 ### 1. Prerrequisitos
 - **Docker Desktop** instalado y ejecutándose
-  - Descargar desde: https://www.docker.com/products/docker-desktop/
   - Verificar instalación: `docker --version`
 
 ### 2. Ejecutar el Proyecto
@@ -430,7 +429,7 @@ plantilla-Core/
 └── src/                 # Código fuente React
 ```
 
-## 🎯 Para Principiantes
+## 🎯 Para Docker
 
 1. **Instalar Docker Desktop** y asegurarse que esté ejecutándose
 2. **Abrir terminal** en la carpeta del proyecto
@@ -441,6 +440,5 @@ plantilla-Core/
 ## 📞 Soporte
 
 Si tienes problemas:
-1. Verifica que Docker Desktop esté ejecutándose
-2. Ejecuta `./docker-scripts.sh` para ver todos los comandos
-3. Usa `./docker-scripts.sh clean` para limpiar y empezar de nuevo
+1. Ejecuta `./docker-scripts.sh` para ver todos los comandos
+2. Usa `./docker-scripts.sh clean` para limpiar y empezar de nuevo
