@@ -30,21 +30,27 @@ RUN npm run build:lib && \
     rm -rf src && \
     rm -rf public
 
-# DESARROLLO - Imagen completa con hot-reload (~300-400MB)
+# DESARROLLO - Imagen compatible con Docker Engine CLI (~300-400MB)
 FROM dev-deps AS development
-RUN apk add --no-cache git python3 make g++
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S devuser -u 1001 -G nodejs
-USER devuser
-COPY --chown=devuser:nodejs . .
+RUN apk add --no-cache git python3 make g++ curl wget
+# Crear usuario sin privilegios especiales para Docker Engine
+RUN addgroup -S appgroup && \
+    adduser -S appuser -G appgroup
+# Copiar archivos antes de cambiar usuario
+COPY . /app/
+RUN chown -R appuser:appgroup /app
+USER appuser
+WORKDIR /app
 ENV NODE_ENV=development
 ENV CHOKIDAR_USEPOLLING=true
 ENV FAST_REFRESH=true
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 ENV WATCHPACK_POLLING=true
 ENV TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
+# Puerto interno del contenedor
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+# Comando para desarrollo con polling habilitado
+CMD ["npm", "start"]
 
 # TEST - Imagen optimizada para testing (~150-200MB)
 FROM dev-deps AS test

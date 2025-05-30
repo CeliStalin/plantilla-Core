@@ -345,3 +345,102 @@ npm run test       # Ejecuta las pruebas
 ## 📄 Licencia
 
 Este proyecto es propiedad de Consalud y su uso está restringido a proyectos internos autorizados.
+
+# 🐳 Plantilla React con Docker
+
+Esta plantilla te permite ejecutar una aplicación React usando Docker con diferentes ambientes (desarrollo, producción y testing).
+
+## 🚀 Inicio Rápido
+
+### 1. Prerrequisitos
+- **Docker Desktop** instalado y ejecutándose
+  - Descargar desde: https://www.docker.com/products/docker-desktop/
+  - Verificar instalación: `docker --version`
+
+### 2. Ejecutar el Proyecto
+
+```bash
+# Hacer el script ejecutable (solo la primera vez)
+chmod +x docker-scripts.sh
+
+# Iniciar ambiente de desarrollo
+./docker-scripts.sh dev
+```
+
+**¡Listo!** Tu aplicación estará disponible en: http://localhost:3001
+
+## 📋 Comandos Disponibles
+
+| Comando | Descripción | Puerto |
+|---------|-------------|--------|
+| `./docker-scripts.sh dev` | Desarrollo con hot-reload | 3001 |
+| `./docker-scripts.sh prod` | Producción con Nginx | 3000 |
+| `./docker-scripts.sh test` | Ejecutar tests | - |
+| `./docker-scripts.sh stop` | Detener servicios | - |
+| `./docker-scripts.sh clean` | Limpiar todo | - |
+
+## 🛠️ Ambientes
+
+### 🔧 Desarrollo (`dev`)
+- Hot-reload automático
+- Código fuente montado como volumen
+- Optimizado para desarrollo
+- Puerto: 3001
+
+### 🏭 Producción (`prod`)
+- Build optimizado con Nginx
+- Imagen ultra-ligera (~50-80MB)
+- Ejecuta en segundo plano
+- Puerto: 3000
+
+### 🧪 Testing (`test`)
+- Ejecuta tests automáticamente
+- Optimizado para CI/CD
+- Se detiene al finalizar
+
+## 🔧 Solución de Problemas
+
+### Error: "docker-compose: command not found"
+```bash
+# Usar el comando moderno (ya incluido en el script)
+docker compose --version
+```
+
+### Error: "Docker no está ejecutándose"
+1. Abrir Docker Desktop
+2. Esperar a que se inicie completamente
+3. Ejecutar el comando nuevamente
+
+### Puerto ocupado
+```bash
+# Detener servicios
+./docker-scripts.sh stop
+
+# O cambiar puertos en docker-compose.yml
+```
+
+## 📁 Estructura del Proyecto
+
+```
+plantilla-Core/
+├── docker-scripts.sh      # Script principal
+├── docker-compose.yml     # Configuración Docker
+├── Dockerfile            # Definición de imágenes
+├── README.md            # Esta documentación
+└── src/                 # Código fuente React
+```
+
+## 🎯 Para Principiantes
+
+1. **Instalar Docker Desktop** y asegurarse que esté ejecutándose
+2. **Abrir terminal** en la carpeta del proyecto
+3. **Ejecutar**: `./docker-scripts.sh dev`
+4. **Abrir navegador** en: http://localhost:3001
+5. **¡Comenzar a programar!** Los cambios se reflejan automáticamente
+
+## 📞 Soporte
+
+Si tienes problemas:
+1. Verifica que Docker Desktop esté ejecutándose
+2. Ejecuta `./docker-scripts.sh` para ver todos los comandos
+3. Usa `./docker-scripts.sh clean` para limpiar y empezar de nuevo
