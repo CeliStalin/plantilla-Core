@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = ({
   backgroundColor = '#ffffff',
   boxBackgroundColor,
   textColor,
-  appName = 'administrador de devolución a herederos',
+  appName = 'administrador de Aplicaciones',
   logoSrc = logoIcon,
   onLoginSuccess = () => {}
 }) => {
@@ -234,8 +234,10 @@ const Login: React.FC<LoginProps> = ({
   }, [isSignedIn, isInitializing, loading, usuario, onLoginSuccess]);
 
   // Aplicar los estilos personalizados
-  const containerStyles = {
-    ...styles.heroWrapper,
+  const pageContainerStyles = {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    minHeight: '100vh',
     backgroundColor,
   };
 
@@ -245,95 +247,75 @@ const Login: React.FC<LoginProps> = ({
   };
 
   return (
-    <>
+    <div style={pageContainerStyles}>
       <Header 
         logoUrl={logoSrc}
         altText={`${appName} Logo`}
       />
 
-      <div className="hero is-fullheight" style={containerStyles}>
-        <div className="hero-body">
-          <div className="container">
-            <div className="columns is-centered">
-              <div className="column is-narrow">
-                <div className="box has-text-centered" style={loginBoxStyles}>
+      <div style={styles.loginContentArea}>
+        <div className="container">
+          <div className="columns is-centered">
+            <div className="column is-narrow">
+              <div className="box has-text-centered" style={loginBoxStyles}>
+                <div style={{ width: '100%', textAlign: 'center' }}>
                   <h1 className="title has-text-centered" style={styles.titleStyles}>
                     <span style={{ color: textColor || theme.colors.black }}>Ingresa al </span>
                     <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
                       {appName}
                     </span>
                   </h1>
+                </div>
                   
-                  {loading || isLoggingIn || isInitializing /* || isCheckingNetwork */ ? (
-                    <div className="field" style={{ width: '100%' }}>
-                      <div className="control">
-                        <button 
-                          className="button is-fullwidth is-primary"
-                          style={{
-                            ...styles.primaryButton,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            minHeight: '48px'
-                          }}
-                          disabled={true}
-                        >
-                          <LoadingDots size="small" />
-                          <span style={{ marginLeft: '8px' }}>
-                            {/* isCheckingNetwork ? 'Verificando red...' : */ 'Cargando...'}
-                          </span>
-                        </button>
-                      </div>
+                {loading || isLoggingIn || isInitializing ? (
+                  <div className="field" style={{ width: '100%' }}>
+                    <div className="control">
+                      <button 
+                        className="button is-fullwidth is-primary"
+                        style={{
+                          ...styles.primaryButton,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          minHeight: '48px'
+                        }}
+                        disabled={true}
+                      >
+                        <LoadingDots size="small" />
+                        <span style={{ marginLeft: '8px' }}>
+                          Cargando...
+                        </span>
+                      </button>
                     </div>
-                  ) : isSignedIn ? (
-                    // Si el usuario está autenticado, mostrar botón para cerrar sesión 
-                    <div className="field" style={{ width: '100%' }}>
-                      <div className="control">
-                        <button 
-                          className="button is-fullwidth is-danger"
-                          style={{
-                            ...styles.primaryButton,
-                            backgroundColor: theme.colors.danger,
-                          }}
-                          onClick={handleLogout}
-                        >
-                          Cerrar sesión
-                        </button>
-                      </div>
+                  </div>
+                ) : isSignedIn ? (
+                  <div className="field" style={{ width: '100%' }}>
+                    <div className="control">
+                      <button 
+                        className="button is-fullwidth is-danger"
+                        style={{
+                          ...styles.primaryButton,
+                          backgroundColor: theme.colors.danger,
+                        }}
+                        onClick={handleLogout}
+                      >
+                        Cerrar sesión
+                      </button>
                     </div>
-                  ) : (
-                    <div className="field" style={{ width: '100%' }}>
-                      <div className="control">
-                        <button 
-                          className="button is-fullwidth is-primary"
-                          style={styles.primaryButton}
-                          onClick={handleLoginRedirect}
-                          disabled={isLoggingIn /* || networkAccess === false */}
-                        >
-                          Iniciar sesión con Azure AD
-                        </button>
-                      </div>
-                      {/* Comentamos el aviso de red
-                      {networkAccess === false ? (
-                        <div style={styles.networkWarning.container}>
-                          <div style={styles.networkWarning.title}>
-                            <span style={styles.networkWarning.icon}>⚠️</span>
-                            Sin acceso a la red corporativa
-                          </div>
-                          <p style={styles.networkWarning.message}>
-                            Para acceder, debes estar conectado a la red de Consalud o usar VPN.
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="help mt-2" style={{
-                          ...styles.networkWarning.note,
-                          color: textColor || styles.networkWarning.note.color
-                        }}>
-                          Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
-                        </p>
-                      )}
-                      */}
-                      {/* En lugar del aviso de red condicional, siempre mostramos la nota */}
+                  </div>
+                ) : (
+                  <div className="field" style={{ width: '100%' }}>
+                    <div className="control">
+                      <button 
+                        className="button is-fullwidth is-primary"
+                        style={styles.primaryButton}
+                        onClick={handleLoginRedirect}
+                        disabled={isLoggingIn}
+                      >
+                        Iniciar sesión con Azure AD
+                      </button>
+                    </div>
+                    <div style={{ textAlign: 'center', width: '100%' }}>
                       <p className="help mt-2" style={{
                         ...styles.networkWarning.note,
                         color: textColor || styles.networkWarning.note.color
@@ -341,20 +323,20 @@ const Login: React.FC<LoginProps> = ({
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>
                     </div>
-                  )}
+                  </div>
+                )}
                   
-                  <ErrorMessages 
-                    error={localError || error || undefined}
-                    errorAD={errorAD || undefined}
-                    errorRoles={errorRoles || undefined}
-                  />
-                </div>
+                <ErrorMessages 
+                  error={localError || error || undefined}
+                  errorAD={errorAD || undefined}
+                  errorRoles={errorRoles || undefined}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

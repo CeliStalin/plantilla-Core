@@ -145,3 +145,42 @@ aside.menu * {
     display: none;
   }
 }
+
+/* Estilos específicos para centrado perfecto del login */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.login-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Estilos específicos para mejorar el centrado del login */
+.login-centered-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.login-field-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Asegurar que los botones del login estén centrados */
+.login-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

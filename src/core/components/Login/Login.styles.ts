@@ -1,14 +1,20 @@
 import { theme } from '../../styles/theme';
 
-export const heroWrapper = {
-  paddingTop: theme.layout.headerHeight,
+export const loginContentArea = {
+  flexGrow: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '1rem',
+  width: '100%',
+  minHeight: 'calc(100vh - 80px)', /* Asegurar altura mínima menos el header */
 };
 
 export const loginBox = {
   display: 'flex',
   padding: theme.spacing.lg,
   flexDirection: 'column' as const,
-  alignItems: 'flex-start',
+  alignItems: 'center', // Cambiar de 'flex-start' a 'center'
   gap: theme.spacing.md,
   borderRadius: theme.borderRadius.small,
   background: theme.colors.white,
@@ -32,7 +38,7 @@ export const primaryButton = {
   padding: '13px 24px',
   justifyContent: 'center',
   alignItems: 'center',
-  alignSelf: 'stretch',
+  alignSelf: 'stretch', // Mantener el ancho completo
   borderRadius: theme.borderRadius.full,
   backgroundColor: theme.colors.primary,
   color: theme.colors.white,
@@ -40,6 +46,8 @@ export const primaryButton = {
   border: 'none',
   fontFamily: theme.typography.fontFamily.primary,
   fontWeight: theme.typography.fontWeight.semibold,
+  width: '100%', // Asegurar ancho completo
+  textAlign: 'center' as const,
 };
 
 // Nuevos estilos para advertencia de red

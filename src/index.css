@@ -63,7 +63,7 @@ body {
   line-height: 1.6; /* Espaciado de línea para mejor legibilidad */
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: center; /* Cambiar de flex-start a center para centrado */
   min-width: 320px;
   height: 100%; 
   overflow-y: auto;
@@ -159,4 +159,11 @@ aside.menu {
 .nav-menu-container {
   border: none !important;
   outline: none !important;
+}
+
+/* Estilos específicos para la página de login */
+.login-page-body {
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh;
 }
