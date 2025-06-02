@@ -1,5 +1,19 @@
 import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 
+// New interfaces for external styling and animations
+export interface AnimationConfig {
+  bounceKeyframes?: string;
+  fadeInKeyframes?: string;
+  hoverEffects?: string;
+  customAnimations?: Record<string, string>;
+}
+
+export interface StyleConfig {
+  cssVariables?: Record<string, string>;
+  customStyles?: string;
+  animationConfig?: AnimationConfig;
+}
+
 export interface HomePageProps {
   className?: string;
   externalLinks?: ExternalLink[];
@@ -12,6 +26,10 @@ export interface HomePageProps {
   // New props for enhanced functionality
   bounceEnabled?: boolean;
   enableInteractiveEffects?: boolean;
+  // External styling props
+  styleConfig?: StyleConfig;
+  injectStyles?: boolean;
+  customCssVars?: Record<string, string>;
   // Development/debugging props
   debug?: boolean;
   onMounted?: () => void;
@@ -29,19 +47,27 @@ export interface ApplicationsGridProps {
   onAppClick: (item: ElementMenu) => void;
   enableBounce?: boolean;
   className?: string;
+  // External styling support
+  styleConfig?: StyleConfig;
+  customAnimations?: boolean;
 }
 
 export interface ApplicationCardProps {
   item: ElementMenu;
   onClick: (item: ElementMenu) => void;
   delay?: number;
+  // Animation control
+  animationEnabled?: boolean;
+  customStyle?: React.CSSProperties;
 }
 
 export interface DirectAccessGridProps {
   loading: boolean;
   onExternalLinkClick: (url: string) => void;
   className?: string;
-  externalLinks?: ExternalLink[]; 
+  externalLinks?: ExternalLink[];
+  // External styling support
+  styleConfig?: StyleConfig;
 }
 
 export interface AccessCardProps {
@@ -50,6 +76,9 @@ export interface AccessCardProps {
   url: string;
   onClick: (url: string) => void;
   delay?: number;
+  // Animation control
+  animationEnabled?: boolean;
+  customStyle?: React.CSSProperties;
 }
 
 export interface ExternalLink {
