@@ -122,13 +122,17 @@ export const useAuth = (): UseAuthReturn => {
     }
     
     // Si ya tenemos todos los datos, no volvemos a cargarlos
-    if (usuario && usuarioAD && roles.length > 0) {
+    // Agregamos una verificación más estricta
+    if (usuario && usuarioAD && roles.length > 0 && !loading) {
       console.log("Datos de usuario ya cargados, omitiendo carga");
       return;
     }
 
-    console.log("Iniciando carga de datos de usuario...");
-    setLoading(true);
+    // Solo mostrar loading si realmente vamos a hacer llamadas
+    if (!usuario || !usuarioAD || roles.length === 0) {
+      console.log("Iniciando carga de datos de usuario...");
+      setLoading(true);
+    }
 
     try {
       // Obtener datos del usuario
@@ -204,7 +208,7 @@ export const useAuth = (): UseAuthReturn => {
       setLoading(false);
       console.log("Carga de datos de usuario completada");
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, usuario, usuarioAD, roles.length, loading]);
 
   // Asegurarnos de que loadUserData se llame cuando el usuario inicie sesión
   useEffect(() => {

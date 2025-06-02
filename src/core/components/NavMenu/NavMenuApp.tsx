@@ -21,9 +21,14 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
   const { enableDynamicMenu } = useMenuConfig();
   const location = useLocation();
   const [menuItems, setMenuItems] = useState<ElementMenu[]>([]);
-  const [loading, setLoading] = useState<boolean>(enableDynamicMenu);
+  const [loading, setLoading] = useState<boolean>(false); // Cambiar a false por defecto
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const prevPathRef = useRef(location.pathname);
+  
+  // Refs para optimización
+  const hasLoadedRef = useRef(false);
+  const lastRoleRef = useRef<string>('');
+  const initialLoadRef = useRef(true);
 
   // Inyectar estilos al montar el componente
   useEffect(() => {
@@ -69,34 +74,67 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
       if (!enableDynamicMenu) {
         setMenuItems([]);
         setLoading(false);
+        hasLoadedRef.current = true;
         return;
       }
 
-      try {
-        if (roles.length === 0) {
-          setMenuItems([]);
-          setLoading(false);
-          return;
+      // Si no está autenticado, limpiar estado
+      if (!isSignedIn) {
+        setMenuItems([]);
+        setLoading(false);
+        hasLoadedRef.current = false;
+        lastRoleRef.current = '';
+        return;
+      }
+
+      // Si no hay roles, no cargar aún
+      if (roles.length === 0) {
+        // Solo mostrar loading en la carga inicial si no tenemos roles
+        if (initialLoadRef.current) {
+          setLoading(true);
         }
-  
-        // Solo cargar menús si el usuario tiene el rol 
-        if (hasDevelopersRole) {
-          const items = await ApiGetMenus("Developers");
+        setMenuItems([]);
+        return;
+      }
+
+      // Determinar el rol actual
+      const currentRole = hasDevelopersRole ? 'Developers' : '';
+
+      // Si ya hemos cargado con el mismo rol, no volver a cargar
+      if (hasLoadedRef.current && lastRoleRef.current === currentRole) {
+        setLoading(false);
+        return;
+      }
+
+      // Solo mostrar loading si es la primera carga o cambió el rol
+      const shouldShowLoading = !hasLoadedRef.current || lastRoleRef.current !== currentRole;
+
+      if (shouldShowLoading) {
+        setLoading(true);
+      }
+
+      try {
+        if (currentRole) {
+          const items = await ApiGetMenus(currentRole);
           setMenuItems(items || []);
         } else {
           // Si no tiene rol Developers, dejar el menú vacío
           setMenuItems([]);
         }
+        
+        hasLoadedRef.current = true;
+        lastRoleRef.current = currentRole;
       } catch (error) {
         setMenuItems([]);
         console.error("Error al cargar menús:", error instanceof Error ? error.message : String(error));
       } finally {
         setLoading(false);
+        initialLoadRef.current = false;
       }
     };
   
     fetchMenu();
-  }, [hasDevelopersRole, roles, enableDynamicMenu]);
+  }, [hasDevelopersRole, roles, enableDynamicMenu, isSignedIn]);
 
   const handleToggle = () => {
     const newState = !isCollapsed;
@@ -140,7 +178,8 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     return location.pathname === path;
   };
 
-  if (loading) {
+  // Solo mostrar loading durante la carga inicial de menús dinámicos
+  if (loading && enableDynamicMenu && initialLoadRef.current) {
     return (
       <div 
         style={{
