@@ -10,11 +10,12 @@ import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styl
 import { HomePageProps } from './types';
 import './styles/animations.css';
 import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
-import { useMenuConfig } from '@/core/context/MenuConfigContext'; 
+import { useMenuConfig } from '@/core/context/MenuConfigContext';
 
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
-  externalLinks 
+  externalLinks,
+  enableBounce = true
 }) => {
   // Hooks
   const { usuario } = useAuth();
@@ -72,6 +73,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               menuItems={menuItems}
               loading={loading}
               onAppClick={navigateToApp}
+              enableBounce={enableBounce}
             />
           </div>
           

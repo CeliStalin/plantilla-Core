@@ -1,18 +1,26 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ElementMenu } from '@/core/interfaces/IMenusElementos';
-import { buildAppPath } from '../utils';
 
 export const useNavigation = () => {
   const navigate = useNavigate();
 
-  const navigateToApp = useCallback((item: ElementMenu) => {
-    const path = buildAppPath(item.Controlador, item.Accion);
+  const navigateToApp = useCallback((app: ElementMenu) => {
+    if (!app.Controlador || !app.Accion) {
+      console.warn('Invalid app navigation data:', app);
+      return;
+    }
+
+    const formattedControlador = app.Controlador.charAt(0).toLowerCase() + app.Controlador.slice(1);
+    const path = `/${formattedControlador}/${app.Accion}`;
+    
     navigate(path);
   }, [navigate]);
 
   const openExternalLink = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   }, []);
 
   return { navigateToApp, openExternalLink };

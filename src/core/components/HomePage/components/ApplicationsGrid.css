@@ -1,0 +1,31 @@
+.app-card {
+  transition: all 0.3s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.app-card:focus {
+  outline: 2px solid #007acc;
+  outline-offset: 2px;
+}
+
+.bounce-enabled {
+  transform-origin: center;
+}
+
+.bounce-enabled.clicked {
+  animation: bounceClick 0.3s ease-out;
+}
+
+@keyframes bounceClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.applications-section {
+  width: 100%;
+}

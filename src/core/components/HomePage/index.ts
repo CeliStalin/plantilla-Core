@@ -1,5 +1,4 @@
-export { default } from './HomePage';           
-export { default as HomePage } from './HomePage'; 
+export { HomePage } from './HomePage';
 export * from './types';
 export * from './constants';
 export * from './hooks';

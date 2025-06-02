@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "./Layout/Layout";
 
-const HomePage: React.FC = () => {
+const MainPage: React.FC = () => {
   return (
     <Layout pageTitle="Inicio">
       <div className="content-container" style={{ minHeight: '400px', backgroundColor: '#ffffff' }}>
@@ -11,4 +11,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default MainPage;

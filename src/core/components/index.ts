@@ -6,7 +6,7 @@ export { default as Login } from './Login/Login';
 export { Counter } from './Counter';
 export * from './Loading'; 
 export { LoadingOverlay } from './Loading/LoadingOverlay';
-export { LoadingSpinner } from './Loading/LoadingSpinner'; // Nueva exportación
+export { LoadingSpinner } from './Loading/LoadingSpinner';
 export * from './Dashboard';
 export { ErrorBoundary } from './ErrorBoundary';
 export * from './ErrorMessage';
@@ -19,12 +19,12 @@ export { default as SecureLayout } from './SecureLayout/SecureLayout';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
-export { default as HomePage } from './HomePage/HomePage';
+export { HomePage } from './HomePage/HomePage'; // Export named, not default
 export { default as Footer } from './Footer'; 
 export { default as Dashboard } from './Dashboard';
 export * from './Typography';
 
-// PageTransition exports - Asegurar exportación del hook
+// PageTransition exports
 export * from './PageTransition';
 export { default as PageTransition } from './PageTransition';
 export { usePageTransition } from './PageTransition/hooks/usePageTransition';

@@ -2,7 +2,8 @@ import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 
 export interface HomePageProps {
   className?: string;
-  externalLinks?: ExternalLink[]; 
+  externalLinks?: ExternalLink[];
+  enableBounce?: boolean;
 }
 
 export interface WelcomeSectionProps {
@@ -14,6 +15,7 @@ export interface ApplicationsGridProps {
   menuItems: ElementMenu[];
   loading: boolean;
   onAppClick: (item: ElementMenu) => void;
+  enableBounce?: boolean;
   className?: string;
 }
 

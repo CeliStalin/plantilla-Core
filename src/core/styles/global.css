@@ -1,5 +1,7 @@
 /* Import typography styles */
 @import './typography.css';
+/* Import centralized animations */
+@import './animations.css';
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -183,4 +185,17 @@ aside.menu * {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+/* Enhanced card interactions with bounce */
+.app-card.bounce-enabled {
+  transform-origin: center center;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize for hardware acceleration */
+.app-card.bounce-enabled:hover,
+.app-card.bounce-enabled:active {
+  will-change: transform, box-shadow;
 }

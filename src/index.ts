@@ -8,12 +8,12 @@ export {
 
 // Component exports - Solo los más importantes
 export { 
+  // Theme
   Layout,
   SecureLayout,
   ProtectedRoute,
   NotFound,
   Unauthorized,
-  HomePage,
   Dashboard,
   Button,
   Card,
@@ -158,3 +158,15 @@ export const createPageTransitionConfig = (options: {
   enableHardwareAcceleration: true,
   ...options
 });
+
+// Enhanced HomePage exports with bounce effects
+export { HomePage } from './core/components/HomePage/HomePage';
+export type { HomePageProps } from './core/components/HomePage/types';
+
+// Animation utilities export
+export const createBounceEffect = (element: HTMLElement, duration: number = 300) => {
+  element.classList.add('bounce-effect');
+  setTimeout(() => {
+    element.classList.remove('bounce-effect');
+  }, duration);
+};
