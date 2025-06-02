@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export interface UsePageTransitionOptions {
@@ -63,8 +63,13 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
     duration,
     easing
   });
+  
   const [isRouterContext, setIsRouterContext] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
   const configRef = useRef(currentConfig);
+  const transitionTimeoutRef = useRef<number | null>(null);
+  const prevPathnameRef = useRef<string | null>(null);
 
   // Detectar contexto de Router
   useEffect(() => {
@@ -82,6 +87,13 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
     configRef.current = currentConfig;
   }, [currentConfig]);
 
+  // Memoized transition duration calculation
+  const transitionDuration = useMemo(() => {
+    return configRef.current.duration || 
+           duration || 
+           (preset === 'fast' ? 200 : preset === 'slow' ? 500 : 300);
+  }, [configRef.current.duration, duration, preset]);
+
   const updateConfig = useCallback((config: TransitionConfig) => {
     setCurrentConfig(prev => ({
       ...prev,
@@ -92,29 +104,45 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
   const startTransition = useCallback((route?: string) => {
     if (disabled) return;
     
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+    
     setIsTransitioning(true);
     
-    // Usar duración del preset o configuración actual
-    const transitionDuration = 
-      configRef.current.duration || 
-      duration || 
-      (preset === 'fast' ? 200 : preset === 'slow' ? 500 : 300);
-    
-    setTimeout(() => {
+    transitionTimeoutRef.current = window.setTimeout(() => {
       setIsTransitioning(false);
     }, transitionDuration);
-  }, [duration, preset, disabled]);
+  }, [transitionDuration, disabled]);
 
   const triggerTransition = useCallback(() => {
     startTransition();
   }, [startTransition]);
 
+  // Optimized effect for route changes
   useEffect(() => {
-    // Solo activar transición automática si estamos en contexto de Router
-    if (isRouterContext) {
-      triggerTransition();
+    if (!isInitialized) {
+      setIsInitialized(true);
+      prevPathnameRef.current = isRouterContext ? location.pathname : window.location.pathname;
+      return;
     }
-  }, [location.pathname, triggerTransition, isRouterContext]);
+
+    const currentPath = isRouterContext ? location.pathname : window.location.pathname;
+    
+    if (isRouterContext && currentPath !== prevPathnameRef.current) {
+      triggerTransition();
+      prevPathnameRef.current = currentPath;
+    }
+  }, [location.pathname, triggerTransition, isRouterContext, isInitialized]);
+
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Estado completo de la transición
   const state: TransitionState = {

@@ -2,42 +2,57 @@ export const pageTransitionStyles = {
   container: {
     width: '100%',
     height: '100%',
-    willChange: 'transform, opacity',
+    contain: 'layout style paint',
     backfaceVisibility: 'hidden' as const,
-    perspective: 1000,
   },
   
   transitions: {
     fade: {
-      transition: 'opacity var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     slide: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     slideLeft: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     slideRight: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     slideUp: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     slideDown: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     zoom: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
     
     fadeSlide: {
-      transition: 'all var(--transition-duration, 300ms) var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionProperty: 'transform, opacity',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
     },
   },
 };
