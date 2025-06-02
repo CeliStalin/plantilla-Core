@@ -130,6 +130,10 @@ export {
   Icons
 } from './assets';
 
+// Components exports - Incluir LoadingSpinner
+export * from './core/components';
+export { LoadingSpinner } from './core/components/Loading/LoadingSpinner';
+
 // Función de utilidad para transiciones (opcional para compatibilidad)
 export const startTransition = (callback: () => void) => {
   if (typeof React !== 'undefined' && React.startTransition) {

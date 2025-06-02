@@ -6,6 +6,7 @@ export { default as Login } from './Login/Login';
 export { Counter } from './Counter';
 export * from './Loading'; 
 export { LoadingOverlay } from './Loading/LoadingOverlay';
+export { LoadingSpinner } from './Loading/LoadingSpinner'; // Nueva exportación
 export * from './Dashboard';
 export { ErrorBoundary } from './ErrorBoundary';
 export * from './ErrorMessage';
