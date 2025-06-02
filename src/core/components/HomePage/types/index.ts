@@ -7,6 +7,11 @@ export interface HomePageProps {
   className?: string;
   externalLinks?: ExternalLink[];
   enableBounce?: boolean;
+  showWelcomeSection?: boolean;
+  showApplicationsSection?: boolean;
+  showDirectAccessSection?: boolean;
+  bounceIntensity?: 'low' | 'medium' | 'high';
+  animationDuration?: number;
 }
 
 export interface ExternalLink {

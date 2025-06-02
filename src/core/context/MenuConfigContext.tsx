@@ -3,12 +3,15 @@ import React, { createContext, useContext, ReactNode } from 'react';
 interface MenuConfigContextType {
   // Configuración del menú
   enableDynamicMenu: boolean;
+  // Configuración de efectos bounce
+  enableBounceEffects: boolean;
   // Otros ajustes que podrías necesitar en el futuro
 }
 
 // Valores por defecto
 const defaultConfig: MenuConfigContextType = {
-  enableDynamicMenu: true  // Por defecto, el core solo muestra la pantalla de inicio
+  enableDynamicMenu: true,  // Por defecto, el core solo muestra la pantalla de inicio
+  enableBounceEffects: false // Por defecto deshabilitado para no romper funcionalidad existente
 };
 
 // Crear el contexto

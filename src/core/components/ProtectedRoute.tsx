@@ -7,6 +7,7 @@ interface ProtectedRouteProps {
   // Make component optional to support children pattern
   component?: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>;
   roles?: string[];
+  allowedRoles?: string[]; // Add allowedRoles property
   isPublic?: boolean;
   enableTransitions?: boolean;
   // Add children support
@@ -16,6 +17,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   roles = [],
+  allowedRoles = [], // Add allowedRoles with default value
   isPublic = false,
   enableTransitions = true,
   children
@@ -28,6 +30,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     isLoggingOut 
   } = useAuth();
   const location = useLocation();
+
+  // Use allowedRoles if provided, otherwise fall back to roles for backwards compatibility
+  const rolesToCheck = allowedRoles.length > 0 ? allowedRoles : roles;
 
   // Validate props - either component or children must be provided
   if (!Component && !children) {
@@ -84,7 +89,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Verificar roles si se especifican
-  if (roles.length > 0 && !hasAnyRole(roles)) {
+  if (rolesToCheck.length > 0 && !hasAnyRole(rolesToCheck)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

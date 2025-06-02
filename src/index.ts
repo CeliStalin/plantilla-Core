@@ -163,6 +163,30 @@ export const createPageTransitionConfig = (options: {
 export { HomePage } from './core/components/HomePage/HomePage';
 export type { HomePageProps } from './core/components/HomePage/types';
 
+// Tipos adicionales para compatibilidad externa
+export interface ExtendedHomePageProps {
+  enableBounce?: boolean;
+  showWelcomeSection?: boolean;
+  showApplicationsSection?: boolean;
+  showDirectAccessSection?: boolean;
+  bounceIntensity?: 'low' | 'medium' | 'high';
+  animationDuration?: number;
+}
+
+export interface ExtendedProtectedRouteProps {
+  component?: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>;
+  roles?: string[];
+  allowedRoles?: string[];
+  isPublic?: boolean;
+  enableTransitions?: boolean;
+  children: React.ReactNode;
+}
+
+export interface ExtendedMenuConfigType {
+  enableDynamicMenu?: boolean;
+  enableBounceEffects?: boolean;
+}
+
 // Animation utilities export
 export const createBounceEffect = (element: HTMLElement, duration: number = 300) => {
   element.classList.add('bounce-effect');
