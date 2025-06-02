@@ -3,13 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { pageTransitionStyles } from './PageTransition.styles';
 import type { PageTransitionProps } from './PageTransition.types';
 
-// Configuración de presets - Agregar minimal
+// Configuración de presets - Add fade preset
 const PRESET_CONFIG = {
   fast: { duration: 200, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' },
   normal: { duration: 300, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' },
   slow: { duration: 500, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' },
   custom: { duration: 300, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' },
   minimal: { duration: 150, easing: 'ease-out' }, // Preset minimal optimizado para apps externas
+  fade: { duration: 250, easing: 'ease-in-out' }, // New fade preset for external apps
   none: { duration: 0, easing: 'linear' }
 } as const;
 
@@ -30,6 +31,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   preset = 'normal',
   easing,
   className = '',
+  style, // Add style prop
   disabled = false,
   enableHardwareAcceleration = false,
   respectReducedMotion = true,
@@ -37,6 +39,8 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   immediateMode = false,
   standalone = false,
   triggerKey,
+  exitBeforeEnter = false,
+  mode = 'sync',
 }) => {
   const location = useSafeLocation();
   const [isVisible, setIsVisible] = useState(!disableInitialTransition); 
@@ -44,9 +48,16 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const [isRouterContext, setIsRouterContext] = useState(true);
   
+  // New states for exit-before-enter functionality
+  const [isExiting, setIsExiting] = useState(false);
+  const [isEntering, setIsEntering] = useState(false);
+  const [pendingChildren, setPendingChildren] = useState<React.ReactNode>(null);
+  
   const prevLocationPathnameRef = useRef<string | null>(null);
   const prevTriggerKeyRef = useRef<string | number | undefined>(triggerKey);
   const animationTimerRef = useRef<number | null>(null);
+  const exitTimerRef = useRef<number | null>(null);
+  const enterTimerRef = useRef<number | null>(null);
   const mountedRef = useRef(true);
 
   // Detectar si estamos en un contexto de Router - Mejorado
@@ -98,17 +109,72 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 
   const effectiveDisabled = disabled || prefersReducedMotion || preset === 'none';
 
-  // Optimized animation trigger function
+  // Enhanced animation trigger function with exit-before-enter support
   const triggerAnimation = useCallback((immediate = false) => {
     if (!mountedRef.current || effectiveDisabled) return;
 
+    // Clear existing timers
     if (animationTimerRef.current) {
       clearTimeout(animationTimerRef.current);
     }
+    if (exitTimerRef.current) {
+      clearTimeout(exitTimerRef.current);
+    }
+    if (enterTimerRef.current) {
+      clearTimeout(enterTimerRef.current);
+    }
 
-    // Para preset minimal, usar transición más rápida
     const shouldUseImmediate = immediate || immediateMode || preset === 'minimal';
+    // Handle concurrent mode as sync for compatibility
+    const effectiveMode = exitBeforeEnter ? 'out-in' : (mode === 'concurrent' ? 'sync' : mode);
 
+    if (effectiveDisabled) {
+      setDisplayChildren(children);
+      setIsVisible(true);
+      return;
+    }
+
+    // Handle exit-before-enter mode
+    if (exitBeforeEnter || effectiveMode === 'out-in') {
+      setPendingChildren(children);
+      setIsExiting(true);
+      setIsVisible(false);
+      
+      exitTimerRef.current = window.setTimeout(() => {
+        if (mountedRef.current) {
+          setIsExiting(false);
+          setDisplayChildren(pendingChildren);
+          setIsEntering(true);
+          
+          enterTimerRef.current = window.setTimeout(() => {
+            if (mountedRef.current) {
+              setIsVisible(true);
+              setIsEntering(false);
+              setPendingChildren(null);
+            }
+          }, shouldUseImmediate ? (preset === 'minimal' ? 5 : 10) : 50);
+        }
+      }, shouldUseImmediate ? (preset === 'minimal' ? 5 : 10) : finalDuration);
+      
+      return;
+    }
+
+    // Handle in-out mode (enter new before old exits)
+    if (effectiveMode === 'in-out') {
+      setDisplayChildren(children);
+      setIsEntering(true);
+      setIsVisible(true);
+      
+      enterTimerRef.current = window.setTimeout(() => {
+        if (mountedRef.current) {
+          setIsEntering(false);
+        }
+      }, shouldUseImmediate ? (preset === 'minimal' ? 5 : 10) : finalDuration);
+      
+      return;
+    }
+
+    // Default sync mode (existing behavior) - also handles concurrent mode
     if (shouldUseImmediate) {
       setDisplayChildren(children);
       setIsVisible(false);
@@ -126,7 +192,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
         }
       }, finalDuration);
     }
-  }, [children, effectiveDisabled, finalDuration, immediateMode, preset]);
+  }, [children, effectiveDisabled, finalDuration, immediateMode, preset, exitBeforeEnter, mode, pendingChildren]);
 
   // Handle mount and unmount
   useEffect(() => {
@@ -135,6 +201,12 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
       mountedRef.current = false;
       if (animationTimerRef.current) {
         clearTimeout(animationTimerRef.current);
+      }
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+      }
+      if (enterTimerRef.current) {
+        clearTimeout(enterTimerRef.current);
       }
     };
   }, []);
@@ -198,20 +270,30 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
     return <>{children}</>;
   }
 
-  // Para preset minimal, usar estilos más simples
-  const getMinimalTransform = (type: PageTransitionProps['type'], isVisible: boolean): string => {
-    if (preset === 'minimal') {
-      // Solo fade para minimal, sin transforms complejos
-      return 'none';
+  // Enhanced visibility logic for exit-before-enter
+  const getEffectiveVisibility = (): boolean => {
+    if (exitBeforeEnter || mode === 'out-in') {
+      return isVisible && !isExiting;
     }
-    return getTransform(type, isVisible);
+    return isVisible;
+  };
+
+  // Enhanced opacity calculation
+  const getEffectiveOpacity = (): number => {
+    if (exitBeforeEnter || mode === 'out-in') {
+      if (isExiting) return 0;
+      if (isEntering) return isVisible ? 1 : 0;
+      return isVisible ? 1 : 0;
+    }
+    return isVisible ? 1 : 0;
   };
 
   const containerStyle: React.CSSProperties = {
     ...pageTransitionStyles.container,
     ...(pageTransitionStyles.transitions[type] || pageTransitionStyles.transitions.fadeSlide),
-    opacity: isVisible ? 1 : 0,
-    transform: getMinimalTransform(type, isVisible),
+    ...style, // Merge user-provided styles
+    opacity: getEffectiveOpacity(),
+    transform: getMinimalTransform(type, getEffectiveVisibility()),
     transitionProperty: preset === 'minimal' ? 'opacity' : 'opacity, transform',
     transitionDuration: `${finalDuration}ms`,
     transitionTimingFunction: finalEasing,
@@ -223,9 +305,40 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
     containerStyle.willChange = 'opacity';
   }
 
+  // Add transition state classes for CSS targeting
+  const getTransitionClasses = (): string => {
+    const classes = [`page-transition`];
+    
+    if (preset === 'minimal') {
+      classes.push('page-transition--minimal');
+    }
+    
+    if (preset === 'fade') {
+      classes.push('page-transition--fade');
+    }
+    
+    if (exitBeforeEnter) {
+      classes.push('page-transition--exit-before-enter');
+    }
+    
+    if (isExiting) {
+      classes.push('page-transition--exiting');
+    }
+    
+    if (isEntering) {
+      classes.push('page-transition--entering');
+    }
+    
+    if (mode && mode !== 'sync') {
+      classes.push(`page-transition--${mode}`);
+    }
+    
+    return classes.join(' ');
+  };
+
   return (
     <div 
-      className={`page-transition ${className} ${preset === 'minimal' ? 'page-transition--minimal' : ''}`}
+      className={`${getTransitionClasses()} ${className}`}
       style={containerStyle}
     >
       {displayChildren}
@@ -248,6 +361,28 @@ const getTransform = (type: PageTransitionProps['type'], isVisible: boolean): st
       return isVisible ? 'scale(1)' : 'scale(0.98)';
     case 'fadeSlide':
       return isVisible ? 'translateY(0)' : 'translateY(10px)';
+    case 'fade':
+    default:
+      return 'none';
+  }
+};
+
+const getMinimalTransform = (type: PageTransitionProps['type'], isVisible: boolean): string => {
+  // For minimal preset, use simpler transforms
+  switch (type) {
+    case 'slide':
+    case 'slideRight':
+      return isVisible ? 'translateX(0)' : 'translateX(10px)';
+    case 'slideLeft':
+      return isVisible ? 'translateX(0)' : 'translateX(-10px)';
+    case 'slideUp':
+      return isVisible ? 'translateY(0)' : 'translateY(5px)';
+    case 'slideDown':
+      return isVisible ? 'translateY(0)' : 'translateY(-5px)';
+    case 'zoom':
+      return isVisible ? 'scale(1)' : 'scale(0.99)';
+    case 'fadeSlide':
+      return isVisible ? 'translateY(0)' : 'translateY(5px)';
     case 'fade':
     default:
       return 'none';

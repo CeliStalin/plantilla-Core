@@ -4,18 +4,21 @@ import useAuth from '../hooks/useAuth';
 import { LoadingOverlay } from './Loading/LoadingOverlay';
 
 interface ProtectedRouteProps {
-  component: React.LazyExoticComponent<React.ComponentType<any>>;
+  // Make component optional to support children pattern
+  component?: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>;
   roles?: string[];
   isPublic?: boolean;
-  // Nueva prop para transiciones
   enableTransitions?: boolean;
+  // Add children support
+  children?: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   roles = [],
   isPublic = false,
-  enableTransitions = true
+  enableTransitions = true,
+  children
 }) => {
   const { 
     isSignedIn, 
@@ -25,6 +28,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     isLoggingOut 
   } = useAuth();
   const location = useLocation();
+
+  // Validate props - either component or children must be provided
+  if (!Component && !children) {
+    console.error('ProtectedRoute: Either "component" prop or "children" must be provided');
+    return <div>Error: ProtectedRoute requires either component prop or children</div>;
+  }
 
   // Mostrar loading mientras se inicializa la autenticación
   if (isInitializing || loading) {
@@ -50,12 +59,21 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to={redirectTo} replace />;
     }
     
-    // Renderizar componente público
-    return (
-      <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
-        <Component />
-      </Suspense>
-    );
+    // Renderizar componente público - support both patterns
+    if (children) {
+      return <>{children}</>;
+    }
+    
+    if (Component) {
+      return (
+        <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
+          <Component />
+        </Suspense>
+      );
+    }
+
+    // This should never happen due to validation above, but add fallback
+    return <div>Error: No component or children provided</div>;
   }
 
   // Para rutas privadas
@@ -70,12 +88,25 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/unauthorized" replace />;
   }
 
-  // Renderizar componente con soporte para transiciones
-  const renderComponent = () => (
-    <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
-      <Component />
-    </Suspense>
-  );
+  // Renderizar componente con soporte para transiciones - support both patterns
+  const renderComponent = () => {
+    // If children are provided, render them directly
+    if (children) {
+      return <>{children}</>;
+    }
+
+    // If component is provided, render with Suspense (for lazy components)
+    if (Component) {
+      return (
+        <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
+          <Component />
+        </Suspense>
+      );
+    }
+
+    // This should never happen due to validation above, but add fallback
+    return <div>Error: No component or children provided</div>;
+  };
 
   return renderComponent();
 };

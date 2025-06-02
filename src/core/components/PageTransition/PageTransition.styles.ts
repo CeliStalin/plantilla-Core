@@ -60,6 +60,13 @@ export const pageTransitionStyles = {
       transitionTimingFunction: 'ease-out',
       transitionDuration: '150ms',
     },
+    
+    // New transition styles for exit-before-enter modes
+    exitBeforeEnter: {
+      transitionProperty: 'opacity, transform',
+      transitionTimingFunction: 'var(--transition-easing, cubic-bezier(0.4, 0, 0.2, 1))',
+      transitionDuration: 'var(--transition-duration, 300ms)',
+    },
   },
 };
 
@@ -77,6 +84,13 @@ export const pageTransitionConfig = {
     easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
     spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
     minimal: 'ease-out',
+  },
+  
+  modes: {
+    sync: 'sync',        // Default: simultaneous enter/exit
+    'out-in': 'out-in',  // Exit before enter (exitBeforeEnter: true)
+    'in-out': 'in-out',  // Enter before exit
+    wait: 'wait',        // Wait for previous to complete
   },
   
   presets: {

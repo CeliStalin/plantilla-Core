@@ -46,7 +46,7 @@ export type {
   TypographyColor 
 } from './core/components/Typography';
 
-// PageTransition exports completos - Asegurar compatibilidad con preset minimal
+// PageTransition exports completos - Asegurar compatibilidad con preset minimal y exitBeforeEnter
 export { usePageTransition } from './core/components/PageTransition';
 export type { 
   PageTransitionProps,
@@ -142,3 +142,19 @@ export const startTransition = (callback: () => void) => {
     callback();
   }
 };
+
+// Export ProtectedRoute with additional flexibility for external consumption
+export { default as ProtectedRouteComponent } from './core/components/ProtectedRoute';
+
+// Additional utility for external apps using exitBeforeEnter
+export const createPageTransitionConfig = (options: {
+  exitBeforeEnter?: boolean;
+  mode?: string;
+  preset?: string;
+  duration?: number;
+}) => ({
+  preset: 'minimal',
+  respectReducedMotion: true,
+  enableHardwareAcceleration: true,
+  ...options
+});
