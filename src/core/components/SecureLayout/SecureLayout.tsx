@@ -8,12 +8,20 @@ interface SecureLayoutProps {
   children: React.ReactNode;
   pageTitle?: string;
   allowedRoles?: string[];
+  // Nuevas props para transiciones
+  enableTransitions?: boolean;
+  transitionType?: 'fade' | 'slide' | 'zoom' | 'fadeSlide';
+  transitionDuration?: number;
 }
 
 const SecureLayout: React.FC<SecureLayoutProps> = ({ 
   children, 
   pageTitle, 
-  allowedRoles = ['Developers'] 
+  allowedRoles = ['Developers'],
+  // Valores por defecto para transiciones
+  enableTransitions = true,
+  transitionType = 'fadeSlide',
+  transitionDuration = 300
 }) => {
   const { 
     isSignedIn, 
@@ -102,7 +110,12 @@ const SecureLayout: React.FC<SecureLayoutProps> = ({
   }
 
   return (
-    <Layout pageTitle={pageTitle}>
+    <Layout 
+      pageTitle={pageTitle}
+      enableTransitions={enableTransitions}
+      transitionType={transitionType}
+      transitionDuration={transitionDuration}
+    >
       {children}
     </Layout>
   );

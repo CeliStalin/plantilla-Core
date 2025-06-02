@@ -107,7 +107,12 @@ import { Layout } from '@consalud/core';
 
 const HomePage = () => {
   return (
-    <Layout pageTitle="Página de Inicio">
+    <Layout 
+      pageTitle="Página de Inicio"
+      enableTransitions={true}
+      transitionType="fadeSlide"
+      transitionDuration={300}
+    >
       {/* Contenido de la página */}
     </Layout>
   );
@@ -124,9 +129,31 @@ const DashboardPage = () => {
     <SecureLayout 
       pageTitle="Dashboard" 
       allowedRoles={['ADMIN']}
+      enableTransitions={true}
+      transitionType="fade"
+      transitionDuration={250}
     >
       {/* Contenido protegido */}
     </SecureLayout>
+  );
+};
+```
+
+### PageTransition (Uso independiente)
+
+```jsx
+import { PageTransition, usePageTransition } from '@consalud/core';
+
+const MyComponent = () => {
+  const { transitionProps } = usePageTransition({
+    type: 'fadeSlide',
+    duration: 300
+  });
+
+  return (
+    <PageTransition {...transitionProps}>
+      <div>Contenido con transiciones</div>
+    </PageTransition>
   );
 };
 ```

@@ -7,12 +7,15 @@ interface ProtectedRouteProps {
   component: React.LazyExoticComponent<React.ComponentType<any>>;
   roles?: string[];
   isPublic?: boolean;
+  // Nueva prop para transiciones
+  enableTransitions?: boolean;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   roles = [],
-  isPublic = false
+  isPublic = false,
+  enableTransitions = true
 }) => {
   const { 
     isSignedIn, 
@@ -67,12 +70,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/unauthorized" replace />;
   }
 
-  // Renderizar componente protegido
-  return (
+  // Renderizar componente con soporte para transiciones
+  const renderComponent = () => (
     <Suspense fallback={<LoadingOverlay show message="Cargando..." />}>
       <Component />
     </Suspense>
   );
+
+  return renderComponent();
 };
 
 export default ProtectedRoute;

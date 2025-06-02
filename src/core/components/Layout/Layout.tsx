@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import NavMenuApp from '../NavMenu/NavMenuApp';
 import Footer from '../Footer'; 
+import { PageTransition } from '../PageTransition';
 import logoIcon from '../../../assets/Logo.png';
 
 interface LayoutProps {
@@ -10,6 +11,10 @@ interface LayoutProps {
   pageTitle?: string;
   backgroundColor?: string;
   showFooter?: boolean; // prop para controlar la visibilidad del footer
+  // Nuevas props para transiciones
+  enableTransitions?: boolean;
+  transitionType?: 'fade' | 'slide' | 'zoom' | 'fadeSlide';
+  transitionDuration?: number;
 }
 
 // Mapa de rutas a títulos de página
@@ -27,7 +32,11 @@ export const Layout: React.FC<LayoutProps> = ({
   children, 
   pageTitle, 
   backgroundColor = '#ffffff',
-  showFooter = true // Por defecto mostrar el footer
+  showFooter = true, // Por defecto mostrar el footer
+  // Valores por defecto para transiciones
+  enableTransitions = true,
+  transitionType = 'fadeSlide',
+  transitionDuration = 300
 }) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
   const location = useLocation();
@@ -82,10 +91,16 @@ export const Layout: React.FC<LayoutProps> = ({
           display: 'flex', // Para permitir que el contenido interno se comporte como flex item si es necesario
           flexDirection: 'column' // Para que el contenido interno se apile verticalmente
         }}>
-          {/* El contenido (children) se renderizará aquí. 
-              Si HomePage o sus hijos tienen paddings/margins, se considerarán dentro de este main.
-              El padding de 1rem de main está incluido en su tamaño gracias a box-sizing: border-box. */}
-          {children}
+          <PageTransition
+            duration={transitionDuration}
+            type={transitionType}
+            disabled={!enableTransitions}
+          >
+            {/* El contenido (children) se renderizará aquí. 
+                Si HomePage o sus hijos tienen paddings/margins, se considerarán dentro de este main.
+                El padding de 1rem de main está incluido en su tamaño gracias a box-sizing: border-box. */}
+            {children}
+          </PageTransition>
         </main>
       </div>
       {showFooter && <Footer />} {/* Footer tomará su espacio natural o será empujado por flex:1 de layout-body */}

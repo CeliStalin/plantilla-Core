@@ -23,6 +23,11 @@ export { default as Footer } from './Footer';
 export { default as Dashboard } from './Dashboard';
 export * from './Typography';
 
+// PageTransition exports - Asegurar exportación del hook
+export * from './PageTransition';
+export { default as PageTransition } from './PageTransition';
+export { usePageTransition } from './PageTransition/hooks/usePageTransition';
+
 // Lazy exports para componentes de página
 export const LazyComponents = {
   Login: React.lazy(() => import('./Login/Login')),

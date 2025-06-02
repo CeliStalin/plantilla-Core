@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from 'react';
 // Core exports principales
 export { 
   // Theme
@@ -20,6 +21,7 @@ export {
   Footer,
   Login,
   LoadingOverlay,
+  PageTransition,
   ErrorBoundary
 } from './core/components';
 
@@ -43,6 +45,20 @@ export type {
   TypographyVariant, 
   TypographyColor 
 } from './core/components/Typography';
+
+// PageTransition exports completos
+export { usePageTransition } from './core/components/PageTransition';
+export type { 
+  PageTransitionProps,
+  UsePageTransitionOptions,
+  UsePageTransitionReturn,
+  TransitionConfig,
+  TransitionState
+} from './core/components/PageTransition';
+export { 
+  pageTransitionStyles, 
+  pageTransitionConfig 
+} from './core/components/PageTransition';
 
 // Context exports
 export { 
@@ -112,3 +128,12 @@ export {
   Images,
   Icons
 } from './assets';
+
+// Función de utilidad para transiciones (opcional para compatibilidad)
+export const startTransition = (callback: () => void) => {
+  if (typeof React !== 'undefined' && React.startTransition) {
+    React.startTransition(callback);
+  } else {
+    callback();
+  }
+};

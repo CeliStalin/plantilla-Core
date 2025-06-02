@@ -6,6 +6,14 @@ export type { Theme, TextColors, ThemeColors } from './theme';
 export { Typography } from './components/Typography';
 export type { TypographyProps, TypographyVariant, TypographyColor } from './components/Typography';
 
+// PageTransition exports - Exportaciones explícitas y completas
+export { default as PageTransition } from './components/PageTransition/PageTransition';
+export { PageTransition as PageTransitionComponent } from './components/PageTransition/PageTransition';
+export type { PageTransitionProps } from './components/PageTransition/PageTransition';
+export { pageTransitionStyles, pageTransitionConfig } from './components/PageTransition/PageTransition.styles';
+export { usePageTransition } from './components/PageTransition/hooks/usePageTransition';
+export type { UsePageTransitionOptions, UsePageTransitionReturn } from './components/PageTransition/hooks/usePageTransition';
+
 // Styles exports
 export { theme as styleTheme } from './styles/theme';
 export { TypographyUtils } from './styles/typography';
