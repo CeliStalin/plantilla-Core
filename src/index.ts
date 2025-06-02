@@ -171,6 +171,22 @@ export interface ExtendedHomePageProps {
   showDirectAccessSection?: boolean;
   bounceIntensity?: 'low' | 'medium' | 'high';
   animationDuration?: number;
+  // Enhanced props for external consumption
+  bounceEnabled?: boolean;
+  enableInteractiveEffects?: boolean;
+  className?: string;
+  externalLinks?: Array<{
+    id: string;
+    title: string;
+    logoSrc: string;
+    url: string;
+    alt: string;
+    fallbackSrc: string;
+  }>;
+  // Development/debugging props
+  debug?: boolean;
+  onMounted?: () => void;
+  onCardClick?: (cardData: any) => void;
 }
 
 export interface ExtendedProtectedRouteProps {

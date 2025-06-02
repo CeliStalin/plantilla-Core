@@ -12,6 +12,13 @@ export interface HomePageProps {
   showDirectAccessSection?: boolean;
   bounceIntensity?: 'low' | 'medium' | 'high';
   animationDuration?: number;
+  // New props for enhanced functionality
+  bounceEnabled?: boolean;
+  enableInteractiveEffects?: boolean;
+  // Development/debugging props
+  debug?: boolean;
+  onMounted?: () => void;
+  onCardClick?: (cardData: any) => void;
 }
 
 export interface ExternalLink {

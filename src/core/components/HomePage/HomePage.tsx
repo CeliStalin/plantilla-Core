@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout } from '@/core/components/Layout/Layout';
 import { WelcomeSection } from './components/WelcomeSection';
 import { ApplicationsGrid } from './components/ApplicationsGrid';
@@ -15,7 +15,19 @@ import { useMenuConfig } from '@/core/context/MenuConfigContext';
 export const HomePage: React.FC<HomePageProps> = ({ 
   className = '',
   externalLinks,
-  enableBounce = true
+  enableBounce = true,
+  // New props with backward compatibility
+  bounceEnabled,
+  enableInteractiveEffects = false,
+  debug = false,
+  onMounted,
+  onCardClick,
+  // ...other existing props
+  showWelcomeSection = true,
+  showApplicationsSection = true,
+  showDirectAccessSection = true,
+  bounceIntensity = 'medium',
+  animationDuration = 300
 }) => {
   // Hooks
   const { usuario } = useAuth();
@@ -56,35 +68,78 @@ export const HomePage: React.FC<HomePageProps> = ({
     ...(isTablet && !isMobile ? { maxWidth: '350px' } : {})
   };
 
+  // Handle backward compatibility for bounce settings
+  const shouldEnableBounce = bounceEnabled ?? enableBounce;
+  
+  // Development/debugging effects
+  useEffect(() => {
+    if (debug && process.env.NODE_ENV === 'development') {
+      console.log('🏠 HomePage Debug Mode Enabled');
+      console.log('Props:', {
+        enableBounce: shouldEnableBounce,
+        bounceIntensity,
+        animationDuration,
+        enableInteractiveEffects
+      });
+    }
+    
+    // Call onMounted callback if provided
+    if (onMounted && typeof onMounted === 'function') {
+      onMounted();
+    }
+  }, [debug, shouldEnableBounce, bounceIntensity, animationDuration, enableInteractiveEffects, onMounted]);
+
+  // Enhanced navigation handler with card click callback
+  const handleAppClick = (item: any) => {
+    if (debug && process.env.NODE_ENV === 'development') {
+      console.log('🎯 App card clicked:', item);
+    }
+    
+    // Call external callback if provided
+    if (onCardClick && typeof onCardClick === 'function') {
+      onCardClick(item);
+    }
+    
+    // Execute original navigation
+    navigateToApp(item);
+  };
+
   return (
     <Layout pageTitle="Inicio">
       <div 
-        className={`homepage-container ${className}`}
+        className={`homepage-container ${className} ${enableInteractiveEffects ? 'interactive-effects-enabled' : ''}`}
         style={containerStyle}
+        data-debug={debug || undefined}
       >
-        {/*Seccion bienvenida */}
-        <WelcomeSection userName={firstName} />
+        {/* Show welcome section conditionally */}
+        {showWelcomeSection && (
+          <WelcomeSection userName={firstName} />
+        )}
 
         {/* Main Content */}
         <div style={mainContentStyle}>
-          {/* Aplicaciones */}
-          <div style={leftColumnStyle}>
-            <ApplicationsGrid
-              menuItems={menuItems}
-              loading={loading}
-              onAppClick={navigateToApp}
-              enableBounce={enableBounce}
-            />
-          </div>
+          {/* Applications - Show conditionally */}
+          {showApplicationsSection && (
+            <div style={leftColumnStyle}>
+              <ApplicationsGrid
+                menuItems={menuItems}
+                loading={loading}
+                onAppClick={handleAppClick}
+                enableBounce={shouldEnableBounce}
+              />
+            </div>
+          )}
           
-          {/* Direct access column */}
-          <div style={rightColumnStyle}>
-            <DirectAccessGrid
-              loading={loading}
-              onExternalLinkClick={openExternalLink}
-              externalLinks={linksToUse} 
-            />
-          </div>
+          {/* Direct access column - Show conditionally */}
+          {showDirectAccessSection && (
+            <div style={rightColumnStyle}>
+              <DirectAccessGrid
+                loading={loading}
+                onExternalLinkClick={openExternalLink}
+                externalLinks={linksToUse} 
+              />
+            </div>
+          )}
         </div>
       </div>
     </Layout>
