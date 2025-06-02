@@ -4,7 +4,7 @@ export { default as PageTransition } from './PageTransition';
 export { PageTransition as PageTransitionComponent } from './PageTransition';
 
 // Exportación de tipos del componente
-export type { PageTransitionProps } from './PageTransition';
+export type { PageTransitionProps } from './PageTransition.types'; // Updated path
 
 // Exportación de estilos y configuración
 export * from './PageTransition.styles';

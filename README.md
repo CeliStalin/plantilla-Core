@@ -144,6 +144,7 @@ const DashboardPage = () => {
 ```jsx
 import { PageTransition, usePageTransition } from '@consalud/core';
 
+// Uso dentro de una aplicación con React Router
 const MyComponent = () => {
   const { transitionProps } = usePageTransition({
     type: 'fadeSlide',
@@ -156,6 +157,81 @@ const MyComponent = () => {
     </PageTransition>
   );
 };
+
+// Uso en aplicaciones externas (sin React Router)
+const ExternalAppComponent = () => {
+  const [content, setContent] = useState('Contenido inicial');
+  
+  return (
+    <PageTransition 
+      type="fadeSlide" 
+      duration={300}
+      standalone={true}
+      triggerKey={content} // Cambia cuando el contenido cambia
+    >
+      <div>{content}</div>
+      <button onClick={() => setContent('Nuevo contenido')}>
+        Cambiar contenido
+      </button>
+    </PageTransition>
+  );
+};
+
+// Uso con control manual de transiciones
+const ManualTransitionComponent = () => {
+  const { triggerTransition, transitionProps } = usePageTransition({
+    type: 'slide',
+    duration: 250
+  });
+
+  const handleContentChange = () => {
+    // Triggear transición manualmente
+    triggerTransition();
+    // Actualizar contenido después
+    setTimeout(() => {
+      // Actualizar el estado de tu aplicación
+    }, 250);
+  };
+
+  return (
+    <div>
+      <PageTransition {...transitionProps}>
+        <div>Tu contenido aquí</div>
+      </PageTransition>
+      <button onClick={handleContentChange}>
+        Cambiar con transición
+      </button>
+    </div>
+  );
+};
+```
+
+#### Configuración para aplicaciones externas
+
+Si tu aplicación externa no usa React Router, asegúrate de usar una de estas opciones:
+
+**Opción 1: Modo Standalone (Recomendado)**
+```jsx
+<PageTransition standalone={true} triggerKey={yourContentKey}>
+  {yourContent}
+</PageTransition>
+```
+
+**Opción 2: Control manual con el hook**
+```jsx
+const { triggerTransition } = usePageTransition();
+// Llamar triggerTransition() cuando quieras activar la transición
+```
+
+**Opción 3: Envolver en un Router básico (si necesitas funcionalidad de routing)**
+```jsx
+import { BrowserRouter } from 'react-router-dom';
+
+<BrowserRouter>
+  <PageTransition>
+    {yourContent}
+  </PageTransition>
+</BrowserRouter>
 ```
 
 ### NavMenu

@@ -37,6 +37,16 @@ export interface UsePageTransitionReturn {
   startTransition: (route?: string) => void;
 }
 
+// Hook seguro para obtener la ubicación
+const useSafeLocation = () => {
+  try {
+    return useLocation();
+  } catch (error) {
+    // Si no está dentro de un Router, retornamos un objeto mock
+    return { pathname: window.location.pathname };
+  }
+};
+
 export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePageTransitionReturn => {
   const {
     duration,
@@ -46,14 +56,26 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
     disabled = false
   } = options;
 
-  const location = useLocation();
+  const location = useSafeLocation();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentConfig, setCurrentConfig] = useState<TransitionConfig>({
     preset: preset as TransitionConfig['preset'],
     duration,
     easing
   });
+  const [isRouterContext, setIsRouterContext] = useState(true);
   const configRef = useRef(currentConfig);
+
+  // Detectar contexto de Router
+  useEffect(() => {
+    try {
+      if (!location || typeof location.pathname !== 'string') {
+        setIsRouterContext(false);
+      }
+    } catch {
+      setIsRouterContext(false);
+    }
+  }, [location]);
 
   // Actualizar ref cuando cambie la configuración
   useEffect(() => {
@@ -88,14 +110,16 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
   }, [startTransition]);
 
   useEffect(() => {
-    // Detectar cambios de ruta y activar transición
-    triggerTransition();
-  }, [location.pathname, triggerTransition]);
+    // Solo activar transición automática si estamos en contexto de Router
+    if (isRouterContext) {
+      triggerTransition();
+    }
+  }, [location.pathname, triggerTransition, isRouterContext]);
 
   // Estado completo de la transición
   const state: TransitionState = {
     isTransitioning,
-    currentRoute: location.pathname,
+    currentRoute: isRouterContext ? location.pathname : window.location.pathname,
     config: currentConfig
   };
 

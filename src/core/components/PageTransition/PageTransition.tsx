@@ -1,16 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageTransitionStyles } from './PageTransition.styles';
-
-export interface PageTransitionProps {
-  children: React.ReactNode;
-  duration?: number;
-  type?: 'fade' | 'slide' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'zoom' | 'fadeSlide';
-  preset?: 'fast' | 'normal' | 'slow' | 'custom';
-  easing?: string;
-  className?: string;
-  disabled?: boolean;
-}
+import type { PageTransitionProps } from './PageTransition.types';
 
 // Configuración de presets
 const PRESET_CONFIG = {
@@ -20,6 +11,16 @@ const PRESET_CONFIG = {
   custom: { duration: 300, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' }
 } as const;
 
+// Hook personalizado para manejar la ubicación de forma segura
+const useSafeLocation = () => {
+  try {
+    return useLocation();
+  } catch (error) {
+    // Si no está dentro de un Router, retornamos un objeto mock
+    return { pathname: window.location.pathname };
+  }
+};
+
 export const PageTransition: React.FC<PageTransitionProps> = ({
   children,
   duration,
@@ -27,17 +28,43 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   preset = 'normal',
   easing,
   className = '',
-  disabled = false
+  disabled = false,
+  enableHardwareAcceleration = false, // Default to false
+  respectReducedMotion = true, // Default to true
+  disableInitialTransition = false,
+  immediateMode = false, // Add and default the new prop
 }) => {
-  const location = useLocation();
-  const [isVisible, setIsVisible] = useState(false); // Start hidden for initial animation
-  const [displayChildren, setDisplayChildren] = useState(children); // Children to actually render
+  const location = useSafeLocation();
+  const [isVisible, setIsVisible] = useState(disableInitialTransition); 
+  const [displayChildren, setDisplayChildren] = useState(children);
   
-  const prevLocationPathnameRef = useRef<string | null>(null); // Use null to detect initial load
+  const prevLocationPathnameRef = useRef<string | null>(null);
   const animationTimerRef = useRef<number | null>(null);
+  const [isRouterContext, setIsRouterContext] = useState(true);
+
+  // Detectar si estamos en un contexto de Router
+  useEffect(() => {
+    try {
+      // Intentar usar useLocation para verificar si estamos en un contexto de Router
+      if (!location || typeof location.pathname !== 'string') {
+        setIsRouterContext(false);
+      }
+    } catch {
+      setIsRouterContext(false);
+    }
+  }, [location]);
 
   const finalDuration = duration ?? PRESET_CONFIG[preset]?.duration ?? 300;
   const finalEasing = easing ?? PRESET_CONFIG[preset]?.easing ?? 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window !== 'undefined' && respectReducedMotion) {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  }, [respectReducedMotion]);
+
+  const effectiveDisabled = disabled || prefersReducedMotion;
 
   useEffect(() => {
     // Clear timer on unmount
@@ -49,58 +76,104 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   }, []);
 
   useEffect(() => {
-    if (disabled) {
+    const isInitialLoadEffectScope = prevLocationPathnameRef.current === null;
+
+    if (effectiveDisabled) {
       setDisplayChildren(children);
       setIsVisible(true);
-      prevLocationPathnameRef.current = location.pathname; // Keep ref updated
+      if (isInitialLoadEffectScope || (isRouterContext && prevLocationPathnameRef.current !== location.pathname)) {
+        prevLocationPathnameRef.current = isRouterContext ? location.pathname : window.location.pathname;
+      }
       return;
     }
 
-    // Clear any pending animation timer before starting a new one
     if (animationTimerRef.current) {
       clearTimeout(animationTimerRef.current);
     }
 
-    const isInitialLoad = prevLocationPathnameRef.current === null;
-    const hasPathChanged = !isInitialLoad && prevLocationPathnameRef.current !== location.pathname;
-
-    if (isInitialLoad) {
-      // Initial load: set children and animate in
-      setDisplayChildren(children);
-      // A tiny delay ensures CSS transitions trigger correctly on mount for the "in" animation
-      animationTimerRef.current = window.setTimeout(() => {
+    // Si no estamos en un contexto de Router, solo manejamos cambios de children
+    if (!isRouterContext) {
+      // En modo no-router, solo animamos cuando cambian los children
+      if (displayChildren !== children) {
+        if (immediateMode) {
+          setDisplayChildren(children);
+          setIsVisible(false);
+          animationTimerRef.current = window.setTimeout(() => {
+            setIsVisible(true);
+          }, 10);
+        } else {
+          setIsVisible(false);
+          animationTimerRef.current = window.setTimeout(() => {
+            setDisplayChildren(children);
+            setIsVisible(true);
+          }, finalDuration);
+        }
+      } else if (!isVisible && !effectiveDisabled) {
         setIsVisible(true);
-      }, 10); // Minimal delay
+      }
+      return;
+    }
+
+    // Lógica existente para contexto de Router
+    const hasPathChanged = !isInitialLoadEffectScope && prevLocationPathnameRef.current !== location.pathname;
+
+    if (isInitialLoadEffectScope) {
+      setDisplayChildren(children);
+      if (disableInitialTransition) {
+        if (!isVisible) setIsVisible(true);
+      } else {
+        if (!isVisible) {
+          animationTimerRef.current = window.setTimeout(() => {
+            setIsVisible(true);
+          }, 10);
+        }
+      }
       prevLocationPathnameRef.current = location.pathname;
     } else if (hasPathChanged) {
-      // Path has changed: animate out current content, then update children and animate in
-      setIsVisible(false); // Animate out current displayChildren
-      animationTimerRef.current = window.setTimeout(() => {
-        setDisplayChildren(children); // Update to new children
-        setIsVisible(true);           // Animate in new children
+      if (immediateMode) {
+        setDisplayChildren(children);
+        setIsVisible(false);
+        animationTimerRef.current = window.setTimeout(() => {
+          setIsVisible(true);
+        }, 10);
         prevLocationPathnameRef.current = location.pathname;
-      }, finalDuration); // Wait for out-animation to (partially) complete
+      } else {
+        setIsVisible(false);
+        animationTimerRef.current = window.setTimeout(() => {
+          setDisplayChildren(children);
+          setIsVisible(true);
+          prevLocationPathnameRef.current = location.pathname;
+        }, finalDuration);
+      }
     } else {
-      // Path is the same. Children prop might have changed, or it's a re-render.
-      // If children prop itself changed, update displayChildren.
       if (displayChildren !== children) {
-        // For children-only updates without path change, you might want a different animation
-        // or just update. For now, update content. If isVisible is true, it will appear.
         setDisplayChildren(children);
       }
-      // Ensure visibility if it was false and component is not disabled (e.g., after 'disabled' toggled off)
-      if (!isVisible && !disabled) {
+      if (!isVisible && !effectiveDisabled) {
         setIsVisible(true);
       }
     }
-  }, [children, location.pathname, disabled, finalDuration, displayChildren]); // displayChildren added to deps to handle direct child updates
+  }, [children, location.pathname, effectiveDisabled, finalDuration, displayChildren, disableInitialTransition, isVisible, immediateMode, isRouterContext]);
 
-  // Si las transiciones están deshabilitadas, renderizar directamente
-  if (disabled) {
-    return <>{children}</>;
+  // Determine if it's an initial load for the conditional rendering logic below
+  const isCurrentlyInitialLoad = prevLocationPathnameRef.current === null;
+
+  // Conditional rendering based on effectiveDisabled
+  if (effectiveDisabled) {
+    if (isCurrentlyInitialLoad && disableInitialTransition) {
+      // On initial load, if initial transition is disabled, render children directly.
+      return <>{children}</>;
+    } else if (!isCurrentlyInitialLoad) {
+      // For subsequent navigations, if transitions are generally disabled, render children directly.
+      return <>{children}</>;
+    }
+    // If it's an initial load, disableInitialTransition is FALSE,
+    // but effectiveDisabled is TRUE (e.g., due to prefersReducedMotion),
+    // we fall through and render the transition container. The useEffect
+    // above will set isVisible to true, effectively showing the content without animation.
   }
 
-  const containerStyle = {
+  const containerStyle: React.CSSProperties = {
     ...pageTransitionStyles.container,
     ...(pageTransitionStyles.transitions[type] || pageTransitionStyles.transitions.fadeSlide),
     opacity: isVisible ? 1 : 0,
@@ -109,6 +182,10 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
     transitionDuration: `${finalDuration}ms`,
     transitionTimingFunction: finalEasing,
   };
+
+  if (enableHardwareAcceleration) {
+    containerStyle.willChange = 'opacity, transform';
+  }
 
   return (
     <div 
