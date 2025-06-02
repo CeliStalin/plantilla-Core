@@ -68,9 +68,10 @@ export {
   useMenuConfig
 } from './core/context';
 
-// Hooks exports
+// Hooks exports - Asegurar exportación correcta de useAuth
 export { 
   useAuth,
+  default as useAuthHook, // Exportación adicional para compatibilidad
   useLocalStorage
 } from './core/hooks';
 

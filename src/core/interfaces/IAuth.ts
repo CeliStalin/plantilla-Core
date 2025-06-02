@@ -37,4 +37,11 @@ export interface IAuthConfig {
     errorRoles: string;
     login: () => Promise<void>;
     logout: () => Promise<void>;
+    // Agregar alias para compatibilidad externa
+    user?: IUser | null; // Opcional para retrocompatibilidad
+  }
+  
+  // Nuevo tipo para uso externo que garantiza la presencia de 'user'
+  export interface IExternalAuthState extends Omit<ILoginContextState, 'user'> {
+    user: IUser | null; // Requerido para uso externo
   }

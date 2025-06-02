@@ -8,15 +8,17 @@ import logoutIcon from '../../../assets/Group.png';
 const UserLoginApp: React.FC = () => {
   const [localUserData, setLocalUserData] = useState<IUser | null>(null);
   const [showInfo, setShowInfo] = useState<boolean>(false);
-  const { logout, usuario, isLoggingOut, loadUserData } = useAuth();
+  const { logout, usuario, user, isLoggingOut, loadUserData } = useAuth(); // Incluir 'user' como alias
   const menuRef = useRef<HTMLDivElement>(null);
   const [isProcessingLogout, setIsProcessingLogout] = useState<boolean>(false);
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
-    if (usuario) {
-      console.log("Usuario encontrado en contexto:", usuario.displayName);
-      setLocalUserData(usuario);
+    // Priorizar 'usuario' pero usar 'user' como fallback para compatibilidad
+    const effectiveUser = usuario || user;
+    if (effectiveUser) {
+      console.log("Usuario encontrado en contexto:", effectiveUser.displayName);
+      setLocalUserData(effectiveUser);
       return;
     }
     
@@ -37,7 +39,7 @@ const UserLoginApp: React.FC = () => {
     } catch (e) {
       console.error('Error al parsear los datos del usuario:', e);
     }
-  }, [usuario, loadUserData]);
+  }, [usuario, user, loadUserData]); // Incluir 'user' en dependencias
 
   // Función para verificar que los datos están completos
   const verifyUserData = React.useCallback(() => {
@@ -82,7 +84,7 @@ const UserLoginApp: React.FC = () => {
     setShowInfo(prevState => !prevState);
   };
 
-  const effectiveUserData = usuario || localUserData;
+  const effectiveUserData = usuario || user || localUserData; // Usar cualquiera que esté disponible
   const avatarSrc = effectiveUserData?.photo || 'https://www.gravatar.com/avatar?d=mp';
   
   const handleLogout = async () => {

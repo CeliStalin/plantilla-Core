@@ -30,6 +30,8 @@ interface UseAuthReturn extends AuthState {
   isLoggingOut: boolean;
   authAttempts: number;
   maxAuthAttempts: number;
+  // Agregar alias para compatibilidad con apps externas
+  user: IUser | null; // Alias de usuario
 }
 
 export const useAuth = (): UseAuthReturn => {
@@ -404,7 +406,9 @@ export const useAuth = (): UseAuthReturn => {
     isInitializing,
     isLoggingOut,
     authAttempts,
-    maxAuthAttempts
+    maxAuthAttempts,
+    // Agregar alias para compatibilidad externa
+    user: usuario // Alias que apunta a usuario
   }), [
     isSignedIn,
     usuario,

@@ -18,9 +18,10 @@ export type { UsePageTransitionOptions, UsePageTransitionReturn } from './compon
 export { theme as styleTheme } from './styles/theme';
 export { TypographyUtils } from './styles/typography';
 
-// Hooks exports
+// Hooks exports - Exportación mejorada
 export { default as useLocalStorage } from './hooks/useLocalStorage';
 export { useAuth } from './hooks/useAuth';
+export { useAuth as default } from './hooks/useAuth'; // Export default para compatibilidad
 
 // Context exports
 export { AuthProvider, useAuthContext } from './context/AuthContext';
@@ -35,11 +36,12 @@ export { ApiGetMenus } from './services/GetApiArq';
 // Utils exports - Solo los más utilizados
 export { GetApiArquitectura, GetSistema, GetNameApiKey, GetKeyApiKey } from './utils/GetEnvVariables';
 
-// Interface exports - Solo las principales
+// Interface exports - Agregar nuevos tipos para uso externo
 export type { IUser } from './interfaces/IAuth';
 export type { IUsuarioAD } from './interfaces/IUsuarioAD';
 export type { IRol, RolResponse } from './interfaces/IRol';
 export type { IUserExterno } from './interfaces/IUserExterno';
+export type { IExternalAuthState } from './interfaces/IAuth'; // Nuevo tipo para apps externas
 
 // Assets exports
 export {
