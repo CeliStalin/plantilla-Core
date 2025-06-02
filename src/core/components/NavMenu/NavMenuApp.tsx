@@ -257,6 +257,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                   }
                   isActive={isPathActive('/home')}
                 />
+               
               </MenuSection>
 
               {/* Menú Dinámico */}

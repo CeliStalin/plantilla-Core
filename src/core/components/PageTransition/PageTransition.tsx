@@ -30,46 +30,70 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   disabled = false
 }) => {
   const location = useLocation();
-  const [isVisible, setIsVisible] = useState(true);
-  const [displayChildren, setDisplayChildren] = useState(children);
-  const previousLocation = useRef(location.pathname);
-  const timeoutRef = useRef<number | null>(null);
+  const [isVisible, setIsVisible] = useState(false); // Start hidden for initial animation
+  const [displayChildren, setDisplayChildren] = useState(children); // Children to actually render
+  
+  const prevLocationPathnameRef = useRef<string | null>(null); // Use null to detect initial load
+  const animationTimerRef = useRef<number | null>(null);
 
-  // Resolver configuración final basada en preset vs props explícitas
   const finalDuration = duration ?? PRESET_CONFIG[preset]?.duration ?? 300;
   const finalEasing = easing ?? PRESET_CONFIG[preset]?.easing ?? 'cubic-bezier(0.4, 0, 0.2, 1)';
 
   useEffect(() => {
-    // Si las transiciones están deshabilitadas, solo actualizar contenido
+    // Clear timer on unmount
+    return () => {
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (disabled) {
       setDisplayChildren(children);
+      setIsVisible(true);
+      prevLocationPathnameRef.current = location.pathname; // Keep ref updated
       return;
     }
 
-    // Solo hacer transición si la ruta cambió
-    if (previousLocation.current !== location.pathname) {
-      // Fase 1: Ocultar contenido actual
-      setIsVisible(false);
-      
-      // Fase 2: Actualizar contenido y mostrar después del delay
-      timeoutRef.current = window.setTimeout(() => {
-        setDisplayChildren(children);
-        setIsVisible(true);
-      }, finalDuration);
-      
-      previousLocation.current = location.pathname;
-    } else {
-      // Si no cambió la ruta, solo actualizar contenido
-      setDisplayChildren(children);
-      setIsVisible(true);
+    // Clear any pending animation timer before starting a new one
+    if (animationTimerRef.current) {
+      clearTimeout(animationTimerRef.current);
     }
 
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+    const isInitialLoad = prevLocationPathnameRef.current === null;
+    const hasPathChanged = !isInitialLoad && prevLocationPathnameRef.current !== location.pathname;
+
+    if (isInitialLoad) {
+      // Initial load: set children and animate in
+      setDisplayChildren(children);
+      // A tiny delay ensures CSS transitions trigger correctly on mount for the "in" animation
+      animationTimerRef.current = window.setTimeout(() => {
+        setIsVisible(true);
+      }, 10); // Minimal delay
+      prevLocationPathnameRef.current = location.pathname;
+    } else if (hasPathChanged) {
+      // Path has changed: animate out current content, then update children and animate in
+      setIsVisible(false); // Animate out current displayChildren
+      animationTimerRef.current = window.setTimeout(() => {
+        setDisplayChildren(children); // Update to new children
+        setIsVisible(true);           // Animate in new children
+        prevLocationPathnameRef.current = location.pathname;
+      }, finalDuration); // Wait for out-animation to (partially) complete
+    } else {
+      // Path is the same. Children prop might have changed, or it's a re-render.
+      // If children prop itself changed, update displayChildren.
+      if (displayChildren !== children) {
+        // For children-only updates without path change, you might want a different animation
+        // or just update. For now, update content. If isVisible is true, it will appear.
+        setDisplayChildren(children);
       }
-    };
-  }, [children, location.pathname, finalDuration, disabled]);
+      // Ensure visibility if it was false and component is not disabled (e.g., after 'disabled' toggled off)
+      if (!isVisible && !disabled) {
+        setIsVisible(true);
+      }
+    }
+  }, [children, location.pathname, disabled, finalDuration, displayChildren]); // displayChildren added to deps to handle direct child updates
 
   // Si las transiciones están deshabilitadas, renderizar directamente
   if (disabled) {
@@ -78,9 +102,10 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 
   const containerStyle = {
     ...pageTransitionStyles.container,
-    ...pageTransitionStyles.transitions[type] || pageTransitionStyles.transitions.fadeSlide,
+    ...(pageTransitionStyles.transitions[type] || pageTransitionStyles.transitions.fadeSlide),
     opacity: isVisible ? 1 : 0,
     transform: getTransform(type, isVisible),
+    transitionProperty: 'opacity, transform', // Explicitly state what transitions
     transitionDuration: `${finalDuration}ms`,
     transitionTimingFunction: finalEasing,
   };
@@ -97,19 +122,19 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 
 const getTransform = (type: PageTransitionProps['type'], isVisible: boolean): string => {
   switch (type) {
-    case 'slide':
+    case 'slide': // Default slide often means from right
     case 'slideRight':
-      return isVisible ? 'translateX(0)' : 'translateX(20px)';
+      return isVisible ? 'translateX(0)' : 'translateX(20px)'; // Enters from right
     case 'slideLeft':
-      return isVisible ? 'translateX(0)' : 'translateX(-20px)';
-    case 'slideUp':
-      return isVisible ? 'translateY(0)' : 'translateY(-10px)';
-    case 'slideDown':
-      return isVisible ? 'translateY(0)' : 'translateY(10px)';
+      return isVisible ? 'translateX(0)' : 'translateX(-20px)'; // Enters from left
+    case 'slideUp': // Content slides up into view
+      return isVisible ? 'translateY(0)' : 'translateY(10px)';  // Starts below, moves up
+    case 'slideDown': // Content slides down into view
+      return isVisible ? 'translateY(0)' : 'translateY(-10px)'; // Starts above, moves down
     case 'zoom':
-      return isVisible ? 'scale(1)' : 'scale(0.98)';
-    case 'fadeSlide':
-      return isVisible ? 'translateY(0)' : 'translateY(10px)';
+      return isVisible ? 'scale(1)' : 'scale(0.98)'; // Zooms in
+    case 'fadeSlide': // Fades and slides up slightly
+      return isVisible ? 'translateY(0)' : 'translateY(10px)'; // Starts below, moves up
     case 'fade':
     default:
       return 'none';
