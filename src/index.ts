@@ -46,7 +46,7 @@ export type {
   TypographyColor 
 } from './core/components/Typography';
 
-// PageTransition exports completos
+// PageTransition exports completos - Asegurar compatibilidad con preset minimal
 export { usePageTransition } from './core/components/PageTransition';
 export type { 
   PageTransitionProps,

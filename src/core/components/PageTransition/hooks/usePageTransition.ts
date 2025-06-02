@@ -4,13 +4,13 @@ import { useLocation } from 'react-router-dom';
 export interface UsePageTransitionOptions {
   duration?: number;
   type?: 'fade' | 'slide' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'zoom' | 'fadeSlide';
-  preset?: 'fast' | 'normal' | 'slow' | 'custom' | 'fadeIn' | 'scale' | 'none';
+  preset?: 'fast' | 'normal' | 'slow' | 'custom' | 'fadeIn' | 'scale' | 'none' | 'minimal'; // Agregar minimal
   easing?: string;
   disabled?: boolean;
 }
 
 export interface TransitionConfig {
-  preset?: 'fadeIn' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'scale' | 'none';
+  preset?: 'fadeIn' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'scale' | 'none' | 'minimal'; // Agregar minimal
   duration?: number;
   easing?: string;
 }
@@ -87,11 +87,19 @@ export const usePageTransition = (options: UsePageTransitionOptions = {}): UsePa
     configRef.current = currentConfig;
   }, [currentConfig]);
 
-  // Memoized transition duration calculation
+  // Memoized transition duration calculation - Incluir minimal
   const transitionDuration = useMemo(() => {
-    return configRef.current.duration || 
-           duration || 
-           (preset === 'fast' ? 200 : preset === 'slow' ? 500 : 300);
+    const configDuration = configRef.current.duration || duration;
+    if (configDuration) return configDuration; // Agregar paréntesis faltante
+    
+    // Mapeo de presets a duraciones
+    switch (preset) {
+      case 'fast': return 200;
+      case 'slow': return 500;
+      case 'minimal': return 150; // Duración específica para minimal
+      case 'none': return 0;
+      default: return 300;
+    }
   }, [configRef.current.duration, duration, preset]);
 
   const updateConfig = useCallback((config: TransitionConfig) => {

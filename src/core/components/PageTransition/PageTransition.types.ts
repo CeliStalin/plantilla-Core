@@ -4,7 +4,7 @@ export interface PageTransitionProps {
   children: React.ReactNode;
   duration?: number;
   type?: 'fade' | 'slide' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'zoom' | 'fadeSlide';
-  preset?: 'fast' | 'normal' | 'slow' | 'custom' |'none';
+  preset?: 'fast' | 'normal' | 'slow' | 'custom' | 'none' | 'minimal'; // Agregar 'minimal'
   easing?: string;
   className?: string;
   disabled?: boolean;
