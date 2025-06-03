@@ -1,18 +1,18 @@
-// Exportación principal del componente con nombre consistente
-export { PageTransition as default } from './PageTransition';
+// Exportación principal del componente
 export { PageTransition } from './PageTransition';
+export { default } from './PageTransition';
 
-// Exportación de tipos del componente
+// Exportación de tipos
 export type { PageTransitionProps } from './PageTransition.types';
 
-// Exportación de estilos y configuración
-export * from './PageTransition.styles';
-
-// Exportación completa del hook y sus tipos
+// Exportación de hooks
 export { usePageTransition } from './hooks/usePageTransition';
 export type { 
-  UsePageTransitionOptions, 
+  UsePageTransitionOptions,
   UsePageTransitionReturn,
   TransitionConfig,
   TransitionState
 } from './hooks/usePageTransition';
+
+// Exportación de estilos
+export { pageTransitionStyles, pageTransitionConfig } from './PageTransition.styles';

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+
 // Core exports principales
 export { 
   // Theme
@@ -6,7 +7,7 @@ export {
   defaultTheme
 } from './core/theme';
 
-// Component exports - Solo los más importantes (Remover PageTransition duplicado)
+// Component exports - Sin PageTransition aquí para evitar duplicación
 export { 
   Layout,
   SecureLayout,
@@ -21,7 +22,6 @@ export {
   Login,
   LoadingOverlay,
   ErrorBoundary
-  // PageTransition removido de aquí para evitar duplicación
 } from './core/components';
 
 // Route exports
@@ -45,23 +45,23 @@ export type {
   TypographyColor 
 } from './core/components/Typography';
 
-// PageTransition exports consolidados - Exportación única y completa
-export { 
-  PageTransition,
-  PageTransition as default // Exportación por defecto
-} from './core/components/PageTransition';
-export { usePageTransition } from './core/components/PageTransition';
+// PageTransition exports - EXPORTACIÓN DIRECTA Y EXPLÍCITA
+export { PageTransition } from './core/components/PageTransition/PageTransition';
+export { usePageTransition } from './core/components/PageTransition/hooks/usePageTransition';
+export type { PageTransitionProps } from './core/components/PageTransition/PageTransition.types';
 export type { 
-  PageTransitionProps,
   UsePageTransitionOptions,
   UsePageTransitionReturn,
   TransitionConfig,
   TransitionState
-} from './core/components/PageTransition';
+} from './core/components/PageTransition/hooks/usePageTransition';
 export { 
   pageTransitionStyles, 
   pageTransitionConfig 
-} from './core/components/PageTransition';
+} from './core/components/PageTransition/PageTransition.styles';
+
+// Exportación por defecto adicional para PageTransition
+export { PageTransition as default } from './core/components/PageTransition/PageTransition';
 
 // Context exports
 export { 
@@ -71,10 +71,10 @@ export {
   useMenuConfig
 } from './core/context';
 
-// Hooks exports - Asegurar exportación correcta de useAuth
+// Hooks exports
 export { 
   useAuth,
-  default as useAuthHook, // Exportación adicional para compatibilidad
+  default as useAuthHook,
   useLocalStorage
 } from './core/hooks';
 
@@ -85,7 +85,7 @@ export {
   useTypographyVariables
 } from './core/hooks/useTypography';
 
-// Services exports - Solo los esenciales
+// Services exports
 export { 
   getMe,
   getUsuarioAD,
@@ -94,7 +94,7 @@ export {
   ApiGetMenus
 } from './core/services';
 
-// Utils exports - Solo los más utilizados
+// Utils exports
 export {
   GetApiArquitectura,
   GetSistema
@@ -117,7 +117,7 @@ export {
 // Styles exports
 export * from './core/styles';
 
-// Assets exports - Add missing SVG exports
+// Assets exports
 export {
   LogoImage,
   LogoutIcon,
@@ -133,11 +133,11 @@ export {
   Icons
 } from './assets';
 
-// Components exports - Incluir LoadingSpinner y otros componentes específicos
+// Components exports adicionales
 export { LoadingSpinner } from './core/components/Loading/LoadingSpinner';
 export { HomePage } from './core/components/HomePage/HomePage';
 
-// Función de utilidad para transiciones (opcional para compatibilidad)
+// Función de utilidad para transiciones
 export const startTransition = (callback: () => void) => {
   if (typeof React !== 'undefined' && React.startTransition) {
     React.startTransition(callback);
@@ -146,10 +146,10 @@ export const startTransition = (callback: () => void) => {
   }
 };
 
-// Export ProtectedRoute with additional flexibility for external consumption
+// Export ProtectedRoute con flexibilidad adicional
 export { default as ProtectedRouteComponent } from './core/components/ProtectedRoute';
 
-// Additional utility for external apps using exitBeforeEnter
+// Utilidad adicional para apps externas
 export const createPageTransitionConfig = (options: {
   exitBeforeEnter?: boolean;
   mode?: string;
@@ -173,7 +173,6 @@ export interface ExtendedHomePageProps {
   showDirectAccessSection?: boolean;
   bounceIntensity?: 'low' | 'medium' | 'high';
   animationDuration?: number;
-  // Enhanced props for external consumption
   bounceEnabled?: boolean;
   enableInteractiveEffects?: boolean;
   className?: string;
@@ -185,7 +184,6 @@ export interface ExtendedHomePageProps {
     alt: string;
     fallbackSrc: string;
   }>;
-  // Development/debugging props
   debug?: boolean;
   onMounted?: () => void;
   onCardClick?: (cardData: any) => void;

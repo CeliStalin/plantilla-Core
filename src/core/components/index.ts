@@ -24,8 +24,9 @@ export { default as Footer } from './Footer';
 export { default as Dashboard } from './Dashboard';
 export * from './Typography';
 
-export { PageTransition } from './PageTransition';
-export { usePageTransition } from './PageTransition/hooks/usePageTransition';
+// PageTransition exports - Asegurar que esté exportando correctamente
+export { PageTransition, default as PageTransitionDefault } from './PageTransition';
+export { usePageTransition } from './PageTransition';
 export type { PageTransitionProps } from './PageTransition';
 
 // Lazy exports para componentes de página

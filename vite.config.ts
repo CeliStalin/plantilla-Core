@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   envDir: '.',
@@ -26,7 +25,6 @@ export default defineConfig({
     },
   },
   build: {
-    // Configuración para biblioteca
     lib: {
       entry: 'src/index.ts',
       name: 'ConsaludCore',
@@ -42,7 +40,6 @@ export default defineConfig({
         'axios',
       ],
       output: [
-        // Configuración para ESM
         {
           format: 'es',
           exports: 'named',
@@ -57,7 +54,6 @@ export default defineConfig({
             axios: 'axios',
           },
         },
-        // Configuración para CommonJS
         {
           format: 'cjs',
           exports: 'named',
@@ -74,26 +70,20 @@ export default defineConfig({
         }
       ],
     },
-    // Configuraciones que van dentro de build
     chunkSizeWarningLimit: 600,
     sourcemap: true,
     minify: 'esbuild',
     target: 'es2020',
-    // Configuración para TypeScript
     emptyOutDir: true,
     outDir: 'dist',
   },
-  // Configuración de optimización de dependencias
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     force: true,
   },
-  // Configuración de esbuild - Remover jsxInject para evitar conflictos
   esbuild: {
     target: 'es2020',
-    // Remover jsxInject ya que @vitejs/plugin-react lo maneja automáticamente
   },
-  // Configuración adicional para desarrollo
   define: {
     __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
   },
