@@ -31,7 +31,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   preset = 'normal',
   easing,
   className = '',
-  style, // Add style prop
+  style,
   disabled = false,
   enableHardwareAcceleration = false,
   respectReducedMotion = true,

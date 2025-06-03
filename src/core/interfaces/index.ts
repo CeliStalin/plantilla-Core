@@ -9,6 +9,6 @@ export * from './IRol';
 export * from './ISistema';
 export * from './IUserExterno';
 
-// Explicit re-exports to resolve conflicts
-export { IUsuarioAD } from './IUsuarioAD';
-export { IUser } from './IAuth';
+export type { IUsuarioAD } from './IUsuarioAD';
+export type { IUser } from './IAuth';
+

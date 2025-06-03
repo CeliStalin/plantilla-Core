@@ -6,9 +6,8 @@ export {
   defaultTheme
 } from './core/theme';
 
-// Component exports - Solo los más importantes
+// Component exports - Solo los más importantes (Remover PageTransition duplicado)
 export { 
-  // Theme
   Layout,
   SecureLayout,
   ProtectedRoute,
@@ -21,8 +20,8 @@ export {
   Footer,
   Login,
   LoadingOverlay,
-  PageTransition,
   ErrorBoundary
+  // PageTransition removido de aquí para evitar duplicación
 } from './core/components';
 
 // Route exports
@@ -46,7 +45,11 @@ export type {
   TypographyColor 
 } from './core/components/Typography';
 
-// PageTransition exports completos - Asegurar compatibilidad con preset minimal y exitBeforeEnter
+// PageTransition exports consolidados - Exportación única y completa
+export { 
+  PageTransition,
+  PageTransition as default // Exportación por defecto
+} from './core/components/PageTransition';
 export { usePageTransition } from './core/components/PageTransition';
 export type { 
   PageTransitionProps,
@@ -130,9 +133,9 @@ export {
   Icons
 } from './assets';
 
-// Components exports - Incluir LoadingSpinner
-export * from './core/components';
+// Components exports - Incluir LoadingSpinner y otros componentes específicos
 export { LoadingSpinner } from './core/components/Loading/LoadingSpinner';
+export { HomePage } from './core/components/HomePage/HomePage';
 
 // Función de utilidad para transiciones (opcional para compatibilidad)
 export const startTransition = (callback: () => void) => {
@@ -159,8 +162,7 @@ export const createPageTransitionConfig = (options: {
   ...options
 });
 
-// Enhanced HomePage exports with bounce effects
-export { HomePage } from './core/components/HomePage/HomePage';
+// HomePage types export
 export type { HomePageProps } from './core/components/HomePage/types';
 
 // Tipos adicionales para compatibilidad externa

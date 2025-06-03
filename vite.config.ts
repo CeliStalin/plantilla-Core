@@ -26,6 +26,12 @@ export default defineConfig({
     },
   },
   build: {
+    // Configuración para biblioteca
+    lib: {
+      entry: 'src/index.ts',
+      name: 'ConsaludCore',
+      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+    },
     rollupOptions: {
       external: [
         'react',
@@ -35,45 +41,60 @@ export default defineConfig({
         'bulma',
         'axios',
       ],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react-router-dom': 'ReactRouterDOM',
-          '@azure/msal-browser': 'msal',
-          bulma: 'bulma',
-          axios: 'axios',
+      output: [
+        // Configuración para ESM
+        {
+          format: 'es',
+          exports: 'named',
+          preserveModules: false,
+          entryFileNames: '[name].js',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'react-router-dom': 'ReactRouterDOM',
+            '@azure/msal-browser': 'msal',
+            bulma: 'bulma',
+            axios: 'axios',
+          },
         },
-        manualChunks(id) {
-          // Create a chunk for MSAL
-          if (id.includes('node_modules/@azure/msal-browser')) {
-            return 'vendor-msal'
-          }
-          if (
-            id.includes('node_modules/react/') ||
-            id.includes('node_modules/react-dom/') ||
-            id.includes('node_modules/react-router-dom/') ||
-            id.includes('node_modules/react-router/')
-          ) {
-            return 'vendor-react'
-          }
-          if (id.includes('node_modules')) {
-            return 'vendor-others'
-          }
-        },
-      },
+        // Configuración para CommonJS
+        {
+          format: 'cjs',
+          exports: 'named',
+          preserveModules: false,
+          entryFileNames: '[name].cjs',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'react-router-dom': 'ReactRouterDOM',
+            '@azure/msal-browser': 'msal',
+            bulma: 'bulma',
+            axios: 'axios',
+          },
+        }
+      ],
     },
+    // Configuraciones que van dentro de build
     chunkSizeWarningLimit: 600,
     sourcemap: true,
     minify: 'esbuild',
     target: 'es2020',
+    // Configuración para TypeScript
+    emptyOutDir: true,
+    outDir: 'dist',
   },
+  // Configuración de optimización de dependencias
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     force: true,
   },
+  // Configuración de esbuild - Remover jsxInject para evitar conflictos
   esbuild: {
     target: 'es2020',
-    platform: 'node',
+    // Remover jsxInject ya que @vitejs/plugin-react lo maneja automáticamente
+  },
+  // Configuración adicional para desarrollo
+  define: {
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
   },
 })

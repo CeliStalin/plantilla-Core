@@ -19,15 +19,14 @@ export { default as SecureLayout } from './SecureLayout/SecureLayout';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
-export { HomePage } from './HomePage/HomePage'; // Export named, not default
+export { HomePage } from './HomePage/HomePage'; 
 export { default as Footer } from './Footer'; 
 export { default as Dashboard } from './Dashboard';
 export * from './Typography';
 
-// PageTransition exports
-export * from './PageTransition';
-export { default as PageTransition } from './PageTransition';
+export { PageTransition } from './PageTransition';
 export { usePageTransition } from './PageTransition/hooks/usePageTransition';
+export type { PageTransitionProps } from './PageTransition';
 
 // Lazy exports para componentes de página
 export const LazyComponents = {
