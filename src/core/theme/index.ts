@@ -304,3 +304,18 @@ export const defaultTheme: Theme = {
 
 // Export theme as default
 export const theme = defaultTheme;
+
+// Re-export desde styles/theme para compatibilidad
+export { 
+  theme as styleTheme,
+  colors,
+  textColors,
+  spacing,
+  typography,
+  borderRadius,
+  shadows,
+  layout,
+  breakpoints,
+  transitions,
+  animations
+} from '../styles/theme';

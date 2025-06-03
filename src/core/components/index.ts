@@ -1,4 +1,6 @@
 import React from 'react';
+
+// Component exports
 export * from './Button';
 export * from './Card';
 export * from './Login';
@@ -20,12 +22,15 @@ export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as NotFound } from './NotFound';
 export { default as Unauthorized } from './Unauthorized';
 export { HomePage } from './HomePage/HomePage'; 
-export { default as Footer } from './Footer'; 
-export { default as Dashboard } from './Dashboard';
-export * from './Typography';
+export { default as DashboardPage } from './Dashboard/DashboardPage';
+export { Dashboard } from './Dashboard/';
 
-// PageTransition exports - Asegurar que esté exportando correctamente
-export { PageTransition, default as PageTransitionDefault } from './PageTransition';
+// Typography exports - Asegurar exportación completa
+export { Typography, default as TypographyDefault } from './Typography';
+export type { TypographyProps, TypographyVariant, TypographyColor } from './Typography';
+
+// PageTransition exports - Asegurar exportación completa
+export { PageTransition } from './PageTransition';
 export { usePageTransition } from './PageTransition';
 export type { PageTransitionProps } from './PageTransition';
 
@@ -36,5 +41,5 @@ export const LazyComponents = {
   Unauthorized: React.lazy(() => import('./Unauthorized')),
   HomePage: React.lazy(() => import('./HomePage/HomePage')),
   MainPage: React.lazy(() => import('./MainPage')),
-  Dashboard: React.lazy(() => import('./Dashboard')),
+  Dashboard: React.lazy(() => import('./Dashboard/DashboardPage')),
 };

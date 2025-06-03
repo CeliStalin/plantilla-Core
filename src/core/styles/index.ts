@@ -15,6 +15,9 @@ export {
   generateTypographyVariables
 } from './typography';
 
+// Re-export theme for convenience
+export { theme } from './theme';
+
 // Re-export types for better TypeScript support
 export type {
   FontFace,
@@ -23,3 +26,9 @@ export type {
   LineHeights,
   LetterSpacing
 } from './typography';
+
+export type {
+  Theme,
+  ThemeColors,
+  TextColors
+} from './theme';

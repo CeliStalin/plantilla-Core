@@ -1,5 +1,11 @@
 export { default, Typography } from './Typography';
-export type { TypographyProps, TypographyVariant, TypographyColor, TypographyWeight, TypographyAlign } from './Typography';
+export type { 
+  TypographyProps, 
+  TypographyVariant, 
+  TypographyColor, 
+  TypographyWeight, 
+  TypographyAlign 
+} from './Typography';
 
 // Typography styles exports
 export * from '../../styles/typography';

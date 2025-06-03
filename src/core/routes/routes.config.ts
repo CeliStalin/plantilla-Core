@@ -19,7 +19,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: "/dashboard",
-    component: React.lazy(() => import('../components/Dashboard')),
+    component: React.lazy(() => import('../components/Dashboard/DashboardPage')),
     roles: ['Developers']
   },
   {

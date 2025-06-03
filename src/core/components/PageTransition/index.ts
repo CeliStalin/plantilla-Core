@@ -1,6 +1,6 @@
 // Exportación principal del componente
 export { PageTransition } from './PageTransition';
-export { default } from './PageTransition';
+export { PageTransition as default } from './PageTransition';
 
 // Exportación de tipos
 export type { PageTransitionProps } from './PageTransition.types';
