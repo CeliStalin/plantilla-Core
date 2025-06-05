@@ -39,7 +39,7 @@ export const welcomeSectionStyles = {
     marginBottom: '0.5rem',
     fontSize: '2rem',
     fontWeight: theme.typography.fontWeight.semibold,
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily, // Cambiado
     margin: 0
   },
   
@@ -47,7 +47,7 @@ export const welcomeSectionStyles = {
     color: '#757575',
     fontSize: '0.95rem',
     lineHeight: '1.4',
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily, // Cambiado
     fontWeight: theme.typography.fontWeight.normal,
     margin: 0
   }

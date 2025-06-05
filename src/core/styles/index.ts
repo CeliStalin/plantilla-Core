@@ -31,4 +31,4 @@ export type {
   Theme,
   ThemeColors,
   TextColors
-} from './theme';
+} from '../theme'; // Cambiado de './theme' a '../theme'

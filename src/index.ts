@@ -1,13 +1,12 @@
 // Core exports principales - Theme con importaciones seguras
-export { 
-  defaultTheme as theme,
-  defaultTheme,
-  // Export del theme completo
-  theme as coreTheme
+export {
+  defaultTheme,      // Exporta defaultTheme (el tema base desde ./core/theme)
+  theme as coreTheme // Exporta 'theme' desde ./core/theme (que es defaultTheme) como coreTheme
 } from './core/theme';
 
-// Export theme utilities desde styles/theme donde realmente están
-export { 
+// Exportar el theme completo y sus utilidades desde styles/theme
+export {
+  theme, // Este será el theme completo y principal exportado como 'theme'
   colors,
   textColors,
   spacing,
@@ -20,7 +19,7 @@ export {
   animations
 } from './core/styles/theme';
 
-// Component exports principales - verificar que todos existan
+// Component exports principales 
 export { 
   Layout,
   Button,

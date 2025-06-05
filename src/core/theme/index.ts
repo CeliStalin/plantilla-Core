@@ -60,40 +60,14 @@ export interface ThemeTypography {
     bold: number;
   };
   lineHeight: {
-    tight: number;
-    normal: number;
-    relaxed: number;
+    none: number; // o string
+    tight: number; // o string
+    snug: number; // o string
+    normal: number; // o string
+    relaxed: number; // o string
+    loose: number; // o string
   };
-  // Extended typography utilities
-  fontSizes?: {
-    xs: string;
-    sm: string;
-    base: string;
-    md: string;
-    lg: string;
-    xl: string;
-    '2xl': string;
-    '3xl': string;
-    '4xl': string;
-    '5xl': string;
-  };
-  fontWeights?: {
-    light: number;
-    normal: number;
-    medium: number;
-    semibold: number;
-    bold: number;
-    extrabold: number;
-  };
-  lineHeights?: {
-    none: number;
-    tight: number;
-    snug: number;
-    normal: number;
-    relaxed: number;
-    loose: number;
-  };
-  letterSpacing?: {
+  letterSpacing: {
     tighter: string;
     tight: string;
     normal: string;
@@ -101,12 +75,44 @@ export interface ThemeTypography {
     wider: string;
     widest: string;
   };
-  fontFamilies?: {
+  fontFamilies: {
     primary: string;
     fallback: string;
     mono: string;
   };
-  variants?: Record<string, any>;
+  variants?: Record<string, React.CSSProperties>;
+}
+
+export interface ThemeLayout {
+  headerHeight: string;
+  sidebarWidth: string;
+  boxWidth: string;
+  containerMaxWidth?: string;
+}
+
+export interface ThemeBreakpoints {
+  xs?: string; // Añadido para consistencia si se usa
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  xxl?: string; // Añadido para consistencia si se usa
+}
+
+export interface ThemeTransitions {
+  default: string;
+  fast: string;
+  slow: string;
+}
+
+export interface ThemeAnimations {
+  duration: {
+    fast: string;
+    normal: string;
+    slow: string;
+  };
+  spin?: string;
+  spinKeyframes?: string;
 }
 
 export interface Theme {
@@ -128,29 +134,10 @@ export interface Theme {
     card: string;
     button: string;
   };
-  layout: {
-    headerHeight: string;
-    sidebarWidth: string;
-    boxWidth: string;
-  };
-  breakpoints: {
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  transitions: {
-    default: string;
-    fast: string;
-    slow: string;
-  };
-  animations: {
-    duration: {
-      fast: string;
-      normal: string;
-      slow: string;
-    };
-  };
+  layout: ThemeLayout;
+  breakpoints: ThemeBreakpoints;
+  transitions: ThemeTransitions;
+  animations: ThemeAnimations;
 }
 
 export const defaultTheme: Theme = {
@@ -198,77 +185,25 @@ export const defaultTheme: Theme = {
   typography: {
     fontFamily: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
     fontSize: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      md: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      xxl: '1.5rem',
+      xs: '0.75rem', sm: '0.875rem', md: '1rem', lg: '1.125rem', xl: '1.25rem', xxl: '1.5rem',
     },
     fontWeight: {
-      light: 300,
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
+      light: 300, normal: 400, medium: 500, semibold: 600, bold: 700,
     },
     lineHeight: {
-      tight: 1.2,
-      normal: 1.5,
-      relaxed: 1.8,
-    },
-    // Extended typography utilities
-    fontSizes: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-      md: '1.125rem',
-      lg: '1.25rem',
-      xl: '1.5rem',
-      '2xl': '1.75rem',
-      '3xl': '2rem',
-      '4xl': '2.25rem',
-      '5xl': '2.5rem',
-    },
-    fontWeights: {
-      light: 300,
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
-      extrabold: 800,
-    },
-    lineHeights: {
-      none: 1,
-      tight: 1.2,
-      snug: 1.4,
-      normal: 1.5,
-      relaxed: 1.625,
-      loose: 2,
+      none: 1, tight: 1.25, snug: 1.375, normal: 1.5, relaxed: 1.625, loose: 2,
     },
     letterSpacing: {
-      tighter: '-0.05em',
-      tight: '-0.025em',
-      normal: '0',
-      wide: '0.025em',
-      wider: '0.05em',
-      widest: '0.1em',
+      tighter: '-0.05em', tight: '-0.025em', normal: '0', wide: '0.025em', wider: '0.05em', widest: '0.1em',
     },
     fontFamilies: {
       primary: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
       fallback: "'Helvetica Neue', Arial, sans-serif",
       mono: "'Courier New', Courier, monospace",
     },
-    variants: {
-      // Add any variant styles here
-    },
   },
   borderRadius: {
-    small: '4px',
-    sm: '0.25rem',
-    md: '0.5rem',
-    lg: '1rem',
-    full: '9999px',
+    small: '4px', sm: '0.25rem', md: '0.5rem', lg: '1rem', full: '9999px',
   },
   shadows: {
     sm: '0 1px 3px rgba(0, 0, 0, 0.1)',
@@ -281,41 +216,17 @@ export const defaultTheme: Theme = {
     headerHeight: '4rem',
     sidebarWidth: '250px',
     boxWidth: '350px',
+    containerMaxWidth: '1200px',
   },
   breakpoints: {
-    sm: '576px',
-    md: '768px',
-    lg: '992px',
-    xl: '1200px',
+    sm: '576px', md: '768px', lg: '992px', xl: '1200px',
   },
   transitions: {
-    default: 'all 0.3s ease',
-    fast: 'all 0.15s ease',
-    slow: 'all 0.5s ease',
+    default: 'all 0.3s ease', fast: 'all 0.15s ease', slow: 'all 0.5s ease',
   },
   animations: {
-    duration: {
-      fast: '0.15s',
-      normal: '0.3s',
-      slow: '0.5s',
-    },
+    duration: { fast: '0.15s', normal: '0.3s', slow: '0.5s' },
   },
 };
 
-// Export theme as default
-export const theme = defaultTheme;
-
-// Re-export desde styles/theme para compatibilidad
-export { 
-  theme as styleTheme,
-  colors,
-  textColors,
-  spacing,
-  typography,
-  borderRadius,
-  shadows,
-  layout,
-  breakpoints,
-  transitions,
-  animations
-} from '../styles/theme';
+export const theme = defaultTheme; 

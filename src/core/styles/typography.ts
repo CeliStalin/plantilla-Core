@@ -13,7 +13,8 @@ export interface TypographyScale {
   md: string;
   lg: string;
   xl: string;
-  '2xl': string;
+  '2xl': string; // Mantenemos '2xl' por si se usa directamente en otro lugar
+  xxl: string; // Añadimos xxl que es requerido por ThemeTypography
   '3xl': string;
   '4xl': string;
   '5xl': string;
@@ -79,7 +80,8 @@ export const FONT_SIZES: TypographyScale = {
   md: '1rem',       // 16px (alias de base)
   lg: '1.125rem',   // 18px
   xl: '1.25rem',    // 20px
-  '2xl': '1.5rem',  // 24px
+  '2xl': '1.5rem',  // 24px (se mantiene por compatibilidad si se usa directamente)
+  xxl: '1.5rem',    // 24px (este es el que requiere ThemeTypography.fontSize)
   '3xl': '1.875rem', // 30px
   '4xl': '2.25rem', // 36px
   '5xl': '3rem',    // 48px

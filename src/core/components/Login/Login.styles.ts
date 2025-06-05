@@ -29,7 +29,7 @@ export const titleStyles = {
   lineHeight: theme.typography.lineHeight.normal,
   margin: '0 auto', 
   padding: '0 20px',
-  fontFamily: theme.typography.fontFamily.primary,
+  fontFamily: theme.typography.fontFamily,
   fontWeight: theme.typography.fontWeight.medium,
 };
 
@@ -44,7 +44,7 @@ export const primaryButton = {
   color: theme.colors.white,
   boxShadow: theme.shadows.button,
   border: 'none',
-  fontFamily: theme.typography.fontFamily.primary,
+  fontFamily: theme.typography.fontFamily,
   fontWeight: theme.typography.fontWeight.semibold,
   width: '100%', // Asegurar ancho completo
   textAlign: 'center' as const,
@@ -62,13 +62,13 @@ export const networkWarning = {
     fontSize: '15px',
     textAlign: 'center' as const,
     fontWeight: theme.typography.fontWeight.medium,
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily,
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
   },
   title: {
     fontSize: '16px', 
     fontWeight: theme.typography.fontWeight.semibold,
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily,
     marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
@@ -87,7 +87,7 @@ export const networkWarning = {
     fontSize: '12px', 
     color: '#666',
     marginTop: '8px',
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily,
     fontWeight: theme.typography.fontWeight.normal,
   }
 };

@@ -33,7 +33,7 @@ export const headerStyles = {
     margin: '0 1rem',
     fontSize: '1.5rem',
     fontWeight: theme.typography.fontWeight.light,
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily,
     opacity: 0.8,
   },
   
@@ -41,7 +41,7 @@ export const headerStyles = {
     color: 'white',
     fontSize: '1.2rem',
     fontWeight: theme.typography.fontWeight.medium,
-    fontFamily: theme.typography.fontFamily.primary,
+    fontFamily: theme.typography.fontFamily,
     letterSpacing: '0.5px',
   }
 };

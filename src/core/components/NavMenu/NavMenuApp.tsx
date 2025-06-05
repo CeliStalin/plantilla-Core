@@ -207,7 +207,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
           <span style={{ 
             color: theme.colors.gray.dark, 
             fontSize: theme.typography.fontSize.sm,
-            fontFamily: theme.typography.fontFamily.primary
+            fontFamily: theme.typography.fontFamily
           }}>
             Cargando menú...
           </span>
