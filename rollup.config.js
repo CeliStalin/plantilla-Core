@@ -4,6 +4,7 @@ import typescript from '@rollup/plugin-typescript';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
+import terser from '@rollup/plugin-terser';
 import path from 'path';
 
 export default {
@@ -49,6 +50,7 @@ export default {
       extract: path.resolve('dist/styles.css'),
       sourceMap: true
     }),
+    terser()
   ],
   external: [
     'react', 
