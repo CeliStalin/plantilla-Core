@@ -122,20 +122,39 @@ export const useAuth = (): UseAuthReturn => {
     }
     
     // Si ya tenemos todos los datos, no volvemos a cargarlos
-    // Agregamos una verificación más estricta
     if (usuario && usuarioAD && roles.length > 0 && !loading) {
-      console.log("Datos de usuario ya cargados, omitiendo carga");
+      console.log("[useAuth] Datos de usuario ya cargados, omitiendo carga");
+      return;
+    }
+
+    // MEJORA: Verificar que realmente tengamos una sesión válida antes de cargar datos
+    try {
+      const isValidSession = await AuthProvider.isAuthenticated();
+      if (!isValidSession) {
+        console.warn("[useAuth] Sesión no válida detectada, actualizando estado...");
+        SecureStorageWrapper.setAuthenticationState(false);
+        setIsSignedIn(false);
+        return;
+      }
+    } catch (error) {
+      console.error("[useAuth] Error al verificar sesión:", error);
+      setError("Error al verificar la sesión");
       return;
     }
 
     // Solo mostrar loading si realmente vamos a hacer llamadas
     if (!usuario || !usuarioAD || roles.length === 0) {
-      console.log("Iniciando carga de datos de usuario...");
+      console.log("[useAuth] Iniciando carga de datos de usuario...");
       setLoading(true);
+      // MEJORA: Limpiar errores previos al iniciar nueva carga
+      setError(null);
+      setErrorAD(null);
+      setErrorRoles(null);
     }
 
     try {
-      // Obtener datos del usuario
+      // MEJORA: Obtener datos del usuario con mejor manejo de errores
+      console.log("[useAuth] Obteniendo datos de Microsoft Graph...");
       const userData = await getMe();
       
       if (typeof userData === 'string') {
@@ -145,14 +164,16 @@ export const useAuth = (): UseAuthReturn => {
             console.error('[useAuth] Error al obtener datos de usuario:', parsedError.Error);
             setError(parsedError.Error);
             setUsuario(null);
+            return; // Salir temprano si hay error
           }
         } catch (e) {
           console.error('[useAuth] Error al procesar la respuesta:', e);
-          setError('Error al procesar la respuesta');
+          setError('Error al procesar la respuesta del usuario');
           setUsuario(null);
+          return; // Salir temprano si hay error
         }
       } else {
-        console.log("Datos de usuario obtenidos correctamente:", userData.displayName);
+        console.log("[useAuth] Datos de usuario obtenidos correctamente:", userData.displayName);
         setUsuario(userData);
         cache.current.set(userData.id, userData);
         
@@ -162,53 +183,70 @@ export const useAuth = (): UseAuthReturn => {
           displayName: userData.displayName
         });
         
-        if (userData.mail || userData.userPrincipalName) {
-          const email = userData.mail || userData.userPrincipalName;
-          console.log("Usando email para obtener datos adicionales:", email);
+        const email = userData.mail || userData.userPrincipalName;
+        if (email) {
+          console.log("[useAuth] Usando email para obtener datos adicionales:", email);
 
-          // Obtener datos de AD
-          try {
-            console.log("Obteniendo datos de AD...");
-            const adData = await getUsuarioAD(email);
-            console.log("Datos de AD obtenidos correctamente");
-            setUsuarioAD(adData);
+          // MEJORA: Ejecutar llamadas en paralelo para mejorar rendimiento
+          const [adDataResult, rolesDataResult] = await Promise.allSettled([
+            getUsuarioAD(email),
+            getRoles(email)
+          ]);
+
+          // Procesar resultado de AD
+          if (adDataResult.status === 'fulfilled') {
+            console.log("[useAuth] Datos de AD obtenidos correctamente");
+            setUsuarioAD(adDataResult.value);
             setErrorAD(null);
-          } catch (error) {
-            console.error('[useAuth] Error al obtener datos de AD:', error);
-            setErrorAD(error instanceof Error ? error.message : String(error));
+          } else {
+            console.error('[useAuth] Error al obtener datos de AD:', adDataResult.reason);
+            setErrorAD(adDataResult.reason instanceof Error ? adDataResult.reason.message : String(adDataResult.reason));
           }
 
-          // Obtener roles
-          try {
-            console.log("Obteniendo roles...");
-            const rolesData = await getRoles(email);
-            console.log(`Roles obtenidos: ${rolesData.length}`);
-            setRoles(rolesData);
+          // Procesar resultado de roles
+          if (rolesDataResult.status === 'fulfilled') {
+            console.log(`[useAuth] Roles obtenidos: ${rolesDataResult.value.length}`);
+            setRoles(rolesDataResult.value);
             setErrorRoles(null);
             
-            // CAMBIO SEGURO: Guardar nombres de rol (no sensibles) en el wrapper seguro
-            if (rolesData && rolesData.length > 0) {
-              const roleNames = rolesData.map(role => role.Rol);
+            // CAMBIO SEGURO: Guardar nombres de rol (no sensibles)
+            if (rolesDataResult.value && rolesDataResult.value.length > 0) {
+              const roleNames = rolesDataResult.value.map(role => role.Rol);
               SecureStorageWrapper.saveUserBasicInfo({
                 roles: roleNames
               });
             }
-          } catch (error) {
-            console.error('[useAuth] Error al obtener roles:', error);
-            setErrorRoles(error instanceof Error ? error.message : String(error));
+          } else {
+            console.error('[useAuth] Error al obtener roles:', rolesDataResult.reason);
+            setErrorRoles(rolesDataResult.reason instanceof Error ? rolesDataResult.reason.message : String(rolesDataResult.reason));
           }
         } else {
-          console.warn("El usuario no tiene email o userPrincipalName para obtener datos adicionales");
+          console.warn("[useAuth] El usuario no tiene email o userPrincipalName para obtener datos adicionales");
+          setErrorAD("No se pudo obtener email del usuario");
+          setErrorRoles("No se pudo obtener email del usuario");
         }
       }
     } catch (err) {
       console.error('[useAuth] Error general al cargar datos de usuario:', err);
-      setError(err instanceof Error ? err.message : String(err));
+      
+      // MEJORA: Distinguir entre diferentes tipos de errores
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      
+      if (errorMessage.includes('No hay una sesión activa')) {
+        console.warn("[useAuth] Sesión expirada, marcando como no autenticado");
+        SecureStorageWrapper.setAuthenticationState(false);
+        setIsSignedIn(false);
+        setError("La sesión ha expirado. Por favor, inicia sesión nuevamente.");
+      } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        setError("Error de conexión. Verifica tu conexión a internet.");
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
-      console.log("Carga de datos de usuario completada");
+      console.log("[useAuth] Carga de datos de usuario completada");
     }
-  }, [isSignedIn, usuario, usuarioAD, roles.length, loading]);
+  }, [isSignedIn, usuario, usuarioAD, roles.length, loading, setIsSignedIn]);
 
   // Asegurarnos de que loadUserData se llame cuando el usuario inicie sesión
   useEffect(() => {
@@ -220,18 +258,35 @@ export const useAuth = (): UseAuthReturn => {
 
   const checkAuthentication = useCallback(async () => {
     try {
-      const authenticated = await AuthProvider.isAuthenticated();
+      // MEJORA: Usar tiempo de espera para evitar bloqueos
+      const authPromise = AuthProvider.isAuthenticated();
+      const timeoutPromise = new Promise<boolean>((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout verificando autenticación')), 5000)
+      );
+      
+      const authenticated = await Promise.race([authPromise, timeoutPromise]);
       
       if (authenticated !== isSignedIn) {
         // CAMBIO SEGURO: Actualizar SecureStorageWrapper
         SecureStorageWrapper.setAuthenticationState(authenticated);
         
         setIsSignedIn(authenticated);
+        
+        // MEJORA: Si cambió a no autenticado, limpiar datos
+        if (!authenticated) {
+          setUsuario(null);
+          setUsuarioAD(null);
+          setRoles([]);
+          cache.current.clear();
+        }
       }
       
       // Incrementar contador de intentos si no está autenticado
       if (!authenticated) {
         setAuthAttempts(prevAttempts => prevAttempts + 1);
+      } else {
+        // Resetear contador si está autenticado
+        setAuthAttempts(0);
       }
       
       return authenticated;

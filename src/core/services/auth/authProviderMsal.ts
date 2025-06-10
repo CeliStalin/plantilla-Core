@@ -152,9 +152,40 @@ export class AuthProvider {
       const hasAccounts = accounts.length > 0;
       const isLoginInStorage = localStorage.getItem('isLogin') === 'true';
       
-      return hasAccounts || isLoginInStorage;
+      // MEJORA: Verificar que la cuenta activa sea válida
+      if (hasAccounts) {
+        const activeAccount = accounts[0];
+        // Verificar que la cuenta tenga los datos mínimos necesarios
+        const isValidAccount = activeAccount && 
+          activeAccount.homeAccountId && 
+          (activeAccount.username || activeAccount.localAccountId);
+        
+        if (!isValidAccount) {
+          console.warn('[AuthProvider] Cuenta inválida detectada, limpiando...');
+          await this.clearAccounts();
+          localStorage.removeItem('isLogin');
+          return false;
+        }
+        
+        // Establecer cuenta activa si no está establecida
+        if (!instance.getActiveAccount()) {
+          instance.setActiveAccount(activeAccount);
+        }
+      }
+      
+      const isAuthenticated = hasAccounts || isLoginInStorage;
+      
+      // MEJORA: Sincronizar estados si hay inconsistencia
+      if (hasAccounts && !isLoginInStorage) {
+        localStorage.setItem('isLogin', 'true');
+      } else if (!hasAccounts && isLoginInStorage) {
+        localStorage.removeItem('isLogin');
+        return false;
+      }
+      
+      return isAuthenticated;
     } catch (error) {
-      console.error('Error al verificar autenticación:', error);
+      console.error('[AuthProvider] Error al verificar autenticación:', error);
       return false;
     }
   }
@@ -163,10 +194,21 @@ export class AuthProvider {
   public static async getActiveAccount(): Promise<AccountInfo | null> {
     try {
       const instance = await getMsalInstance();
-      const accounts = instance.getAllAccounts();
-      return accounts.length > 0 ? accounts[0] : null;
+      let activeAccount = instance.getActiveAccount();
+      
+      // Si no hay cuenta activa pero hay cuentas disponibles, establecer la primera
+      if (!activeAccount) {
+        const accounts = instance.getAllAccounts();
+        if (accounts.length > 0) {
+          activeAccount = accounts[0];
+          instance.setActiveAccount(activeAccount);
+          console.log('[AuthProvider] Estableciendo cuenta activa:', activeAccount.username);
+        }
+      }
+      
+      return activeAccount;
     } catch (error) {
-      console.error('Error al obtener cuenta activa:', error);
+      console.error('[AuthProvider] Error al obtener cuenta activa:', error);
       return null;
     }
   }
@@ -364,32 +406,51 @@ export class AuthProvider {
       const account = await this.getActiveAccount();
       
       if (!account) {
+        console.error('[AuthProvider] No hay cuenta activa para obtener token');
+        // MEJORA: Intentar verificar si realmente está autenticado
+        const isAuth = await this.isAuthenticated();
+        if (!isAuth) {
+          throw new Error('No hay una sesión activa');
+        } else {
+          // Hay inconsistencia, intentar obtener cuenta nuevamente
+          const retryAccount = await this.getActiveAccount();
+          if (!retryAccount) {
+            throw new Error('No se pudo establecer cuenta activa');
+          }
+        }
+      }
+      
+      const finalAccount = account || await this.getActiveAccount();
+      if (!finalAccount) {
         throw new Error('No hay una sesión activa');
       }
       
       const tokenRequest = {
         scopes: scopes.length > 0 ? scopes : loginRequest.scopes,
-        account: account,
+        account: finalAccount,
       };
       
       try {
+        console.log('[AuthProvider] Intentando obtener token silenciosamente...');
         const response: AuthenticationResult = await instance.acquireTokenSilent(tokenRequest);
+        console.log('[AuthProvider] Token obtenido exitosamente');
         return response.accessToken;
       } catch (silentError) {
-        // Si falla la adquisición silenciosa, intentar con popup o redirect según el flujo actual
-        console.warn('Silent token acquisition failed, falling back to interactive method', silentError);
+        console.warn('[AuthProvider] Fallo token silencioso, intentando método interactivo:', silentError);
         
         if (useRedirectFlow) {
           // Si estamos en flujo de redirección, no podemos esperar una respuesta inmediata
           await instance.acquireTokenRedirect(tokenRequest);
           throw new Error('Redirect in progress for token acquisition');
         } else {
+          console.log('[AuthProvider] Intentando token con popup...');
           const response = await instance.acquireTokenPopup(tokenRequest);
+          console.log('[AuthProvider] Token obtenido con popup exitosamente');
           return response.accessToken;
         }
       }
     } catch (error) {
-      console.error('Error al obtener access token:', error);
+      console.error('[AuthProvider] Error al obtener access token:', error);
       throw error;
     }
   }
