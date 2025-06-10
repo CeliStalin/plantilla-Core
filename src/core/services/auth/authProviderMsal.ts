@@ -152,7 +152,7 @@ export class AuthProvider {
       const hasAccounts = accounts.length > 0;
       const isLoginInStorage = localStorage.getItem('isLogin') === 'true';
       
-      // MEJORA: Verificar que la cuenta activa sea válida
+      // Verificar que la cuenta activa sea válida
       if (hasAccounts) {
         const activeAccount = accounts[0];
         // Verificar que la cuenta tenga los datos mínimos necesarios
@@ -175,7 +175,7 @@ export class AuthProvider {
       
       const isAuthenticated = hasAccounts || isLoginInStorage;
       
-      // MEJORA: Sincronizar estados si hay inconsistencia
+      //Sincronizar estados si hay inconsistencia
       if (hasAccounts && !isLoginInStorage) {
         localStorage.setItem('isLogin', 'true');
       } else if (!hasAccounts && isLoginInStorage) {
@@ -407,7 +407,7 @@ export class AuthProvider {
       
       if (!account) {
         console.error('[AuthProvider] No hay cuenta activa para obtener token');
-        // MEJORA: Intentar verificar si realmente está autenticado
+        //Intentar verificar si realmente está autenticado
         const isAuth = await this.isAuthenticated();
         if (!isAuth) {
           throw new Error('No hay una sesión activa');

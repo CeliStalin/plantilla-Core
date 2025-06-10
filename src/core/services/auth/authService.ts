@@ -6,7 +6,7 @@ import { mapRawToUsuarioAd } from '../../utils/MapperRawToUsuarioAd';
 import { mapRawArrayToRolResponseArray } from '../../utils/MapperRawToRol';
 
 export class AuthService {
-  // MEJORA: Agregar método auxiliar para retry con backoff
+  //Agregar método auxiliar para retry con backoff
   private static async retryWithBackoff<T>(
     operation: () => Promise<T>,
     maxRetries: number = 2,
@@ -55,7 +55,7 @@ export class AuthService {
         // Asegurarse de que MSAL esté inicializado
         await AuthProvider.initialize();
         
-        // MEJORA: Verificar autenticación antes de obtener token
+        // Verificar autenticación antes de obtener token
         const isAuthenticated = await AuthProvider.isAuthenticated();
         if (!isAuthenticated) {
           throw new Error('Usuario no autenticado');

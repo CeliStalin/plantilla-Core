@@ -34,7 +34,7 @@ export { PageTransition } from './PageTransition';
 export { usePageTransition } from './PageTransition';
 export type { PageTransitionProps } from './PageTransition';
 
-// Breadcrumb exports - Nuevo componente
+// Breadcrumb exports
 export { Breadcrumb, default as BreadcrumbDefault } from './Breadcrumb';
 export { useBreadcrumb } from './Breadcrumb';
 export type { BreadcrumbProps, BreadcrumbItem, UseBreadcrumbOptions } from './Breadcrumb';

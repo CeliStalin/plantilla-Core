@@ -71,12 +71,12 @@ export const useAuth = (): UseAuthReturn => {
         if (redirectResponse && redirectResponse.account) {
           console.log("Respuesta de redirección procesada en useAuth");
           
-          // CAMBIO SEGURO: Actualizar SecureStorageWrapper
+          // Actualizar SecureStorageWrapper
           SecureStorageWrapper.setAuthenticationState(true);
           
           setIsSignedIn(true);
           
-          // CAMBIO SEGURO: Guardar información básica no sensible
+          //  Guardar información básica no sensible
           if (redirectResponse.account) {
             SecureStorageWrapper.saveUserBasicInfo({
               id: redirectResponse.account.homeAccountId,
@@ -88,7 +88,7 @@ export const useAuth = (): UseAuthReturn => {
           const signedIn = await AuthProvider.isAuthenticated();
           
           if (signedIn !== isSignedIn) {
-            // CAMBIO SEGURO: Actualizar SecureStorageWrapper
+            // Actualizar SecureStorageWrapper
             SecureStorageWrapper.setAuthenticationState(signedIn);
             
             setIsSignedIn(signedIn);
@@ -127,7 +127,7 @@ export const useAuth = (): UseAuthReturn => {
       return;
     }
 
-    // MEJORA: Verificar que realmente tengamos una sesión válida antes de cargar datos
+    // Verificar que realmente tengamos una sesión válida antes de cargar datos
     try {
       const isValidSession = await AuthProvider.isAuthenticated();
       if (!isValidSession) {
@@ -146,14 +146,14 @@ export const useAuth = (): UseAuthReturn => {
     if (!usuario || !usuarioAD || roles.length === 0) {
       console.log("[useAuth] Iniciando carga de datos de usuario...");
       setLoading(true);
-      // MEJORA: Limpiar errores previos al iniciar nueva carga
+      // Limpiar errores previos al iniciar nueva carga
       setError(null);
       setErrorAD(null);
       setErrorRoles(null);
     }
 
     try {
-      // MEJORA: Obtener datos del usuario con mejor manejo de errores
+      // Obtener datos del usuario con mejor manejo de errores
       console.log("[useAuth] Obteniendo datos de Microsoft Graph...");
       const userData = await getMe();
       
@@ -164,20 +164,20 @@ export const useAuth = (): UseAuthReturn => {
             console.error('[useAuth] Error al obtener datos de usuario:', parsedError.Error);
             setError(parsedError.Error);
             setUsuario(null);
-            return; // Salir temprano si hay error
+            return; // Salir si hay error
           }
         } catch (e) {
           console.error('[useAuth] Error al procesar la respuesta:', e);
           setError('Error al procesar la respuesta del usuario');
           setUsuario(null);
-          return; // Salir temprano si hay error
+          return; // Salir si hay error
         }
       } else {
         console.log("[useAuth] Datos de usuario obtenidos correctamente:", userData.displayName);
         setUsuario(userData);
         cache.current.set(userData.id, userData);
         
-        // CAMBIO SEGURO: Guardar solo datos básicos no sensibles
+        // Guardar solo datos básicos no sensibles
         SecureStorageWrapper.saveUserBasicInfo({
           id: userData.id,
           displayName: userData.displayName
@@ -187,7 +187,7 @@ export const useAuth = (): UseAuthReturn => {
         if (email) {
           console.log("[useAuth] Usando email para obtener datos adicionales:", email);
 
-          // MEJORA: Ejecutar llamadas en paralelo para mejorar rendimiento
+          //Ejecutar llamadas en paralelo para mejorar rendimiento
           const [adDataResult, rolesDataResult] = await Promise.allSettled([
             getUsuarioAD(email),
             getRoles(email)
@@ -209,7 +209,7 @@ export const useAuth = (): UseAuthReturn => {
             setRoles(rolesDataResult.value);
             setErrorRoles(null);
             
-            // CAMBIO SEGURO: Guardar nombres de rol (no sensibles)
+            //Guardar nombres de rol (no sensibles)
             if (rolesDataResult.value && rolesDataResult.value.length > 0) {
               const roleNames = rolesDataResult.value.map(role => role.Rol);
               SecureStorageWrapper.saveUserBasicInfo({
@@ -229,7 +229,7 @@ export const useAuth = (): UseAuthReturn => {
     } catch (err) {
       console.error('[useAuth] Error general al cargar datos de usuario:', err);
       
-      // MEJORA: Distinguir entre diferentes tipos de errores
+      // Distinguir entre diferentes tipos de errores
       const errorMessage = err instanceof Error ? err.message : String(err);
       
       if (errorMessage.includes('No hay una sesión activa')) {
@@ -258,7 +258,7 @@ export const useAuth = (): UseAuthReturn => {
 
   const checkAuthentication = useCallback(async () => {
     try {
-      // MEJORA: Usar tiempo de espera para evitar bloqueos
+      //Usar tiempo de espera para evitar bloqueos
       const authPromise = AuthProvider.isAuthenticated();
       const timeoutPromise = new Promise<boolean>((_, reject) => 
         setTimeout(() => reject(new Error('Timeout verificando autenticación')), 5000)
@@ -267,12 +267,12 @@ export const useAuth = (): UseAuthReturn => {
       const authenticated = await Promise.race([authPromise, timeoutPromise]);
       
       if (authenticated !== isSignedIn) {
-        // CAMBIO SEGURO: Actualizar SecureStorageWrapper
+        //Actualizar SecureStorageWrapper
         SecureStorageWrapper.setAuthenticationState(authenticated);
         
         setIsSignedIn(authenticated);
         
-        // MEJORA: Si cambió a no autenticado, limpiar datos
+        // Si cambió a no autenticado, limpiar datos
         if (!authenticated) {
           setUsuario(null);
           setUsuarioAD(null);
@@ -305,7 +305,7 @@ export const useAuth = (): UseAuthReturn => {
       // Iniciar sesión
       await AuthProvider.login();
       
-      // CAMBIO SEGURO: Actualizar SecureStorageWrapper
+      //Actualizar SecureStorageWrapper
       SecureStorageWrapper.setAuthenticationState(true);
       
       setIsSignedIn(true);
@@ -324,7 +324,7 @@ export const useAuth = (): UseAuthReturn => {
     try {
       setLoading(true);
       
-      // CAMBIO SEGURO: Limpiar datos de SecureStorageWrapper
+      //Limpiar datos de SecureStorageWrapper
       SecureStorageWrapper.clearAuthData();
       
       // Limpiar estado local ANTES del logout de MSAL
@@ -368,7 +368,7 @@ export const useAuth = (): UseAuthReturn => {
         localStorage.removeItem('usuarioAD');
         localStorage.removeItem('roles');
         
-        // CAMBIO SEGURO: Limpiar wrapper seguro
+        //Limpiar wrapper seguro
         SecureStorageWrapper.clearAuthData();
         
         setIsSignedIn(false);
