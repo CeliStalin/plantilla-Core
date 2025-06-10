@@ -34,6 +34,11 @@ export { PageTransition } from './PageTransition';
 export { usePageTransition } from './PageTransition';
 export type { PageTransitionProps } from './PageTransition';
 
+// Breadcrumb exports - Nuevo componente
+export { Breadcrumb, default as BreadcrumbDefault } from './Breadcrumb';
+export { useBreadcrumb } from './Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItem, UseBreadcrumbOptions } from './Breadcrumb';
+
 // Lazy exports para componentes de página
 export const LazyComponents = {
   Login: React.lazy(() => import('./Login/Login')),
@@ -42,4 +47,5 @@ export const LazyComponents = {
   HomePage: React.lazy(() => import('./HomePage/HomePage')),
   MainPage: React.lazy(() => import('./MainPage')),
   Dashboard: React.lazy(() => import('./Dashboard/DashboardPage')),
+  Breadcrumb: React.lazy(() => import('./Breadcrumb/Breadcrumb')),
 };

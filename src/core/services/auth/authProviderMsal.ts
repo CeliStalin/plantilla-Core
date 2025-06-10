@@ -45,6 +45,11 @@ function initializeMsal(): Promise<void> {
 
     initializationPromise = (async () => {
       try {
+        //  Protección
+        if (typeof window === "undefined" || !window.crypto) {
+          throw new Error("MSAL solo puede inicializarse en un navegador moderno con soporte para window.crypto");
+        }
+
         // Verificar que la configuración sea válida
         if (!msalConfig.auth.clientId || !msalConfig.auth.authority) {
           console.error('Error: No se encontró configuración válida para MSAL. Verifica las variables de entorno.');
