@@ -37,7 +37,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
 
     const content = (
       <span className="breadcrumb-content">
-        {item.icon && <span className="breadcrumb-icon">{item.icon}</span>}
         <span className="breadcrumb-label">{item.label}</span>
       </span>
     );
