@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { navMenuStyles } from '../styles/navMenu.styles';
+import { useMenuCollapse } from '../../../context/MenuCollapseContext';
+
 
 interface MenuItemProps {
   to: string;
   label: string | React.ReactNode;
   isActive?: boolean;
+  isApplicationItem?: boolean;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive }) => {
+export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isApplicationItem = false }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { collapseMenu } = useMenuCollapse();
   
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    
     if (to && to.trim() !== '') {
+      console.log('[MenuItem] Navegando a:', to);
       navigate(to, { replace: false });
     } else {
       console.warn("MenuItem: Intento de navegación a una ruta vacía");

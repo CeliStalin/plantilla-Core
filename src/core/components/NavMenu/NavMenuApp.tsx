@@ -11,6 +11,7 @@ import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import { injectMenuStyles } from './utils/styleInjector';
 import AppIcon from '../../../assets/app.svg';
+import { useMenuCollapse } from '../../context/MenuCollapseContext';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
@@ -22,13 +23,14 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
   const location = useLocation();
   const [menuItems, setMenuItems] = useState<ElementMenu[]>([]);
   const [loading, setLoading] = useState<boolean>(false); // Cambiar a false por defecto
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const prevPathRef = useRef(location.pathname);
   
   // Refs para optimización
   const hasLoadedRef = useRef(false);
   const lastRoleRef = useRef<string>('');
   const initialLoadRef = useRef(true);
+
+  const { isMenuCollapsed, collapseMenu, expandMenu, setIsMenuCollapsed } = useMenuCollapse();
 
   // Inyectar estilos al montar el componente
   useEffect(() => {
@@ -45,19 +47,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
       // Informamos al componente padre que el menú está desplegado inicialmente
       onToggle(false);
     }
-  }, [onToggle]);
-
-  useEffect(() => {
-    // Comprobamos si hay preferencia guardada del usuario
-    const savedPreference = localStorage.getItem('menu-collapsed-state');
-    if (savedPreference !== null) {
-      // Si existe una preferencia guardada, la usamos
-      setIsCollapsed(savedPreference === 'true');
-      if (onToggle) {
-        onToggle(savedPreference === 'true');
-      }
-    }
-    // Si no hay preferencia guardada, mantiene el valor predeterminado (desplegado)
   }, [onToggle]);
 
   useEffect(() => {
@@ -136,36 +125,28 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
     fetchMenu();
   }, [hasDevelopersRole, roles, enableDynamicMenu, isSignedIn]);
 
-  const handleToggle = () => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    
-    // Efecto de rotación mejorado con fallback
-    const hamburgerSvg = document.querySelector('.menu-hamburger svg') as HTMLElement;
-    if (hamburgerSvg) {
-      // Limpiar clases previas
-      hamburgerSvg.classList.remove('menu-rotate-cw', 'menu-rotate-ccw');
-      
-      // Force reflow
-      void hamburgerSvg.offsetWidth;
-      
-      // Aplicar animación apropiada
-      if (isCollapsed) { 
-        hamburgerSvg.classList.add('menu-rotate-cw');
-      } else {
-        hamburgerSvg.classList.add('menu-rotate-ccw');
-      }
-
-      // Fallback: remover clase después de la animación
-      setTimeout(() => {
-        hamburgerSvg.classList.remove('menu-rotate-cw', 'menu-rotate-ccw');
-      }, 700); // Duración de la animación
+  useEffect(() => {
+    // Si la ruta es de aplicaciones y no es home, colapsa el menú
+    if (
+      (location.pathname.startsWith('/mnherederos') || location.pathname.startsWith('/otraApp')) &&
+      location.pathname !== '/home'
+    ) {
+      setIsMenuCollapsed(true);
+      collapseMenu();
     }
-    
-    localStorage.setItem('menu-collapsed-state', String(newState));
-    
+  }, [location.pathname, collapseMenu, setIsMenuCollapsed]);
+
+  useEffect(() => {
+    if (location.pathname === '/home') {
+      setIsMenuCollapsed(false);
+      expandMenu();
+    }
+  }, [location.pathname, expandMenu, setIsMenuCollapsed]);
+
+  const handleToggle = () => {
+    setIsMenuCollapsed(!isMenuCollapsed);
     if (onToggle) {
-      onToggle(newState);
+      onToggle(!isMenuCollapsed);
     }
   };
 
@@ -225,8 +206,8 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
       <div 
         className="nav-menu-container"
         style={{
-          ...navMenuStyles.container(isCollapsed),
-          boxShadow: isCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
+          ...navMenuStyles.container(isMenuCollapsed),
+          boxShadow: isMenuCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
         }}
       >
         <aside 
@@ -237,7 +218,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
           }}
         >
           <button 
-            className={`menu-toggle-button ${!isCollapsed ? 'expanded' : ''}`}
+            className={`menu-toggle-button ${!isMenuCollapsed ? 'expanded' : ''}`}
             onClick={handleToggle}
             aria-label="Toggle menu"
             tabIndex={-1}
@@ -264,12 +245,12 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </div>
-            {!isCollapsed && (
+            {!isMenuCollapsed && (
               <span style={navMenuStyles.menuText}>Menú</span>
             )}
           </button>
           
-          <div style={navMenuStyles.menuContent(isCollapsed)}>
+          <div style={navMenuStyles.menuContent(isMenuCollapsed)}>
             <ul className="menu-list" style={{ padding: 0, listStyle: 'none' }}>
               {/* Menú Básico - Inicio */}
               <MenuSection>
@@ -319,6 +300,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
                         to={itemPath}
                         label={item.Descripcion}
                         isActive={isPathActive(itemPath)}
+                        isApplicationItem={true}
                       />
                     );
                   })}

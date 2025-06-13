@@ -5,7 +5,7 @@ set -e
 rm -rf node_modules dist build .turbo .next .cache
 
 # Eliminar lockfiles (opcional, descomenta si lo deseas siempre)
-#rm -f package-lock.json yarn.lock pnpm-lock.yaml
+rm -f package-lock.json yarn.lock pnpm-lock.yaml
 
 # Limpiar caché de npm
 npm cache clean --force
