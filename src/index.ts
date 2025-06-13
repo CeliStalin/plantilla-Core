@@ -245,3 +245,5 @@ export { Breadcrumb } from './core/components/Breadcrumb';
 export { default as BreadcrumbDefault } from './core/components/Breadcrumb';
 export { useBreadcrumb } from './core/components/Breadcrumb';
 export type { BreadcrumbProps, BreadcrumbItem, UseBreadcrumbOptions } from './core/components/Breadcrumb';
+
+export { useMenuCollapse, MenuCollapseProvider } from './core/context/MenuCollapseContext';

@@ -545,3 +545,48 @@ plantilla-Core/
 Si tienes problemas:
 1. Ejecuta `./docker-scripts.sh` para ver todos los comandos
 2. Usa `./docker-scripts.sh clean` para limpiar y empezar de nuevo
+
+## 🏠 HomePage: Uso avanzado y consumo externo
+
+El componente `HomePage` puede usarse tanto dentro de la app principal como en aplicaciones externas. Ahora soporta los siguientes props avanzados:
+
+### Props avanzados
+
+- `withLayout?: boolean` (default: `true`):
+  - Si es `true` (o no se pasa), el contenido se envuelve en el layout del core.
+  - Si es `false`, renderiza solo el contenido interno. **Debes envolverlo en tu propio layout y en el `MenuCollapseProvider`**.
+
+- `menuCollapsed?: boolean`:
+  - Si se define, fuerza el estado del menú izquierdo (NavMenu):
+    - `true` = menú colapsado
+    - `false` = menú expandido
+  - Si no se define, el control es interno (por contexto/localStorage).
+
+### Ejemplo de uso en app externa (sin layout interno):
+
+```jsx
+import { HomePage } from '@consalud/core';
+import { MenuCollapseProvider } from '@consalud/core/context/MenuCollapseContext';
+import SecureLayout from '@consalud/core/components/SecureLayout/SecureLayout';
+
+export default function App() {
+  return (
+    <SecureLayout>
+      <MenuCollapseProvider>
+        <HomePage withLayout={false} menuCollapsed={true} />
+      </MenuCollapseProvider>
+    </SecureLayout>
+  );
+}
+```
+
+### Ejemplo de uso con layout interno (por defecto):
+
+```jsx
+<HomePage /> // Usa el layout y el control de menú del core
+```
+
+### Notas
+- Si usas `withLayout={false}`, **debes envolver el componente en `MenuCollapseProvider`** para evitar errores de contexto.
+- Si usas `menuCollapsed`, puedes controlar el estado del menú izquierdo desde tu app externa.
+- Si no pasas estos props, el comportamiento es el mismo que antes (retrocompatibilidad).

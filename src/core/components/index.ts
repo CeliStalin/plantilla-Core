@@ -49,3 +49,5 @@ export const LazyComponents = {
   Dashboard: React.lazy(() => import('./Dashboard/DashboardPage')),
   Breadcrumb: React.lazy(() => import('./Breadcrumb/Breadcrumb')),
 };
+
+export { useMenuCollapse, MenuCollapseProvider } from '../context/MenuCollapseContext';

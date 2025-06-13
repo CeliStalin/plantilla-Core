@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Layout } from '@/core/components/Layout/Layout';
 import { WelcomeSection } from './components/WelcomeSection';
 import { ApplicationsGrid } from './components/ApplicationsGrid';
@@ -11,30 +11,45 @@ import { HomePageProps } from './types';
 import './styles/animations.css';
 import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
 import { useMenuConfig } from '@/core/context/MenuConfigContext';
+import { useMenuCollapse } from '../../context/MenuCollapseContext';
+import { MenuCollapseProvider } from '@/core/context/MenuCollapseContext';
 
-export const HomePage: React.FC<HomePageProps> = ({ 
+export interface HomePageWithLayoutProps extends HomePageProps {
+  /**
+   * Si es true (por defecto), envuelve el contenido en el Layout del core.
+   * Si es false, renderiza solo el contenido interno (requiere envolver en MenuCollapseProvider y layout externo).
+   */
+  withLayout?: boolean;
+  /**
+   * Si se define, fuerza el estado del menú izquierdo (NavMenu) a colapsado o expandido.
+   * true = colapsado, false = expandido. Si no se define, el control es interno.
+   */
+  menuCollapsed?: boolean;
+}
+
+// Componente interno que contiene toda la lógica y hooks
+const HomePageInner: React.FC<HomePageWithLayoutProps> = ({ 
   className = '',
   externalLinks,
   enableBounce = true,
-  // New props with backward compatibility
   bounceEnabled,
   enableInteractiveEffects = false,
   debug = false,
   onMounted,
   onCardClick,
-  // ...other existing props
   showWelcomeSection = true,
   showApplicationsSection = true,
   showDirectAccessSection = true,
   bounceIntensity = 'medium',
-  animationDuration = 300
+  animationDuration = 300,
+  menuCollapsed,
+  ...rest
 }) => {
   // Hooks
   const { usuario } = useAuth();
   const { menuItems, loading } = useMenuItems();
   const { isMobile, isTablet } = useResponsive();
   const { navigateToApp, openExternalLink } = useNavigation();
-  // const { enableDynamicMenu } = useMenuConfig(); // No longer needed here for this specific conditional rendering
 
   const firstName = getFirstName(usuario?.displayName);
   const linksToUse = externalLinks || defaultExternalLinks;
@@ -45,7 +60,6 @@ export const HomePage: React.FC<HomePageProps> = ({
     ...(isMobile ? responsiveHomePageStyles.mobile.container : {}),
     ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.container : {}),
     backgroundColor: '#ffffff',
-    // Asegurar que no haya restricciones de ancho
     maxWidth: '100%',
     margin: 0
   };
@@ -70,7 +84,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   // Handle backward compatibility for bounce settings
   const shouldEnableBounce = bounceEnabled ?? enableBounce;
-  
+
   // Development/debugging effects
   useEffect(() => {
     if (debug && process.env.NODE_ENV === 'development') {
@@ -82,67 +96,93 @@ export const HomePage: React.FC<HomePageProps> = ({
         enableInteractiveEffects
       });
     }
-    
-    // Call onMounted callback if provided
     if (onMounted && typeof onMounted === 'function') {
       onMounted();
     }
   }, [debug, shouldEnableBounce, bounceIntensity, animationDuration, enableInteractiveEffects, onMounted]);
+
+  // Usar el hook profesional para controlar el menú
+  const { expandMenu, collapseMenu, isMenuCollapsed } = useMenuCollapse();
+
+  // Sincronizar el estado del menú con el prop externo si está definido
+  useEffect(() => {
+    if (typeof menuCollapsed === 'boolean') {
+      if (menuCollapsed && !isMenuCollapsed) {
+        collapseMenu();
+      } else if (!menuCollapsed && isMenuCollapsed) {
+        expandMenu();
+      }
+    }
+  }, [menuCollapsed, isMenuCollapsed, collapseMenu, expandMenu]);
 
   // Enhanced navigation handler with card click callback
   const handleAppClick = (item: any) => {
     if (debug && process.env.NODE_ENV === 'development') {
       console.log('🎯 App card clicked:', item);
     }
-    
-    // Call external callback if provided
+    collapseMenu();
     if (onCardClick && typeof onCardClick === 'function') {
       onCardClick(item);
     }
-    
-    // Execute original navigation
     navigateToApp(item);
   };
 
+  // El contenido principal de la página
   return (
-    <Layout pageTitle="Inicio">
-      <div 
-        className={`homepage-container ${className} ${enableInteractiveEffects ? 'interactive-effects-enabled' : ''}`}
-        style={containerStyle}
-        data-debug={debug || undefined}
-      >
-        {/* Show welcome section conditionally */}
-        {showWelcomeSection && (
-          <WelcomeSection userName={firstName} />
+    <div 
+      className={`homepage-container ${className} ${enableInteractiveEffects ? 'interactive-effects-enabled' : ''}`}
+      style={containerStyle}
+      data-debug={debug || undefined}
+    >
+      {showWelcomeSection && (
+        <WelcomeSection userName={firstName} />
+      )}
+      <div style={mainContentStyle}>
+        {showApplicationsSection && (
+          <div style={leftColumnStyle}>
+            <ApplicationsGrid
+              menuItems={menuItems}
+              loading={loading}
+              onAppClick={handleAppClick}
+              enableBounce={shouldEnableBounce}
+            />
+          </div>
         )}
-
-        {/* Main Content */}
-        <div style={mainContentStyle}>
-          {/* Applications - Show conditionally */}
-          {showApplicationsSection && (
-            <div style={leftColumnStyle}>
-              <ApplicationsGrid
-                menuItems={menuItems}
-                loading={loading}
-                onAppClick={handleAppClick}
-                enableBounce={shouldEnableBounce}
-              />
-            </div>
-          )}
-          
-          {/* Direct access column - Show conditionally */}
-          {showDirectAccessSection && (
-            <div style={rightColumnStyle}>
-              <DirectAccessGrid
-                loading={loading}
-                onExternalLinkClick={openExternalLink}
-                externalLinks={linksToUse} 
-              />
-            </div>
-          )}
-        </div>
+        {showDirectAccessSection && (
+          <div style={rightColumnStyle}>
+            <DirectAccessGrid
+              loading={loading}
+              onExternalLinkClick={openExternalLink}
+              externalLinks={linksToUse} 
+            />
+          </div>
+        )}
       </div>
-    </Layout>
+    </div>
+  );
+};
+
+/**
+ * HomePage principal.
+ * - Por defecto, SIEMPRE usa Layout, menú y footer (withLayout = true).
+ * - Para compatibilidad con apps externas, se puede pasar withLayout={false} para renderizar solo el contenido interno.
+ * - NO pasar withLayout={false} en la app principal.
+ */
+export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
+  // Valor por defecto explícito para withLayout
+  const withLayout = props.withLayout !== undefined ? props.withLayout : true;
+
+  if (withLayout) {
+    return (
+      <Layout pageTitle="Inicio">
+        <HomePageInner {...props} />
+      </Layout>
+    );
+  }
+  return (
+    <MenuCollapseProvider>
+      <HomePageInner {...props} />
+    </MenuCollapseProvider>
   );
 };
 

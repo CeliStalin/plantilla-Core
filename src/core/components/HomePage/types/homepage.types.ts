@@ -34,6 +34,16 @@ export interface HomePageProps {
   debug?: boolean;
   onMounted?: () => void;
   onCardClick?: (cardData: any) => void;
+  /**
+   * Si es true (por defecto), envuelve el contenido en el Layout del core.
+   * Si es false, renderiza solo el contenido interno (requiere envolver en MenuCollapseProvider y layout externo).
+   */
+  withLayout?: boolean;
+  /**
+   * Si se define, fuerza el estado del menú izquierdo (NavMenu) a colapsado o expandido.
+   * true = colapsado, false = expandido. Si no se define, el control es interno.
+   */
+  menuCollapsed?: boolean;
 }
 
 export interface WelcomeSectionProps {
