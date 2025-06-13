@@ -32,9 +32,37 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
 
   const { isMenuCollapsed, collapseMenu, expandMenu, setIsMenuCollapsed } = useMenuCollapse();
 
+  // Estado para controlar la animación de rotación
+  const [rotateClass, setRotateClass] = useState<string>("");
+  const rotateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const prevCollapsedRef = useRef(isMenuCollapsed);
+
   // Inyectar estilos al montar el componente
   useEffect(() => {
     injectMenuStyles();
+  }, []);
+
+  // Efecto para manejar la animación de rotación
+  useEffect(() => {
+    if (prevCollapsedRef.current !== isMenuCollapsed) {
+      // Determinar dirección de la animación
+      const direction = isMenuCollapsed ? "menu-rotate-ccw" : "menu-rotate-cw";
+      setRotateClass(direction);
+      // Limpiar la clase después de la duración de la animación
+      if (rotateTimeoutRef.current) clearTimeout(rotateTimeoutRef.current);
+      rotateTimeoutRef.current = setTimeout(() => {
+        setRotateClass("");
+      }, 700); // Debe coincidir con --menu-rotation-duration
+      prevCollapsedRef.current = isMenuCollapsed;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMenuCollapsed]);
+
+  // Limpiar timeout al desmontar
+  useEffect(() => {
+    return () => {
+      if (rotateTimeoutRef.current) clearTimeout(rotateTimeoutRef.current);
+    };
   }, []);
 
   // Verificar si el usuario tiene el rol 
@@ -227,7 +255,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
             }}
           >
             <div 
-              className="menu-hamburger"
+              className={`menu-hamburger${rotateClass ? ' ' + rotateClass : ''}`}
               style={navMenuStyles.menuHamburger}
             >
               <svg
