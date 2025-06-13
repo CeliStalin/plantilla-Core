@@ -11,8 +11,9 @@ export const useNavigation = () => {
       return;
     }
 
-    const formattedControlador = app.Controlador.charAt(0).toLowerCase() + app.Controlador.slice(1);
-    const path = `/${formattedControlador}/${app.Accion}`;
+    const formattedControlador = app.Controlador.toLowerCase();
+    const formattedAccion = app.Accion.toLowerCase();
+    const path = `/${formattedControlador}/${formattedAccion}`;
     
     navigate(path);
   }, [navigate]);

@@ -90,22 +90,26 @@ export const Layout: React.FC<LayoutProps> = ({
               onToggle={handleMenuToggle} 
             />
             
-            <main style={{ 
-              marginLeft: isMenuCollapsed ? "50px" : "220px", 
-              width: "100%", // Ocupa el ancho disponible menos el NavMenu
-              transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-              backgroundColor: backgroundColor,
-              overflowY: 'auto', // Main maneja su propio scroll vertical si el contenido excede
-              padding: "1rem",
-              boxSizing: 'border-box',
-              flex: 1, // Para que main ocupe el espacio vertical en layout-body
-              display: 'flex', // Para permitir que el contenido interno se comporte como flex item si es necesario
-              flexDirection: 'column' // Para que el contenido interno se apile verticalmente
-            }}>
+            <main 
+              className="instant-stable navigation-stable no-flash"
+              style={{ 
+                marginLeft: isMenuCollapsed ? "50px" : "220px", 
+                width: "100%", // Ocupa el ancho disponible menos el NavMenu
+                transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                backgroundColor: backgroundColor,
+                overflowY: 'auto', // Main maneja su propio scroll vertical si el contenido excede
+                padding: "1rem",
+                boxSizing: 'border-box',
+                flex: 1, // Para que main ocupe el espacio vertical en layout-body
+                display: 'flex', // Para permitir que el contenido interno se comporte como flex item si es necesario
+                flexDirection: 'column' // Para que el contenido interno se apile verticalmente
+              }}
+            >
               <PageTransition
                 duration={transitionDuration}
                 type={transitionType}
                 disabled={!enableTransitions}
+                preset="minimal"
               >
                 {/* El contenido (children) se renderizará aquí. 
                     Si HomePage o sus hijos tienen paddings/margins, se considerarán dentro de este main.
