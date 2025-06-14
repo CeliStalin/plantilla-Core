@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BreadcrumbProps, BreadcrumbItem } from './types';
+import './Breadcrumb.styles.css';
 
-const defaultSeparator = <span>/</span>;
-const defaultHomeIcon = <span>🏠</span>;
+const defaultSeparator = <span>{'>'}</span>;
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   separator = defaultSeparator,
   maxItems,
   showHome = true,
-  homeIcon = defaultHomeIcon,
   className = '',
   itemClassName = '',
   activeClassName = '',
@@ -18,6 +17,9 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   onItemClick
 }) => {
   const navigate = useNavigate();
+
+  // Log de entrada de items
+  console.log('[Breadcrumb] items prop:', items);
 
   const handleItemClick = (item: BreadcrumbItem, index: number, event: React.MouseEvent) => {
     if (onItemClick) {
@@ -29,6 +31,8 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   };
 
   const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
+    // Log en el render de cada label
+    console.log('[Breadcrumb] renderItem label:', item.label);
     const itemClasses = [
       'breadcrumb-item',
       itemClassName,
@@ -48,6 +52,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
           to={item.path}
           className={itemClasses}
           onClick={(e) => handleItemClick(item, index, e)}
+          aria-current={isLast ? 'page' : undefined}
         >
           {content}
         </Link>
@@ -55,36 +60,64 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
     }
 
     return (
-      <span key={index} className={itemClasses}>
+      <span 
+        key={index} 
+        className={itemClasses}
+        aria-current={isLast ? 'page' : undefined}
+      >
         {content}
       </span>
     );
   };
 
   const renderSeparator = (index: number) => (
-    <span key={`sep-${index}`} className={`breadcrumb-separator ${separatorClassName}`}>
+    <span key={`sep-${index}`} className={`breadcrumb-separator ${separatorClassName}`} aria-hidden="true">
       {separator}
     </span>
   );
 
-  // Procesar items con límite máximo
-  let processedItems = [...items];
-  
-  if (maxItems && items.length > maxItems) {
-    const start = items.slice(0, 1);
-    const end = items.slice(-(maxItems - 2));
-    const ellipsis: BreadcrumbItem = { label: '...', isActive: false };
+  // Limpieza defensiva: eliminar cualquier slash inicial en los labels
+  let processedItems = [...items].map(item => ({
+    ...item,
+    label: typeof item.label === 'string' ? item.label.replace(/^\/+/, '') : item.label
+  }));
+  // Log después de la limpieza
+  console.log('[Breadcrumb] processedItems:', processedItems);
+
+  // Verificar si ya existe un ítem "Inicio" o "Home" en la lista
+  const hasHomeItem = processedItems.some(item => 
+    item.label.toLowerCase().includes('inicio') || 
+    item.label.toLowerCase().includes('home') ||
+    item.path === '/' ||
+    item.path === '/home'
+  );
+
+  // Aplicar límite máximo si está especificado
+  if (maxItems && processedItems.length > maxItems) {
+    const start = processedItems.slice(0, 1);
+    const end = processedItems.slice(-(maxItems - 2));
+    const ellipsis: BreadcrumbItem = { 
+      label: '...', 
+      isActive: false 
+    };
     processedItems = [...start, ellipsis, ...end];
   }
 
-  // Agregar home si es necesario
-  if (showHome && (!processedItems.length || processedItems[0].path !== '/')) {
+  // Agregar home solo si es necesario y no existe ya
+  if (showHome && !hasHomeItem) {
     const homeItem: BreadcrumbItem = {
       label: 'Inicio',
-      path: '/',
-      icon: homeIcon
+      path: '/home'
     };
     processedItems.unshift(homeItem);
+  }
+
+  // Marcar el último ítem como activo si no está especificado
+  if (processedItems.length > 0) {
+    const lastItem = processedItems[processedItems.length - 1];
+    if (lastItem.isActive === undefined) {
+      lastItem.isActive = true;
+    }
   }
 
   const breadcrumbClasses = [
@@ -92,13 +125,19 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
     className
   ].filter(Boolean).join(' ');
 
+  if (processedItems.length === 0) {
+    return null;
+  }
+  // Log antes del render final
+  console.log('[Breadcrumb] rendering items:', processedItems);
+
   return (
-    <nav className={breadcrumbClasses} aria-label="breadcrumb">
+    <nav className={breadcrumbClasses} aria-label="Navegación de migas de pan">
       <ol className="breadcrumb-list">
         {processedItems.map((item, index) => {
           const isLast = index === processedItems.length - 1;
           return (
-            <li key={index} className="breadcrumb-list-item">
+            <li key={`breadcrumb-${index}`} className="breadcrumb-list-item">
               {renderItem(item, index, isLast)}
               {!isLast && renderSeparator(index)}
             </li>
