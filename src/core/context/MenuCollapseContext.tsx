@@ -7,7 +7,7 @@ interface MenuCollapseContextType {
   setIsMenuCollapsed: (collapsed: boolean) => void;
 }
 
-const MenuCollapseContext = createContext<MenuCollapseContextType | undefined>(undefined);
+const MenuCollapseContext = createContext<MenuCollapseContextType | null>(null);
 
 export const useMenuCollapse = () => {
   const ctx = useContext(MenuCollapseContext);
@@ -15,7 +15,11 @@ export const useMenuCollapse = () => {
   return ctx;
 };
 
-export const MenuCollapseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface MenuCollapseProviderProps {
+  children: React.ReactNode;
+}
+
+export const MenuCollapseProvider = ({ children }: MenuCollapseProviderProps) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(() => {
     const saved = localStorage.getItem('menu-collapsed-state');
     return saved === 'true';
@@ -34,8 +38,15 @@ export const MenuCollapseProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setIsMenuCollapsed(false);
   }, []);
 
+  const value: MenuCollapseContextType = {
+    isMenuCollapsed,
+    collapseMenu,
+    expandMenu,
+    setIsMenuCollapsed,
+  };
+
   return (
-    <MenuCollapseContext.Provider value={{ isMenuCollapsed, collapseMenu, expandMenu, setIsMenuCollapsed }}>
+    <MenuCollapseContext.Provider value={value}>
       {children}
     </MenuCollapseContext.Provider>
   );

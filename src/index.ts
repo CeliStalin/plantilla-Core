@@ -1,3 +1,5 @@
+import './core/styles/animations.css';
+
 // Core exports principales - Theme con importaciones seguras
 export {
   defaultTheme,      // Exporta defaultTheme (el tema base desde ./core/theme)

@@ -33,8 +33,12 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   menuItems = [],
   loading,
   onAppClick,
-  className = ''
+  className = '',
+  enableBounce = false
 }) => {
+  console.log('ApplicationsGrid - enableBounce:', enableBounce);
+  console.log('ApplicationsGrid - menuItems:', menuItems);
+
   const { triggerBounce, isCardClicked } = useBounceEffect();
 
   const handleAppClick = useCallback((app: ElementMenu) => {
@@ -56,14 +60,14 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   }, [handleAppClick]);
 
   const getCardClassName = useCallback((app: ElementMenu) => {
-    const baseClasses = ['app-card'];
-    
+    const baseClasses = ['app-card', 'animate-fade-in-up'];
+    if (enableBounce) baseClasses.push('bounce-enabled');
     if (app?.Id && isCardClicked(app.Id.toString())) {
       baseClasses.push('clicked');
     }
-    
+    console.log('ApplicationsGrid - card classes:', baseClasses.join(' '));
     return baseClasses.join(' ');
-  }, [isCardClicked]);
+  }, [isCardClicked, enableBounce]);
 
   const getCardKey = useCallback((app: ElementMenu, index: number) => {
     return app?.Id?.toString() || `app-card-${index}`;

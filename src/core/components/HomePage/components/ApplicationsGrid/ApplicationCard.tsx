@@ -24,7 +24,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
 
   return (
     <div 
-      className="app-card" 
+      className="app-card animate-fade-in-up" 
       style={{
         ...applicationsGridStyles.card,
         animationDelay: `${delay}s`
@@ -40,10 +40,10 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
           handleClick();
         }
       }}
-      aria-label={`Abrir aplicación ${item.Descripcion || item.Nombre}`} // Usar Descripcion, con fallback a Nombre
+      aria-label={`Abrir aplicación ${item.Descripcion || item.Nombre}`}
     >
       <span style={applicationsGridStyles.cardTitle}>
-        {item.Descripcion || item.Nombre} {/* Mostrar Descripcion, con fallback a Nombre */}
+        {item.Descripcion || item.Nombre}
       </span>
       <ChevronRightIcon />
     </div>

@@ -10,8 +10,8 @@ interface MenuConfigContextType {
 
 // Valores por defecto
 const defaultConfig: MenuConfigContextType = {
-  enableDynamicMenu: false,  // Por defecto, el core solo muestra la pantalla de inicio
-  enableBounceEffects: false // Por defecto deshabilitado para no romper funcionalidad existente
+  enableDynamicMenu: true,  // Por defecto, el core solo muestra la pantalla de inicio
+  enableBounceEffects: true // Por defecto deshabilitado para no romper funcionalidad existente
 };
 
 // Crear el contexto
