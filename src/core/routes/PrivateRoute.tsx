@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
@@ -8,9 +9,9 @@ interface PrivateRouteProps {
   msalReady?: boolean;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ msalReady = true, allowedRoles = [], ...props }) => {
+function PrivateRoute({ msalReady = true, allowedRoles = [], ...props }: PrivateRouteProps) {
   if (!msalReady) {
-    return <div>Cargando autenticación...</div>;
+    return <>Cargando autenticación...</>;
   }
   const auth = useAuth();
   const { isSignedIn, isInitializing, loading, hasAnyRole } = auth;
@@ -63,16 +64,16 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ msalReady = true, allowedRo
   
   // Si no está autenticado, no mostrar contenido (se está redirigiendo)
   if (!isSignedIn) {
-    return null;
+    return '';
   }
   
   // Verificar roles antes de mostrar contenido
   if (allowedRoles.length > 0 && !hasAnyRole(allowedRoles)) {
-    return null; // Se está redirigiendo a unauthorized
+    return ''; // Se está redirigiendo a unauthorized
   }
   
   // Si está autenticado y tiene los roles necesarios, mostrar el contenido
   return <>{props.children}</>;
-};
+}
 
-export default PrivateRoute;
+export { PrivateRoute };

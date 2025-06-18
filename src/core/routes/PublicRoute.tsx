@@ -61,4 +61,4 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ msalReady = true, ...props })
   return <>{props.children}</>;
 };
 
-export default PublicRoute;
+export { PublicRoute };

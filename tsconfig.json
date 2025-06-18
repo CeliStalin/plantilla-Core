@@ -18,7 +18,7 @@
       "@/*": ["src/*"]
     },
     "typeRoots": ["./node_modules/@types", "./"],
-    "types": ["node", "vite/client"],
+    "types": ["react", "react-dom", "node", "vite/client"],
     "noImplicitAny": false
   },
   "include": [
