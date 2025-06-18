@@ -1,3 +1,5 @@
+import { GetAmbiente } from '@/core/utils/GetEnvVariables';
+
 interface LogEntry {
   level: 'info' | 'warn' | 'error' | 'debug';
   message: string;
@@ -32,7 +34,7 @@ class Logger {
       this.logs.push(entry);
       
       // En desarrollo, mostrar en consola
-      if (import.meta.env.DEV) {
+      if (GetAmbiente() === 'development') {
         // No pasamos el objeto data directamente, sino que lo convertimos a string seguro
         const safeData = data ? this.getSafeString(data) : '';
         switch(level) {
@@ -52,7 +54,7 @@ class Logger {
       }
       
       // Enviar a servicio de logging externo en producción
-      if (import.meta.env.PROD && level === 'error') {
+      if (GetAmbiente() === 'production' && level === 'error') {
         this.sendToExternalService(entry);
       }
     } catch (err) {

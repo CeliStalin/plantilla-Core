@@ -1,10 +1,11 @@
 import { Configuration, LogLevel } from '@azure/msal-browser';
+import { GetNameApiKey, GetApiArquitectura } from '@/core/utils/GetEnvVariables';
 
 // Configuración mejorada para seguridad
 export const msalConfig: Configuration = {
   auth: {
-    clientId: import.meta.env.VITE_APP_CLIENT_ID || import.meta.env.VITE_CLIENT_ID || '',
-    authority: import.meta.env.VITE_APP_AUTHORITY || import.meta.env.VITE_AUTHORITY || '',
+    clientId: GetNameApiKey() || GetNameApiKey() || '',
+    authority: GetApiArquitectura() || GetApiArquitectura() || '',
     redirectUri: window.location.origin,
     postLogoutRedirectUri: window.location.origin,
     navigateToLoginRequestUrl: true,
@@ -50,5 +51,5 @@ export const loginRequest = {
 
 // Scopes para acceder a APIs
 export const apiRequest = {
-  scopes: [`api://${import.meta.env.VITE_API_CLIENT_ID || import.meta.env.VITE_APP_CLIENT_ID}/access_api`],
+  scopes: [`api://${GetNameApiKey() || GetNameApiKey()}/access_api`],
 };

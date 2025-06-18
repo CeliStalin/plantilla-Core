@@ -1,17 +1,18 @@
 import React from 'react';
 import { footerStyles } from '../Footer/styles/Footer.styles';
-import { FooterDesktop } from '../../../assets';
 
 interface FooterProps {
   className?: string;
   showOnMobile?: boolean;
   customStyles?: React.CSSProperties;
+  footerImageSrc: string;
 }
 
 export const Footer: React.FC<FooterProps> = ({ 
   className = '',
   showOnMobile = true,
-  customStyles = {}
+  customStyles = {},
+  footerImageSrc
 }) => {
   const combinedStyles = {
     ...footerStyles.container,
@@ -24,7 +25,7 @@ export const Footer: React.FC<FooterProps> = ({
       style={combinedStyles}
     >
       <img 
-        src={FooterDesktop}
+        src={footerImageSrc}
         alt="Consalud Footer"
         style={footerStyles.image}
         loading="lazy"

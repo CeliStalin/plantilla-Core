@@ -5,13 +5,15 @@ import useAuth from '../hooks/useAuth';
 interface PublicRouteProps {
   children: React.ReactNode;
   redirectPath?: string;
+  msalReady?: boolean;
 }
 
-export const PublicRoute: React.FC<PublicRouteProps> = ({
-  children,
-  redirectPath = '/home'
-}) => {
-  const { isSignedIn, isInitializing } = useAuth();
+const PublicRoute: React.FC<PublicRouteProps> = ({ msalReady = true, ...props }) => {
+  if (!msalReady) {
+    return <div>Cargando autenticación...</div>;
+  }
+  const auth = useAuth();
+  const { isSignedIn, isInitializing } = auth;
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -20,7 +22,7 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
       try {
         // Verificar si hay una ruta guardada para redirigir
         const savedPath = sessionStorage.getItem('redirectAfterLogin');
-        const targetPath = savedPath || redirectPath;
+        const targetPath = savedPath || props.redirectPath || '/home';
         
         // Limpiar la ruta guardada
         if (savedPath) {
@@ -31,10 +33,10 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
       } catch (error) {
         console.error('Error during navigation:', error);
         // Fallback a la ruta por defecto
-        navigate(redirectPath, { replace: true });
+        navigate(props.redirectPath || '/home', { replace: true });
       }
     }
-  }, [isSignedIn, isInitializing, redirectPath, navigate]);
+  }, [isSignedIn, isInitializing, props.redirectPath, navigate]);
   
   // Mostrar un indicador de carga mientras verifica
   if (isInitializing) {
@@ -56,7 +58,7 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
   }
   
   // Si no está autenticado, mostrar el contenido
-  return <>{children}</>;
+  return <>{props.children}</>;
 };
 
 export default PublicRoute;

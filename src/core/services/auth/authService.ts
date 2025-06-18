@@ -4,6 +4,7 @@ import { UsuarioAd } from '../../interfaces/IUsuarioAD';
 import { RolResponse } from '../../interfaces/IRol';
 import { mapRawToUsuarioAd } from '../../utils/MapperRawToUsuarioAd';
 import { mapRawArrayToRolResponseArray } from '../../utils/MapperRawToRol';
+import { GetApiArquitectura, GetSistema, GetNameApiKey, GetKeyApiKey } from '@/core/utils/GetEnvVariables';
 
 export class AuthService {
   //Agregar método auxiliar para retry con backoff
@@ -90,9 +91,9 @@ export class AuthService {
   public static async getUsuarioAD(email: string): Promise<UsuarioAd> {
     return this.retryWithBackoff(async () => {
       try {
-        const apiUrl = `${import.meta.env.VITE_APP_API_ARQUITECTURA_URL}/Usuario/mail/${email}`;
+        const apiUrl = `${GetApiArquitectura()}/Usuario/mail/${email}`;
         const headers = {
-          [import.meta.env.VITE_APP_NAME_API_KEY]: import.meta.env.VITE_APP_KEY_PASS_API_ARQ,
+          [GetNameApiKey()]: GetKeyApiKey(),
           "Content-Type": "application/json; charset=utf-8",
         };
         
@@ -125,34 +126,29 @@ export class AuthService {
   public static async getRoles(email: string): Promise<RolResponse[]> {
     return this.retryWithBackoff(async () => {
       try {
-        const sistema = import.meta.env.VITE_APP_SISTEMA;
-        const apiUrl = `${import.meta.env.VITE_APP_API_ARQUITECTURA_URL}/Rol/mail/${email}/app/${sistema}`;
-        
+        const sistema = GetSistema();
+        const apiUrl = `${GetApiArquitectura()}/Rol/mail/${email}/app/${sistema.codigo}`;
         const headers = {
-          [import.meta.env.VITE_APP_NAME_API_KEY]: import.meta.env.VITE_APP_KEY_PASS_API_ARQ,
+          [GetNameApiKey()]: GetKeyApiKey(),
           "Content-Type": "application/json; charset=utf-8",
         };
-        
-        console.log('[AuthService] Obteniendo roles para:', email);
+        // console.log('[AuthService.getRoles] URL construida:', apiUrl);
         const response = await fetch(apiUrl, {
           method: "GET",
           headers
         });
-        
         if (!response.ok) {
           throw new Error(`${response.status} - ${response.statusText}`);
         }
-        
         const rawData = await response.json();
+        // console.log('[AuthService.getRoles] Respuesta cruda de la API:', rawData);
         const mappedData = mapRawArrayToRolResponseArray(rawData);
         console.log(`[AuthService] Roles obtenidos exitosamente: ${mappedData.length} roles`);
         return mappedData;
-        
       } catch (error) {
         const errorMessage = error instanceof Error 
             ? error.message 
             : String(error);
-            
         console.error(`[AuthService] Error al obtener roles para ${email}:`, errorMessage);
         throw new Error(`Error al obtener roles para ${email}: ${errorMessage}`);
       }

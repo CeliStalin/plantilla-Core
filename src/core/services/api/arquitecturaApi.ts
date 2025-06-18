@@ -16,7 +16,10 @@ export class ArquitecturaApi {
   public static async getRoles(email: string): Promise<RolResponse[]> {
     try {
       const sistema = import.meta.env.VITE_SISTEMA || import.meta.env.VITE_APP_SISTEMA;
-      const rawData = await apiClient.get<RawRolResponse[]>(`/Rol/mail/${email}/app/${sistema}`);
+      const url = `/Rol/mail/${email}/app/${sistema}`;
+      console.log('[getRoles] URL construida:', url);
+      const rawData = await apiClient.get<RawRolResponse[]>(url);
+      console.log('[getRoles] Respuesta cruda de la API:', rawData);
       return mapRawArrayToRolResponseArray(rawData);
     } catch (error) {
       console.error('Error al obtener roles:', error);
@@ -36,12 +39,18 @@ export class ArquitecturaApi {
 
   public static async getMenus(rol: string): Promise<ElementMenu[]> {
     if (!rol) {
+      console.warn('[getMenus] Rol vacío, no se realizará la petición.');
       return [];
     }
 
     try {
       const sistema = import.meta.env.VITE_SISTEMA || import.meta.env.VITE_APP_SISTEMA;
-      const rawData = await apiClient.get<RawMenusElemento[]>(`/Elemento/${rol}/${sistema}`);
+      const url = `/Elemento/${rol}/${sistema}`;
+      console.log('[getMenus] Rol:', rol);
+      console.log('[getMenus] Sistema:', sistema);
+      console.log('[getMenus] URL construida:', url);
+      const rawData = await apiClient.get<RawMenusElemento[]>(url);
+      console.log('[getMenus] Respuesta cruda de la API:', rawData);
       return mapRawArrayToElementMenuArray(rawData);
     } catch (error) {
       console.error('Error al obtener menús:', error);

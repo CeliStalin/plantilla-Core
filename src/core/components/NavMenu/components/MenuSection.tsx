@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { navMenuStyles } from '../styles/navMenu.styles';
 import { theme } from '../../../styles/theme';
-import { RowSvg } from '../../../../assets';
 
 interface MenuSectionProps {
   title?: string | React.ReactNode; 
@@ -47,16 +46,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
           borderRadius: '50%',
           backgroundColor: isExpanded ? 'rgba(4, 165, 155, 0.1)' : 'transparent',
         }}>
-          <img 
-            src={RowSvg} 
-            alt="Expand/Collapse"
-            style={{
-              width: '10px',
-              height: '10px',
-              transition: 'transform 0.3s ease',
-              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-            }} 
-          />
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4l3 3 3-3" stroke={theme.colors.primary} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </span>
       </p>
       <div style={navMenuStyles.sectionContent(isExpanded)}>

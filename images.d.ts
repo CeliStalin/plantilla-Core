@@ -19,28 +19,4 @@ declare module '*.svg' {
   export const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   const src: string;
   export default src;
-}
-declare module '*.bmp' {
-  const value: string;
-  export default value;
-}
-declare module '*.tiff' {
-  const value: string;
-  export default value;
-}
-declare module '*.woff' {
-  const value: string;
-  export default value;
-}
-declare module '*.woff2' {
-  const value: string;
-  export default value;
-}
-declare module '*.ttf' {
-  const value: string;
-  export default value;
-}
-declare module '*.eot' {
-  const value: string;
-  export default value;
-}
+} 

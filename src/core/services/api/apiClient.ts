@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError, AxiosRequestConfig } from 'axios';
 import { AuthProvider } from '@/core/services/auth/authProviderMsal';
+import { GetApiArquitectura, GetTimeout, GetNameApiKey, GetKeyApiKey } from '@/core/utils/GetEnvVariables';
 
 export class ApiClient {
   private static instance: ApiClient;
@@ -7,8 +8,8 @@ export class ApiClient {
   
   private constructor() {
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_APP_API_ARQUITECTURA_URL,
-      timeout: Number(import.meta.env.VITE_APP_TIMEOUT) || 10000,
+      baseURL: GetApiArquitectura(),
+      timeout: GetTimeout().timeout || 10000,
       withCredentials: true,
     });
     
@@ -29,7 +30,7 @@ export class ApiClient {
           
           // Headers de seguridad adicionales
           config.headers['X-Requested-With'] = 'XMLHttpRequest';
-          config.headers['X-API-Key'] = import.meta.env.VITE_APP_NAME_API_KEY;
+          config.headers[GetNameApiKey()] = GetKeyApiKey();
           config.headers['Content-Type'] = 'application/json; charset=utf-8';
           
           return config;

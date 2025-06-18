@@ -128,22 +128,6 @@ export {
   generateTypographyVariables
 } from './core/styles/typography';
 
-// Assets exports - verificar que el módulo assets exista
-export {
-  LogoImage,
-  LogoutIcon,
-  DocumentsFileCheckmarkSvg,
-  MapsSvg,
-  appSvg,
-  RowSvg,
-  logoMiintranet,
-  logoPortalConsalud,
-  logoConsaludCDC,
-  FooterDesktop,
-  Images,
-  Icons
-} from './assets';
-
 // Export interfaces selectivos para evitar conflictos
 export type { IUser } from './core/interfaces/IAuth';
 export type { IUsuarioAD } from './core/interfaces/IUsuarioAD';

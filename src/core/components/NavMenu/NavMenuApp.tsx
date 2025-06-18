@@ -10,14 +10,14 @@ import { MenuSection } from './components/MenuSection';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import { injectMenuStyles } from './utils/styleInjector';
-import AppIcon from '../../../assets/app.svg';
 import { useMenuCollapse } from '../../context/MenuCollapseContext';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
+  appIconSrc?: string;
 }
 
-const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
+const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
   const { roles, isSignedIn } = useAuth();
   const { enableDynamicMenu } = useMenuConfig();
   const location = useLocation();
@@ -312,11 +312,13 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle }) => {
               {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
                 <MenuSection title={
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <img 
-                      src={AppIcon} 
-                      alt="Aplicaciones"
-                      style={{ width: '16px', height: '16px' }}
-                    />
+                    {appIconSrc && (
+                      <img 
+                        src={appIconSrc} 
+                        alt="Aplicaciones"
+                        style={{ width: '16px', height: '16px' }}
+                      />
+                    )}
                     Aplicaciones
                   </span>
                 }>

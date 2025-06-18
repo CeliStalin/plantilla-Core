@@ -6,6 +6,8 @@ import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
 import terser from '@rollup/plugin-terser';
 import path from 'path';
+import url from '@rollup/plugin-url';
+import svgr from '@svgr/rollup';
 
 export default {
   input: 'src/index.ts',
@@ -50,7 +52,13 @@ export default {
       extract: path.resolve('dist/styles.css'),
       sourceMap: true
     }),
-    terser()
+    terser(),
+    url({
+      include: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
+      limit: 8192,
+      emitFiles: true
+    }),
+    svgr(),
   ],
   external: [
     'react', 

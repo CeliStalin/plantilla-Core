@@ -174,7 +174,7 @@ export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
 
   if (withLayout) {
     return (
-      <Layout pageTitle="Inicio">
+      <Layout pageTitle="Inicio" logoSrc="" footerImageSrc="">
         <HomePageInner {...props} />
       </Layout>
     );

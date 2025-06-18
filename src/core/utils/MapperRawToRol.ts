@@ -24,18 +24,9 @@ const mapRawToRolResponse = (rawData: RawRolResponse): RolResponse => {
   
   
   const mapRawArrayToRolResponseArray = (rawDataArray: RawRolResponse[]): RolResponse[] => {
-    if (!rawDataArray || !Array.isArray(rawDataArray)) {
-      console.warn('[MapperRawToRol] Los datos de roles no son un array válido:', rawDataArray);
-      return [];
-    }
-    
-    try {
-      const mappedRoles = rawDataArray.map(rawData => mapRawToRolResponse(rawData));
-      return mappedRoles;
-    } catch (error) {
-      console.error('[MapperRawToRol] Error al mapear roles:', error);
-      return [];
-    }
+    return Array.isArray(rawDataArray)
+      ? rawDataArray.map(mapRawToRolResponse)
+      : [];
   };
   
   export { mapRawToRolResponse, mapRawArrayToRolResponseArray };

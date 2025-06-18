@@ -1,47 +1,61 @@
 import { PublicClientApplication, Configuration, AuthenticationResult, AccountInfo, PopupRequest, RedirectRequest } from '@azure/msal-browser';
+import { GetMsalAuthority, GetMsalClientId, GetNameApiKey, GetApiArquitectura } from '@/core/utils/GetEnvVariables';
 
-// Configuración de MSAL
-const msalConfig: Configuration = {
-  auth: {
-    clientId: import.meta.env.VITE_APP_CLIENT_ID || '',
-    authority: import.meta.env.VITE_APP_AUTHORITY || '',
-    redirectUri: `${window.location.origin}/login`,
-    postLogoutRedirectUri: window.location.origin,
-    navigateToLoginRequestUrl: true,
-  },
-  cache: {
-    cacheLocation: 'sessionStorage',
-    storeAuthStateInCookie: true,
-  },
-};
-
-// Scopes de la aplicación
-const loginRequest: PopupRequest | RedirectRequest = {
-  scopes: ['user.read', 'openid', 'profile', 'email', 'offline_access'],
-  prompt: 'select_account', // Esto fuerza la selección de cuenta
-};
-
-// Crear e inicializar la instancia de MSAL
+let msalConfig: Configuration | null = null;
 let msalInstance: PublicClientApplication | null = null;
 let initializationPromise: Promise<void> | null = null;
-let useRedirectFlow = false; // Flag para controlar el flujo
+let useRedirectFlow = false;
 
-// Inicializar MSAL como una promesa
+export function initializeMsalConfig() {
+  msalConfig = {
+    auth: {
+      clientId: GetMsalClientId() || '',
+      authority: GetMsalAuthority() || '',
+      redirectUri: `${window.location.origin}/login`,
+      postLogoutRedirectUri: window.location.origin,
+      navigateToLoginRequestUrl: true,
+    },
+    cache: {
+      cacheLocation: 'sessionStorage',
+      storeAuthStateInCookie: true,
+    },
+  };
+  msalInstance = null;
+  initializationPromise = null;
+}
+
+function getMsalConfigOrThrow(): Configuration {
+  if (!msalConfig) {
+    throw new Error('MSAL config not initialized. Call initializeMsalConfig() after setCoreEnvConfig.');
+  }
+  return msalConfig;
+}
+
+function getMsalInstanceOrThrow(): PublicClientApplication {
+  if (!msalInstance) {
+    throw new Error('MSAL instance not initialized. Call initializeMsal() after initializeMsalConfig().');
+  }
+  return msalInstance;
+}
+
 function initializeMsal(): Promise<void> {
   if (!initializationPromise) {
+    if (!msalConfig) {
+      throw new Error('MSAL config not initialized. Call initializeMsalConfig() after setCoreEnvConfig.');
+    }
     // Agregar logs detallados para depuración
     console.log("Iniciando inicialización de MSAL...");
     console.log("Variables de entorno disponibles:", {
-      CLIENT_ID: import.meta.env.VITE_APP_CLIENT_ID || 'No disponible',
-      AUTHORITY: import.meta.env.VITE_APP_AUTHORITY || 'No disponible',
-      CLIENT_ID_ALT: import.meta.env.VITE_CLIENT_ID || 'No disponible',
-      AUTHORITY_ALT: import.meta.env.VITE_AUTHORITY || 'No disponible',
-      REDIRECT_URI: import.meta.env.VITE_REDIRECT_URI || 'No disponible',
-      ENVIRONMENT: import.meta.env.MODE || 'No disponible'
+      CLIENT_ID: GetMsalClientId() || 'No disponible',
+      AUTHORITY: GetMsalAuthority() || 'No disponible',
+      CLIENT_ID_ALT: GetMsalClientId() || 'No disponible',
+      AUTHORITY_ALT: GetMsalAuthority() || 'No disponible',
+      REDIRECT_URI: GetMsalClientId() || 'No disponible',
+      ENVIRONMENT: GetMsalAuthority() || 'No disponible'
     });
     
     // Verificar si hay alguna variable de entorno disponible en general
-    console.log("Todas las variables de entorno:", import.meta.env);
+    console.log("Todas las variables de entorno:", GetMsalClientId());
 
     initializationPromise = (async () => {
       try {
@@ -129,6 +143,10 @@ async function getMsalInstance(): Promise<PublicClientApplication> {
   }
   return msalInstance;
 }
+
+const getDefaultScopes = (): string[] => [
+  'user.read', 'openid', 'profile', 'email', 'offline_access'
+];
 
 // Clase para gestionar la autenticación
 export class AuthProvider {
@@ -250,15 +268,15 @@ export class AuthProvider {
       
       if (useRedirectFlow) {
         await instance.loginRedirect({
-          ...loginRequest,
-          redirectUri: msalConfig.auth.redirectUri,
-          prompt: 'select_account' // Forzar selección de cuenta
+          scopes: getDefaultScopes(),
+          redirectUri: getMsalConfigOrThrow().auth.redirectUri,
+          prompt: 'select_account',
         });
       } else {
         const loginResponse = await instance.loginPopup({
-          ...loginRequest,
-          redirectUri: msalConfig.auth.redirectUri,
-          prompt: 'select_account' // Forzar selección de cuenta
+          scopes: getDefaultScopes(),
+          redirectUri: getMsalConfigOrThrow().auth.redirectUri,
+          prompt: 'select_account',
         });
         
         console.log('Login exitoso con respuesta:', loginResponse);
@@ -284,9 +302,9 @@ export class AuthProvider {
       
       const instance = await getMsalInstance();
       await instance.loginRedirect({
-        ...loginRequest,
-        redirectUri: msalConfig.auth.redirectUri,
-        prompt: 'select_account' // Forzar selección de cuenta
+        scopes: getDefaultScopes(),
+        redirectUri: getMsalConfigOrThrow().auth.redirectUri,
+        prompt: 'select_account',
       });
     } catch (error) {
       console.error('Error durante loginRedirect:', error);
@@ -426,7 +444,7 @@ export class AuthProvider {
       }
       
       const tokenRequest = {
-        scopes: scopes.length > 0 ? scopes : loginRequest.scopes,
+        scopes: scopes.length > 0 ? scopes : getDefaultScopes(),
         account: finalAccount,
       };
       
@@ -455,11 +473,6 @@ export class AuthProvider {
     }
   }
 }
-
-// Inicializar MSAL automáticamente al cargar este módulo
-initializeMsal().catch(error => {
-  console.error('Failed to initialize MSAL:', error);
-});
 
 // Funciones de compatibilidad para el código existente
 export async function isAuthenticated(): Promise<boolean> {

@@ -115,6 +115,8 @@ const SecureLayout: React.FC<SecureLayoutProps> = ({
       enableTransitions={enableTransitions}
       transitionType={transitionType}
       transitionDuration={transitionDuration}
+      logoSrc=""
+      footerImageSrc=""
     >
       {children}
     </Layout>

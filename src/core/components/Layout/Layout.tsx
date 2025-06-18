@@ -4,7 +4,6 @@ import { Header } from './components/Header';
 import NavMenuApp from '../NavMenu/NavMenuApp';
 import Footer from '../Footer'; 
 import { PageTransition } from '../PageTransition';
-import logoIcon from '../../../assets/Logo.png';
 import { MenuCollapseProvider } from '../../context/MenuCollapseContext';
 
 interface LayoutProps {
@@ -16,6 +15,8 @@ interface LayoutProps {
   enableTransitions?: boolean;
   transitionType?: 'fade' | 'slide' | 'zoom' | 'fadeSlide';
   transitionDuration?: number;
+  logoSrc: string;
+  footerImageSrc?: string;
 }
 
 // Mapa de rutas a títulos de página
@@ -39,7 +40,9 @@ export const Layout: React.FC<LayoutProps> = ({
   // Valores por defecto para transiciones
   enableTransitions = true,
   transitionType = 'fadeSlide',
-  transitionDuration = 300
+  transitionDuration = 300,
+  logoSrc,
+  footerImageSrc
 }) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
   const location = useLocation();
@@ -74,7 +77,7 @@ export const Layout: React.FC<LayoutProps> = ({
           flexDirection: 'column' 
         }}>
           <Header 
-            logoUrl={logoIcon}
+            logoUrl={logoSrc}
             altText="Consalud Logo"
             pageTitle={currentPageTitle}
           />
@@ -118,7 +121,7 @@ export const Layout: React.FC<LayoutProps> = ({
               </PageTransition>
             </main>
           </div>
-          {showFooter && <Footer />} {/* Footer tomará su espacio natural o será empujado por flex:1 de layout-body */}
+          {showFooter && <Footer footerImageSrc={footerImageSrc!} />} {/* Footer tomará su espacio natural o será empujado por flex:1 de layout-body */}
         </div>
       </LegacyMenuCollapseContext.Provider>
     </MenuCollapseProvider>

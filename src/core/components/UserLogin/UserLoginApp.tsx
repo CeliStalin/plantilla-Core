@@ -3,12 +3,20 @@ import { IUser } from '../../interfaces/IUserAz';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { LoadingDots } from '../Login/components/LoadingDots';
-import logoutIcon from '../../../assets/Group.png';
 
-const UserLoginApp: React.FC = () => {
+interface UserLoginAppProps {
+  logoutIconSrc: string;
+  msalReady?: boolean;
+}
+
+const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIconSrc }) => {
+  if (!msalReady) {
+    return <div>Cargando autenticación...</div>;
+  }
+  const auth = useAuth();
   const [localUserData, setLocalUserData] = useState<IUser | null>(null);
   const [showInfo, setShowInfo] = useState<boolean>(false);
-  const { logout, usuario, user, isLoggingOut, loadUserData } = useAuth(); // Incluir 'user' como alias
+  const { logout, usuario, user, isLoggingOut, loadUserData } = auth; // Incluir 'user' como alias
   const menuRef = useRef<HTMLDivElement>(null);
   const [isProcessingLogout, setIsProcessingLogout] = useState<boolean>(false);
   const [dataLoading, setDataLoading] = useState(false);
@@ -204,7 +212,7 @@ const UserLoginApp: React.FC = () => {
         }}
       >
         <img 
-          src={logoutIcon}
+          src={logoutIconSrc}
           alt="logout icon"
           style={{
             width: '30px',

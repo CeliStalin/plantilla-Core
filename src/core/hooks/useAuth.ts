@@ -34,6 +34,15 @@ interface UseAuthReturn extends AuthState {
   user: IUser | null; // Alias de usuario
 }
 
+let msalReadyPromise: Promise<void> | null = null;
+
+export function ensureMsalInitialized(): Promise<void> {
+  if (!msalReadyPromise) {
+    msalReadyPromise = AuthProvider.initialize();
+  }
+  return msalReadyPromise;
+}
+
 export const useAuth = (): UseAuthReturn => {
   const { isLoggingOut, setIsLoggingOut } = useAuthContext();
   
@@ -60,8 +69,8 @@ export const useAuth = (): UseAuthReturn => {
 
     const initializeAuth = async () => {
       try {
-        // Asegurarse de que MSAL esté inicializado
-        await AuthProvider.initialize();
+        // Esperar a que MSAL esté inicializado
+        await ensureMsalInitialized();
         
         if (!mounted) return;
 

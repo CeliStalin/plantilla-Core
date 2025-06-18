@@ -6,25 +6,22 @@ import { ErrorMessages } from './components/ErrorMessages';
 import { LoadingDots } from './components/LoadingDots';
 import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
-import logoIcon from '../../../assets/Logo.png';
 
 export interface LoginProps { 
   backgroundColor?: string; 
   boxBackgroundColor?: string;
   textColor?: string;
   appName?: string;
-  logoSrc?: string;
+  logoSrc: string;
   onLoginSuccess?: () => void;
+  msalReady?: boolean;
 }
 
-const Login: React.FC<LoginProps> = ({ 
-  backgroundColor = '#ffffff',
-  boxBackgroundColor,
-  textColor,
-  appName = 'administrador de Aplicaciones',
-  logoSrc = logoIcon,
-  onLoginSuccess = () => {}
-}) => {
+const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
+  if (!msalReady) {
+    return <div>Cargando autenticación...</div>;
+  }
+  const auth = useAuth();
   const location = {
     pathname: window.location.pathname,
     search: window.location.search,
@@ -42,7 +39,7 @@ const Login: React.FC<LoginProps> = ({
     errorRoles, 
     logout,
     isInitializing
-  } = useAuth();
+  } = auth;
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -229,28 +226,41 @@ const Login: React.FC<LoginProps> = ({
   useEffect(() => {
     if (isSignedIn && !isInitializing && !loading && usuario) {
       console.log('Usuario autenticado exitosamente, ejecutando onLoginSuccess');
-      onLoginSuccess();
+      if (props.onLoginSuccess) props.onLoginSuccess();
     }
-  }, [isSignedIn, isInitializing, loading, usuario, onLoginSuccess]);
+  }, [isSignedIn, isInitializing, loading, usuario, props.onLoginSuccess]);
 
   // Aplicar los estilos personalizados
   const pageContainerStyles = {
     display: 'flex',
     flexDirection: 'column' as const,
     minHeight: '100vh',
-    backgroundColor,
+    backgroundColor: props.backgroundColor || '#ffffff',
   };
 
   const loginBoxStyles = {
     ...styles.loginBox,
-    background: boxBackgroundColor || styles.loginBox.background,
+    background: props.boxBackgroundColor || styles.loginBox.background,
   };
+
+  // Log de depuración de estado de autenticación y carga
+  console.log('[Login] Render', {
+    isSignedIn,
+    isInitializing,
+    loading,
+    usuario,
+    usuarioAD,
+    roles,
+    error,
+    errorAD,
+    errorRoles
+  });
 
   return (
     <div style={pageContainerStyles}>
       <Header 
-        logoUrl={logoSrc}
-        altText={`${appName} Logo`}
+        logoUrl={props.logoSrc}
+        altText={`${props.appName} Logo`}
       />
 
       <div style={styles.loginContentArea}>
@@ -260,9 +270,9 @@ const Login: React.FC<LoginProps> = ({
               <div className="box has-text-centered" style={loginBoxStyles}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h1 className="title has-text-centered" style={styles.titleStyles}>
-                    <span style={{ color: textColor || theme.colors.black }}>Ingresa al </span>
+                    <span style={{ color: props.textColor || theme.colors.black }}>Ingresa al </span>
                     <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-                      {appName}
+                      {props.appName}
                     </span>
                   </h1>
                 </div>
@@ -318,7 +328,7 @@ const Login: React.FC<LoginProps> = ({
                     <div style={{ textAlign: 'center', width: '100%' }}>
                       <p className="help mt-2" style={{
                         ...styles.networkWarning.note,
-                        color: textColor || styles.networkWarning.note.color
+                        color: props.textColor || styles.networkWarning.note.color
                       }}>
                         Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
                       </p>

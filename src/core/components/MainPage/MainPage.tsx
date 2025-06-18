@@ -3,7 +3,7 @@ import { Layout } from "../Layout/Layout";
 
 const Mainpage: React.FC = () => {
   return (
-    <Layout>
+    <Layout logoSrc="" footerImageSrc="">
       <div className="content-container" style={{ minHeight: '400px' }}>
         <div className="content">
           <h1 className="title">Bienvenido a Consalud</h1>

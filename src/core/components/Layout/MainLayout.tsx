@@ -3,18 +3,19 @@ import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { Content } from './Content';
 import { useLayout } from './hooks/useLayout';
-import logoIcon from '@/assets/Logo.png';
 
 interface MainLayoutProps {
   children: React.ReactNode;
   sidebar?: React.ReactNode;
   pageTitle?: string;
+  logoSrc: string;
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   sidebar,
   pageTitle,
+  logoSrc,
 }) => {
   const { isCollapsed, toggleSidebar } = useLayout();
 
@@ -34,7 +35,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   return (
     <div style={styles.container}>
       <Header 
-        logoUrl={logoIcon}
+        logoUrl={logoSrc}
         altText="Consalud Logo"
         pageTitle={pageTitle}
       />

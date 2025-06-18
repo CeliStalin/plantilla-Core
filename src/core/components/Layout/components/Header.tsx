@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ logoUrl, altText, pageTitle }) =
           </>
         )}
       </div>
-      <UserLoginApp />
+      <UserLoginApp logoutIconSrc="" />
     </header>
   );
 };

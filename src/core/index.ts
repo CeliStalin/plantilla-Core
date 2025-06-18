@@ -43,21 +43,5 @@ export type { IRol, RolResponse } from './interfaces/IRol';
 export type { IUserExterno } from './interfaces/IUserExterno';
 export type { IExternalAuthState } from './interfaces/IAuth'; // Nuevo tipo para apps externas
 
-// Assets exports
-export {
-  LogoImage,
-  LogoutIcon,
-  DocumentsFileCheckmarkSvg,
-  MapsSvg,
-  appSvg,
-  RowSvg,
-  logoMiintranet,
-  logoPortalConsalud,
-  logoConsaludCDC,
-  FooterDesktop,
-  Images,
-  Icons
-} from '../assets';
-
 export * from './components';
 export { useMenuCollapse, MenuCollapseProvider } from './context/MenuCollapseContext';
