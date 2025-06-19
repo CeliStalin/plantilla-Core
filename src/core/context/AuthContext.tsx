@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface AuthContextType {
+export interface AuthContextType {
   isLoggingOut: boolean;
   setIsLoggingOut: (value: boolean) => void;
 }
@@ -11,7 +11,7 @@ const AuthContext = createContext<AuthContextType>({
   setIsLoggingOut: () => {}
 });
 
-interface AuthProviderProps {
+export interface AuthProviderProps {
   children: ReactNode;
 }
 
@@ -31,10 +31,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-export const useAuthContext = (): AuthContextType => {
+export function useAuthContext(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuthContext debe utilizarse dentro de un AuthProvider');
   }
   return context;
-};
+}

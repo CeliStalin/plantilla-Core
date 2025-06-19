@@ -5,7 +5,7 @@ import { AppGridIcon } from '../../icons';
 import { LoadingPlaceholder } from '@/core/components/LoadingPlaceholder';
 import { applicationsGridStyles, responsiveApplicationsStyles } from './ApplicationsGrid.styles';
 import { useResponsive } from '../../hooks';
-import { useMenuConfig } from '@/core/context/MenuConfigContext';
+import { useMenuConfig } from '@/core/hooks';
 import { ANIMATION_DELAYS } from '../../constants';
 
 export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({ 

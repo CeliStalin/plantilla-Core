@@ -10,9 +10,10 @@ import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styl
 import { HomePageProps } from './types';
 import './styles/animations.css';
 import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
-import { useMenuConfig } from '@/core/context/MenuConfigContext';
+import { useMenuConfig } from '@/core/hooks';
 import { useMenuCollapse } from '../../context/MenuCollapseContext';
 import { MenuCollapseProvider } from '@/core/context/MenuCollapseContext';
+import { Logo } from '@/assets';
 
 export interface HomePageWithLayoutProps extends HomePageProps {
   /**
@@ -174,7 +175,7 @@ export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
 
   if (withLayout) {
     return (
-      <Layout pageTitle="Inicio" logoSrc="" footerImageSrc="">
+      <Layout pageTitle="Inicio" logoSrc={Logo} footerImageSrc="">
         <HomePageInner {...props} />
       </Layout>
     );

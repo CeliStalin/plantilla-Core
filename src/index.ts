@@ -76,19 +76,14 @@ export {
   useAuthContext
 } from './core/context/AuthContext';
 
-export { 
-  MenuConfigProvider,
-  useMenuConfig
-} from './core/context/MenuConfigContext';
+// Menu config exports
+export { MenuConfigProvider } from './core/context/MenuConfigContext';
+export { useMenuConfig } from './core/hooks';
 
 // Hooks exports - solo los que existen
+export { useAuth } from './core/hooks';
+export { useLocalStorage } from './core/hooks';
 export { 
-  useAuth,
-  useLocalStorage
-} from './core/hooks';
-
-// Typography hooks - verificar existencia
-export {
   useTypography,
   useTypographyCSS,
   useTypographyVariables

@@ -1,6 +1,7 @@
 import React from 'react';
 import UserLoginApp from '../../UserLogin/UserLoginApp';
 import { headerStyles } from '../styles/header.styles';
+import { LogoutIcon } from '@/assets';
 
 interface HeaderProps {
   logoUrl: string;
@@ -27,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({ logoUrl, altText, pageTitle }) =
           </>
         )}
       </div>
-      <UserLoginApp logoutIconSrc="" />
+      <UserLoginApp logoutIconSrc={LogoutIcon} />
     </header>
   );
 };

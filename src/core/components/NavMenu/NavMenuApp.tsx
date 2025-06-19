@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { ApiGetMenus } from "../../services/GetApiArq";
 import { ElementMenu } from "../../interfaces/IMenusElementos";
 import useAuth from "../../hooks/useAuth";
-import { useMenuConfig } from "../../context/MenuConfigContext";
+import { useMenuConfig } from "../../hooks";
 import { navMenuStyles } from './styles/navMenu.styles';
 import { MenuItem } from './components/MenuItem';
 import { MenuSection } from './components/MenuSection';

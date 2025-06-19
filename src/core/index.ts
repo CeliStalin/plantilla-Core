@@ -25,7 +25,7 @@ export { useAuth as default } from './hooks/useAuth'; // Export default para com
 
 // Context exports
 export { AuthProvider, useAuthContext } from './context/AuthContext';
-export { MenuConfigProvider, useMenuConfig } from './context/MenuConfigContext';
+// export { MenuConfigProvider, useMenuConfig } from './context/MenuConfigContext';
 
 // Services exports - Solo los esenciales
 export { AuthProvider as MsalAuthProvider } from './services/auth/authProviderMsal';

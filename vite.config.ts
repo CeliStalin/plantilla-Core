@@ -38,6 +38,8 @@ export default defineConfig({
         '@azure/msal-browser',
         'bulma',
         'axios',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime'
       ],
       output: [
         {

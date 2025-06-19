@@ -3,7 +3,7 @@ import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 import { ApiGetMenus } from '@/core/services/GetApiArq';
 import { useAuth } from '@/core/hooks/useAuth';
 import { ANIMATION_DELAYS } from '../constants';
-import { useMenuConfig } from '@/core/context/MenuConfigContext'; 
+import { useMenuConfig } from '@/core/hooks';
 
 export const useMenuItems = () => {
   const { roles, isSignedIn } = useAuth();

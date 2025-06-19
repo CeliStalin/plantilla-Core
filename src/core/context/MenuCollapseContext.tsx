@@ -1,6 +1,6 @@
 import React, { createContext, useState, useCallback, useContext, useEffect } from 'react';
 
-interface MenuCollapseContextType {
+export interface MenuCollapseContextType {
   isMenuCollapsed: boolean;
   collapseMenu: () => void;
   expandMenu: () => void;
@@ -9,13 +9,13 @@ interface MenuCollapseContextType {
 
 const MenuCollapseContext = createContext<MenuCollapseContextType | null>(null);
 
-export const useMenuCollapse = () => {
+export function useMenuCollapse() {
   const ctx = useContext(MenuCollapseContext);
   if (!ctx) throw new Error('useMenuCollapse must be used within a MenuCollapseProvider');
   return ctx;
-};
+}
 
-interface MenuCollapseProviderProps {
+export interface MenuCollapseProviderProps {
   children: React.ReactNode;
 }
 
@@ -50,6 +50,4 @@ export const MenuCollapseProvider = ({ children }: MenuCollapseProviderProps) =>
       {children}
     </MenuCollapseContext.Provider>
   );
-};
-
-export { MenuCollapseContext }; 
+}; 

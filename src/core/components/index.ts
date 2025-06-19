@@ -1,45 +1,56 @@
 import React from 'react';
 
-// Component exports
-export * from './Button';
-export * from './Card';
-export * from './Login';
-export { default as Login } from './Login/Login';
-export { Counter } from './Counter';
-export * from './Loading'; 
-export { LoadingOverlay } from './Loading/LoadingOverlay';
-export { LoadingSpinner } from './Loading/LoadingSpinner';
-export * from './Dashboard';
+// Core Components
+export { Button } from './Button';
+export { Card } from './Card';
 export { ErrorBoundary } from './ErrorBoundary';
-export * from './ErrorMessage';
-export * from './Layout';
-export * from './MainPage';
-export * from './NavMenu';
-export * from './UserLogin';
-export * from './Footer'; 
-export { default as SecureLayout } from './SecureLayout/SecureLayout';
-export { default as ProtectedRoute } from './ProtectedRoute';
-export { default as NotFound } from './NotFound';
-export { default as Unauthorized } from './Unauthorized';
-export { HomePage } from './HomePage/HomePage'; 
-export { default as DashboardPage } from './Dashboard/DashboardPage';
-export { Dashboard } from './Dashboard/';
-
-// Typography exports - Asegurar exportación completa
-export { Typography, default as TypographyDefault } from './Typography';
-export type { TypographyProps, TypographyVariant, TypographyColor } from './Typography';
-
-// PageTransition exports - Asegurar exportación completa
+export { ErrorMessage } from './ErrorMessage';
+export { Footer } from './Footer';
+export { HomePage } from './HomePage/HomePage';
+export { Layout } from './Layout';
+export { default as Login } from './Login/Login';
+export { default as MainPage } from './MainPage';
+export { NavMenuApp } from './NavMenu';
 export { PageTransition } from './PageTransition';
-export { usePageTransition } from './PageTransition';
-export type { PageTransitionProps } from './PageTransition';
+export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as SecureLayout } from './SecureLayout/SecureLayout';
+export { Typography } from './Typography';
 
-// Breadcrumb exports
-export { Breadcrumb, default as BreadcrumbDefault } from './Breadcrumb';
-export { useBreadcrumb } from './Breadcrumb';
-export type { BreadcrumbProps, BreadcrumbItem, UseBreadcrumbOptions } from './Breadcrumb';
+// Loading Components
+export { 
+  LoadingDots,
+  LoadingOverlay,
+  LoadingSpinner 
+} from './Loading';
 
-// Lazy exports para componentes de página
+// Navigation Components
+export { 
+  Breadcrumb,
+  useBreadcrumb,
+  type BreadcrumbProps,
+  type BreadcrumbItem,
+  type UseBreadcrumbOptions 
+} from './Breadcrumb';
+
+// Page Components
+export { default as Dashboard } from './Dashboard/DashboardPage';
+
+// Typography Types
+export type { 
+  TypographyProps,
+  TypographyVariant,
+  TypographyColor,
+  TypographyWeight,
+  TypographyAlign 
+} from './Typography';
+
+// Page Transition Types & Hooks
+export { usePageTransition } from './PageTransition/hooks/usePageTransition';
+export type { 
+  PageTransitionProps 
+} from './PageTransition/PageTransition.types';
+
+// Lazy-loaded Components
 export const LazyComponents = {
   Login: React.lazy(() => import('./Login/Login')),
   NotFound: React.lazy(() => import('./NotFound')),

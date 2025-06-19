@@ -1,6 +1,6 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, ReactNode } from 'react';
 
-interface MenuConfigContextType {
+export interface MenuConfigContextType {
   // Configuración del menú
   enableDynamicMenu: boolean;
   // Configuración de efectos bounce
@@ -10,7 +10,7 @@ interface MenuConfigContextType {
 
 // Valores por defecto
 const defaultConfig: MenuConfigContextType = {
-  enableDynamicMenu: true,  // Por defecto, el core solo muestra la pantalla de inicio
+  enableDynamicMenu: false,  // Por defecto, el core solo muestra la pantalla de inicio
   enableBounceEffects: true // Por defecto deshabilitado para no romper funcionalidad existente
 };
 
@@ -24,7 +24,7 @@ interface MenuConfigProviderProps {
 }
 
 // Proveedor del contexto
-export const MenuConfigProvider: React.FC<MenuConfigProviderProps> = ({ 
+const MenuConfigProvider: React.FC<MenuConfigProviderProps> = ({ 
   children, 
   config = {} 
 }) => {
@@ -41,11 +41,4 @@ export const MenuConfigProvider: React.FC<MenuConfigProviderProps> = ({
   );
 };
 
-// Hook para acceder a la configuración
-export const useMenuConfig = () => {
-  const context = useContext(MenuConfigContext);
-  if (!context) {
-    throw new Error('useMenuConfig debe usarse dentro de un MenuConfigProvider');
-  }
-  return context;
-};
+export { MenuConfigProvider, MenuConfigContext };

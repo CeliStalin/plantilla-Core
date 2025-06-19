@@ -1,13 +1,18 @@
-// Hooks principales
-export { useAuth, default as useAuthDefault } from './useAuth';
+// Core Hooks
+export { default as useAuth } from './useAuth';
 export { default as useLocalStorage } from './useLocalStorage';
+export { default as useMenuConfig } from './useMenuConfig';
 
-// Typography hooks
+// Typography Hooks
 export {
   useTypography,
   useTypographyCSS,
-  useTypographyVariables
+  useTypographyVariables,
+  type UseTypographyProps
 } from './useTypography';
 
-// Re-exportar useAuth como default para compatibilidad
+// Re-export types
+export type { MenuConfigContextType } from '../context/MenuConfigContext';
+
+// Backwards compatibility exports
 export { useAuth as default } from './useAuth';
