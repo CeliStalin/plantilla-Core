@@ -1,7 +1,17 @@
-// Menu Configuration Context
-export { MenuConfigProvider, type MenuConfigContextType } from './MenuConfigContext';
+/**
+ * Menu Configuration Context
+ * @public
+ */
+export { 
+  MenuConfigProvider,
+  useMenuConfig,
+  type MenuConfigContextType 
+} from './menu';
 
-// Authentication Context
+/**
+ * Authentication Context
+ * @public
+ */
 export {
   AuthProvider,
   useAuthContext,
@@ -9,10 +19,13 @@ export {
   type AuthProviderProps
 } from './AuthContext';
 
-// Menu Collapse Context
+/**
+ * Menu Collapse Context
+ * @public
+ */
 export {
   useMenuCollapse,
   MenuCollapseProvider,
   type MenuCollapseContextType,
   type MenuCollapseProviderProps
-} from './MenuCollapseContext';
+} from './menu';

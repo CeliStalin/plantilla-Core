@@ -1,13 +1,19 @@
 import React from 'react';
 
-// Core Components
+/**
+ * Core Components
+ * @public
+ */
 export { Button } from './Button';
 export { Card } from './Card';
-export { ErrorBoundary } from './ErrorBoundary';
+export { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 export { ErrorMessage } from './ErrorMessage';
-export { Footer } from './Footer';
+export { Footer } from './Footer/Footer';
 export { HomePage } from './HomePage/HomePage';
-export { Layout } from './Layout';
+export { Layout } from './Layout/Layout';
+export { Content } from './Layout/Content';
+export { Header } from './Layout/Header';
+export { Sidebar } from './Layout/Sidebar';
 export { default as Login } from './Login/Login';
 export { default as MainPage } from './MainPage';
 export { NavMenuApp } from './NavMenu';
@@ -16,14 +22,20 @@ export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as SecureLayout } from './SecureLayout/SecureLayout';
 export { Typography } from './Typography';
 
-// Loading Components
+/**
+ * Loading Components
+ * @public
+ */
 export { 
   LoadingDots,
   LoadingOverlay,
   LoadingSpinner 
 } from './Loading';
 
-// Navigation Components
+/**
+ * Navigation Components
+ * @public
+ */
 export { 
   Breadcrumb,
   useBreadcrumb,
@@ -32,10 +44,16 @@ export {
   type UseBreadcrumbOptions 
 } from './Breadcrumb';
 
-// Page Components
+/**
+ * Page Components
+ * @public
+ */
 export { default as Dashboard } from './Dashboard/DashboardPage';
 
-// Typography Types
+/**
+ * Typography Types
+ * @public
+ */
 export type { 
   TypographyProps,
   TypographyVariant,
@@ -44,13 +62,19 @@ export type {
   TypographyAlign 
 } from './Typography';
 
-// Page Transition Types & Hooks
+/**
+ * Page Transition Types & Hooks
+ * @public
+ */
 export { usePageTransition } from './PageTransition/hooks/usePageTransition';
 export type { 
   PageTransitionProps 
 } from './PageTransition/PageTransition.types';
 
-// Lazy-loaded Components
+/**
+ * Lazy-loaded Components
+ * @public
+ */
 export const LazyComponents = {
   Login: React.lazy(() => import('./Login/Login')),
   NotFound: React.lazy(() => import('./NotFound')),
@@ -61,4 +85,8 @@ export const LazyComponents = {
   Breadcrumb: React.lazy(() => import('./Breadcrumb/Breadcrumb')),
 };
 
-export { useMenuCollapse, MenuCollapseProvider } from '../context/MenuCollapseContext';
+/**
+ * Menu Components
+ * @public
+ */
+export { useMenuCollapse, MenuCollapseProvider } from '../context/menu';
