@@ -6,7 +6,7 @@ import { LoadingPlaceholder } from '@/core/components/LoadingPlaceholder';
 import { applicationsGridStyles, responsiveApplicationsStyles } from './ApplicationsGrid.styles';
 import { useResponsive } from '../../hooks';
 import { useMenuConfig } from '@/core/hooks';
-import { ANIMATION_DELAYS } from '../../constants';
+import { ANIMATION_DELAYS } from '../../constants/animations';
 
 export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({ 
   menuItems, 

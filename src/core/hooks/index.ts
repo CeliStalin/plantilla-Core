@@ -25,7 +25,5 @@ export {
  * Context Hooks
  * @public
  */
-export { 
-  useMenuConfig,
-  useMenuCollapse 
-} from '../context/menu';
+export { useMenuConfig } from '../context/menu';
+export { useMenuCollapse } from '../context/MenuCollapseContext';

@@ -28,4 +28,4 @@ export {
   MenuCollapseProvider,
   type MenuCollapseContextType,
   type MenuCollapseProviderProps
-} from './menu';
+} from './MenuCollapseContext';

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 import { ApiGetMenus } from '@/core/services/GetApiArq';
 import { useAuth } from '@/core/hooks/useAuth';
-import { ANIMATION_DELAYS } from '../constants';
+import { EXTERNAL_LINKS_DELAYS } from '../constants';
 import { useMenuConfig } from '@/core/hooks';
 
 export const useMenuItems = () => {
@@ -73,7 +73,7 @@ export const useMenuItems = () => {
         setError(err instanceof Error ? err.message : 'Error desconocido');
         setMenuItems([]);
       } finally {
-        setTimeout(() => setLoading(false), ANIMATION_DELAYS.LOADING_TIMEOUT);
+        setTimeout(() => setLoading(false), EXTERNAL_LINKS_DELAYS.LOADING_TIMEOUT);
       }
     };
     

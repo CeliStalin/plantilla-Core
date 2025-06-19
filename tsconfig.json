@@ -33,7 +33,6 @@
     "dist", 
     "**/*.test.ts", 
     "**/*.test.tsx", 
-    "src/main.tsx", 
-    "src/App.tsx"
+    "src/main.tsx"
   ]
 }

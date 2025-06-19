@@ -7,20 +7,35 @@ export interface MenuCollapseContextType {
   setIsMenuCollapsed: (collapsed: boolean) => void;
 }
 
-const MenuCollapseContext = createContext<MenuCollapseContextType | null>(null);
+const defaultContext: MenuCollapseContextType = {
+  isMenuCollapsed: false,
+  collapseMenu: () => console.warn('MenuCollapseContext: Provider not found'),
+  expandMenu: () => console.warn('MenuCollapseContext: Provider not found'),
+  setIsMenuCollapsed: () => console.warn('MenuCollapseContext: Provider not found'),
+};
+
+const MenuCollapseContext = createContext<MenuCollapseContextType>(defaultContext);
+MenuCollapseContext.displayName = 'MenuCollapseContext';
 
 export function useMenuCollapse() {
-  const ctx = useContext(MenuCollapseContext);
-  if (!ctx) throw new Error('useMenuCollapse must be used within a MenuCollapseProvider');
-  return ctx;
+  const context = useContext(MenuCollapseContext);
+  if (process.env.NODE_ENV !== 'production' && context === defaultContext) {
+    console.warn('useMenuCollapse must be used within a MenuCollapseProvider');
+  }
+  return context;
 }
 
 export interface MenuCollapseProviderProps {
   children: React.ReactNode;
+  initialState?: boolean;
 }
 
-export const MenuCollapseProvider = ({ children }: MenuCollapseProviderProps) => {
+export const MenuCollapseProvider = ({ 
+  children,
+  initialState
+}: MenuCollapseProviderProps) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(() => {
+    if (initialState !== undefined) return initialState;
     const saved = localStorage.getItem('menu-collapsed-state');
     return saved === 'true';
   });
@@ -33,21 +48,18 @@ export const MenuCollapseProvider = ({ children }: MenuCollapseProviderProps) =>
     console.log('[MenuCollapseContext] Colapsando menú');
     setIsMenuCollapsed(true);
   }, []);
+
   const expandMenu = useCallback(() => {
     console.log('[MenuCollapseContext] Expandiendo menú');
     setIsMenuCollapsed(false);
   }, []);
 
-  const value: MenuCollapseContextType = {
+  const value = {
     isMenuCollapsed,
     collapseMenu,
     expandMenu,
     setIsMenuCollapsed,
   };
 
-  return (
-    <MenuCollapseContext.Provider value={value}>
-      {children}
-    </MenuCollapseContext.Provider>
-  );
+  return React.createElement(MenuCollapseContext.Provider, { value }, children);
 }; 

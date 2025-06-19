@@ -4,7 +4,7 @@ import { AccessCard } from './AccessCard';
 import { DirectAccessIcon } from '../../icons/HomePageIcons';
 import { LoadingCard } from '@/core/components/LoadingPlaceholder';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
-import { EXTERNAL_LINKS, ANIMATION_DELAYS } from '../../constants';
+import { EXTERNAL_LINKS, EXTERNAL_LINKS_DELAYS } from '../../constants';
 
 export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({ 
   loading, 
@@ -36,7 +36,7 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
               logoSrc={link.logoSrc}
               url={link.url}
               onClick={onExternalLinkClick}
-              delay={ANIMATION_DELAYS.ACCESS_CARD_BASE_DELAY + (index * 0.1)}
+              delay={EXTERNAL_LINKS_DELAYS.ACCESS_CARD_BASE_DELAY + (index * 0.1)}
             />
           ))
         )}

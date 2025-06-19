@@ -27,7 +27,7 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
   }
 ];
 
-export const ANIMATION_DELAYS = {
+export const EXTERNAL_LINKS_DELAYS = {
   WELCOME_SECTION: 0,
   LOADING_TIMEOUT: 600,
   CARD_BASE_DELAY: 0.1,

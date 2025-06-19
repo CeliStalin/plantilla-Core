@@ -43,13 +43,10 @@ export { useTypography, useTypographyCSS, useTypographyVariables } from './hooks
  * @public
  */
 export { AuthProvider, useAuthContext } from './context/AuthContext';
-export {
-  MenuConfigContext,
-  MenuConfigProvider,
-  useMenuConfig,
-  MenuCollapseProvider,
-  useMenuCollapse
-} from './context/menu';
+export { MenuCollapseProvider, useMenuCollapse } from './context/MenuCollapseContext';
+export { MenuConfigContext } from './context/menu-config.context';
+export { MenuConfigProvider } from './context/menu-config-provider';
+export { useMenuConfig } from './context/use-menu-config';
 
 /**
  * Services exports

@@ -45,7 +45,7 @@ export default defineConfig({
         {
           format: 'es',
           exports: 'named',
-          preserveModules: false,
+          preserveModules: true,
           entryFileNames: '[name].js',
           globals: {
             react: 'React',
@@ -59,7 +59,7 @@ export default defineConfig({
         {
           format: 'cjs',
           exports: 'named',
-          preserveModules: false,
+          preserveModules: true,
           entryFileNames: '[name].cjs',
           globals: {
             react: 'React',
@@ -70,7 +70,7 @@ export default defineConfig({
             axios: 'axios',
           },
         }
-      ],
+      ]
     },
     chunkSizeWarningLimit: 600,
     sourcemap: true,
@@ -87,6 +87,6 @@ export default defineConfig({
     target: 'es2020',
   },
   define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
-  },
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
+  }
 })
