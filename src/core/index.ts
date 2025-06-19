@@ -19,13 +19,19 @@ export { theme as styleTheme } from './styles/theme';
 export { TypographyUtils } from './styles/typography';
 
 // Hooks exports - Exportación mejorada
-export { default as useLocalStorage } from './hooks/useLocalStorage';
 export { useAuth } from './hooks/useAuth';
-export { useAuth as default } from './hooks/useAuth'; // Export default para compatibilidad
+export { default as useLocalStorage } from './hooks/useLocalStorage';
+export { useTypography, useTypographyCSS, useTypographyVariables } from './hooks/useTypography';
 
 // Context exports
 export { AuthProvider, useAuthContext } from './context/AuthContext';
-// export { MenuConfigProvider, useMenuConfig } from './context/MenuConfigContext';
+export {
+  MenuConfigContext,
+  MenuConfigProvider,
+  useMenuConfig,
+  MenuCollapseProvider,
+  useMenuCollapse
+} from './context/menu';
 
 // Services exports - Solo los esenciales
 export { AuthProvider as MsalAuthProvider } from './services/auth/authProviderMsal';
@@ -41,7 +47,7 @@ export type { IUser } from './interfaces/IAuth';
 export type { IUsuarioAD } from './interfaces/IUsuarioAD';
 export type { IRol, RolResponse } from './interfaces/IRol';
 export type { IUserExterno } from './interfaces/IUserExterno';
-export type { IExternalAuthState } from './interfaces/IAuth'; // Nuevo tipo para apps externas
+export type { IExternalAuthState } from './interfaces/IAuth';
 
+// Re-export components
 export * from './components';
-export { useMenuCollapse, MenuCollapseProvider } from './context/MenuCollapseContext';

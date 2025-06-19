@@ -35,11 +35,6 @@ export {
 // Exportaciones condicionales para componentes que pueden no existir
 export { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
 
-// Dashboard - Usar re-export condicional más limpio
-// Primero intentar desde el módulo específico, luego desde el índice general
-//export { Dashboard } from './core/components/Dashboard';
-// Si el anterior falla, usar: export { Dashboard } from './core/components';
-
 // SecureLayout y ProtectedRoute con exportaciones seguras
 export { default as SecureLayout } from './core/components/SecureLayout/SecureLayout';
 export { default as ProtectedRoute } from './core/components/ProtectedRoute';
@@ -77,8 +72,11 @@ export {
 } from './core/context/AuthContext';
 
 // Menu config exports
-export { MenuConfigProvider } from './core/context/MenuConfigContext';
-export { useMenuConfig } from './core/hooks';
+export { 
+  MenuConfigProvider, 
+  useMenuConfig,
+  type MenuConfigContextType 
+} from './core/context/menu';
 
 // Hooks exports - solo los que existen
 export { useAuth } from './core/hooks';
@@ -227,4 +225,4 @@ export { default as BreadcrumbDefault } from './core/components/Breadcrumb';
 export { useBreadcrumb } from './core/components/Breadcrumb';
 export type { BreadcrumbProps, BreadcrumbItem, UseBreadcrumbOptions } from './core/components/Breadcrumb';
 
-export { useMenuCollapse, MenuCollapseProvider } from './core/context/MenuCollapseContext';
+export { useMenuCollapse, MenuCollapseProvider } from './core/context/menu';

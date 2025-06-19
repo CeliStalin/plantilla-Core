@@ -2,15 +2,14 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { ApiGetMenus } from "../../services/GetApiArq";
 import { ElementMenu } from "../../interfaces/IMenusElementos";
-import useAuth from "../../hooks/useAuth";
-import { useMenuConfig } from "../../hooks";
+import { useAuth } from "../../hooks/useAuth";
+import { useMenuConfig, useMenuCollapse } from "../../hooks";
 import { navMenuStyles } from './styles/navMenu.styles';
 import { MenuItem } from './components/MenuItem';
 import { MenuSection } from './components/MenuSection';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import { injectMenuStyles } from './utils/styleInjector';
-import { useMenuCollapse } from '../../context/MenuCollapseContext';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;

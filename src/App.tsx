@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import { AuthProvider } from './core/context/AuthContext';
-import { MenuConfigProvider } from './core/context/MenuConfigContext';
+import { MenuConfigProvider } from './core/context/menu';
 import { ErrorBoundary } from './core/components/ErrorBoundary/ErrorBoundary';
 import { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
 import { routes as appRoutes } from './core/routes/routes.config';

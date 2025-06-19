@@ -1,18 +1,10 @@
-// Core Hooks
-export { default as useAuth } from './useAuth';
+// Re-export hooks
+export { useAuth } from './useAuth';
 export { default as useLocalStorage } from './useLocalStorage';
-export { default as useMenuConfig } from './useMenuConfig';
+export { useTypography, useTypographyCSS, useTypographyVariables } from './useTypography';
 
-// Typography Hooks
-export {
-  useTypography,
-  useTypographyCSS,
-  useTypographyVariables,
-  type UseTypographyProps
-} from './useTypography';
-
-// Re-export types
-export type { MenuConfigContextType } from '../context/MenuConfigContext';
+// Re-export context hooks
+export { useMenuConfig, useMenuCollapse } from '../context/menu';
 
 // Backwards compatibility exports
 export { useAuth as default } from './useAuth';
