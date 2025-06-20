@@ -5,7 +5,7 @@ import { MenuConfigProvider } from './core/context/menu';
 import { ErrorBoundary } from './core/components/ErrorBoundary/ErrorBoundary';
 import { LoadingOverlay } from './core/components/Loading/LoadingOverlay';
 import { routes as appRoutes } from './core/routes/routes.config';
-import ProtectedRoute from './core/components/ProtectedRoute';
+import { ProtectedRoute } from './core/components/ProtectedRoute';
 
 import './core/styles/global.css';
 import './App.css';
@@ -42,7 +42,7 @@ const App = () => {
         {/* Ruta 404 - Captura cualquier otra ruta no definida */}
         <Route path="*" element={
           <ProtectedRoute
-            component={React.lazy(() => import('./core/components/NotFound'))}
+            component={React.lazy(() => import('./core/components/NotFound').then(module => ({ default: module.NotFound })))}
             isPublic={true}
           />
         } />

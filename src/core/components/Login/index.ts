@@ -1,4 +1,4 @@
-export { default } from './Login';
+export * from './Login';
 export type { LoginProps } from './Login';
 export * from './components/Header';
 export * from './components/UserInfo';

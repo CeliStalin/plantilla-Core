@@ -4,7 +4,7 @@ import { RouteConfig } from './types';
 export const routes: RouteConfig[] = [
   {
     path: "/login",
-    component: React.lazy(() => import('../components/Login/Login')),
+    component: React.lazy(() => import('../components/Login/Login').then(module => ({ default: module.Login }))),
     public: true,
     title: "Iniciar Sesión",
     breadcrumbLabel: "Login",
@@ -33,7 +33,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: "/unauthorized",
-    component: React.lazy(() => import('../components/Unauthorized')),
+    component: React.lazy(() => import('../components/Unauthorized').then(module => ({ default: module.Unauthorized }))),
     public: true,
     title: "No Autorizado",
     breadcrumbLabel: "Sin Acceso",

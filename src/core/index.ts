@@ -46,7 +46,7 @@ export * from './utils/GetEnvVariables';
 // --- Types ---
 export type { CardProps } from './components/Card/Card.types';
 export type { HomePageWithLayoutProps as HomePageProps } from './components/HomePage/HomePage';
-export type { MenuCollapseContextType } from './context/MenuCollapseContext';
+export { type MenuCollapseContextType, useMenuCollapse, MenuCollapseProvider } from './context/MenuCollapseContext';
 export type { MenuConfigContextType } from './context/menu-config.context';
 export type { BreadcrumbItem, BreadcrumbProps, UseBreadcrumbOptions } from './components/Breadcrumb/types';
 export type { PageTransitionProps } from './components/PageTransition/PageTransition.types';

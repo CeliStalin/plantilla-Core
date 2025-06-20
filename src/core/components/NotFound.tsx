@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
-const NotFound: React.FC = () => {
+export const NotFound: React.FC = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   
@@ -54,4 +54,4 @@ const NotFound: React.FC = () => {
   );
 };
 
-export default NotFound;
+// export default NotFound;

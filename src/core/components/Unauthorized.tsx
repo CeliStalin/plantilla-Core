@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
-const Unauthorized: React.FC = () => {
+export const Unauthorized: React.FC = () => {
   const { isSignedIn, roles } = useAuth();
   
   const userRoles = roles.map(role => role.Rol).join(', ');
@@ -68,5 +68,3 @@ const Unauthorized: React.FC = () => {
     </div>
   );
 };
-
-export default Unauthorized;

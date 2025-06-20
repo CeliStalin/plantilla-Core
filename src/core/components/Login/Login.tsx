@@ -17,7 +17,7 @@ export interface LoginProps {
   msalReady?: boolean;
 }
 
-const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
+export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
   if (!msalReady) {
     return <div>Cargando autenticación...</div>;
   }
@@ -349,5 +349,3 @@ const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
     </div>
   );
 };
-
-export default Login;

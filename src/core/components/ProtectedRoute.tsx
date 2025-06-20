@@ -14,7 +14,7 @@ interface ProtectedRouteProps {
   children?: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   roles = [],
   allowedRoles = [], // Add allowedRoles with default value
@@ -115,5 +115,3 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   return renderComponent();
 };
-
-export default ProtectedRoute;
