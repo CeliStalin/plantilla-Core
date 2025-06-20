@@ -1,63 +1,47 @@
 // --- Core Entry Point ---
 
 // Components
-export { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
-export { Button } from './components/Button/Button';
-export { Card } from './components/Card/Card';
-export { Counter } from './components/Counter';
-export { DashboardFallback } from './components/Dashboard';
-export { default as DashboardPage } from './components/Dashboard/DashboardPage';
-export { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
-export { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
-export { Footer } from './components/Footer/Footer';
-export { HomePage } from './components/HomePage/HomePage';
-export { Layout } from './components/Layout/Layout';
-export { LoadingDots } from './components/Loading/LoadingDots';
-export { LoadingOverlay } from './components/Loading/LoadingOverlay';
-export { LoadingSpinner } from './components/Loading/LoadingSpinner';
-export { default as Login } from './components/Login/Login';
-export { default as MainPage } from './components/MainPage';
-export { default as NavMenuApp } from './components/NavMenu/NavMenuApp';
-export { default as NotFound } from './components/NotFound';
-export { PageTransition } from './components/PageTransition/PageTransition';
-export { default as ProtectedRoute } from './components/ProtectedRoute';
-export { default as SecureLayout } from './components/SecureLayout/SecureLayout';
-export { Typography } from './components/Typography/Typography';
-export { default as Unauthorized } from './components/Unauthorized';
-export { UserLoginApp } from './components/UserLogin/UserLoginApp';
-
+export * from './components';
 
 // Contexts
-export { AuthProvider, useAuthContext } from './context/AuthContext';
-export { MenuCollapseProvider, useMenuCollapse } from './context/MenuCollapseContext';
-export { MenuConfigProvider } from './context/menu-config-provider';
-export { useMenuConfig } from './context/use-menu-config';
-
+export * from './context';
 
 // Hooks
-export { useAuth } from './hooks/useAuth';
-export { useBreadcrumb } from './components/Breadcrumb/useBreadcrumb';
-export { usePageTransition } from './components/PageTransition/hooks/usePageTransition';
-export { default as useLocalStorage } from './hooks/useLocalStorage';
-export { useTypography, useTypographyCSS, useTypographyVariables } from './hooks/useTypography';
+export * from './hooks';
 
+// Interfaces
+export * from './interfaces';
+
+// Theme
+export * from './theme';
+
+// Types
+export * from './types';
+
+// Config
+export * from './config/env';
+export * from './config/msalConfig';
 
 // Services
-export { ApiClient } from './services/api/apiClient';
-export { ArquitecturaApi } from './services/api/arquitecturaApi';
-export { AuthProvider as MsalAuthProvider, initializeMsal } from './services/auth/authProviderMsal';
-export { AuthService } from './services/auth/authService';
-
-
-// Theme & Styles
-export { theme, defaultTheme } from './theme/index';
-export { theme as styleTheme } from './styles/theme';
-
+export * from './services/api/apiClient';
+export * from './services/api/arquitecturaApi';
+export * from './services/auth/authService';
+export * from './services/logging/logger';
+export * from './services/SecureStorageWrapper';
+export * from './services/TokenManagementService';
+export {
+    AuthProvider as MsalAuthProvider,
+    initializeMsal,
+    isAuthenticated,
+    login,
+    logout,
+    getAccessToken,
+    initializeMsalConfig
+} from './services/auth/authProviderMsal';
 
 // Utils
-// Note: Assuming GetEnvVariables exports these functions correctly.
-// Check ./utils/GetEnvVariables if there are issues.
-// export { GetAmbiente, GetApiArquitectura, GetKeyApiKey, GetNameApiKey, GetSistema, GetTimeout, GetMsalAuthority, GetMsalClientId } from './utils/GetEnvVariables';
+export * from './utils/mappers';
+export * from './utils/GetEnvVariables';
 
 // --- Types ---
 export type { CardProps } from './components/Card/Card.types';

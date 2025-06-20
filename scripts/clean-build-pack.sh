@@ -1,26 +1,27 @@
 #!/bin/bash
+# Este script está diseñado para realizar una compilación limpia y completa del proyecto desde cero.
 set -e
 
-# Limpiar dependencias y cachés
-rm -rf node_modules dist build .turbo .next .cache
+echo "[1/5] Limpiando artefactos de compilación anteriores..."
+rm -rf dist build .turbo .next .cache *.tgz
 
-# NO eliminar el package-lock.json ni los lockfiles para builds reproducibles
-# Si necesitas forzar la actualización de dependencias (por ejemplo, tras cambiar versiones en package.json),
-# puedes eliminar manualmente el lockfile y luego correr este script, pero NO es lo recomendado para builds normales.
-#rm -f package-lock.json yarn.lock pnpm-lock.yaml  # <- Solo descomentar si realmente quieres regenerar todo
-
-# Limpiar caché de npm
+echo "[2/5] Limpiando la caché de npm..."
 npm cache clean --force
 
-echo "\n[✔] Cachés y dependencias eliminadas."
+echo "[3/5] Eliminando dependencias (node_modules)..."
+rm -rf node_modules
 
-echo "\n[→] Instalando dependencias..."
-npm ci
+# Nota sobre el lockfile:
+# No se elimina package-lock.json por defecto para asegurar BUILDS REPRODUCIBLES.
+# Si necesitas actualizar todas las dependencias a las últimas versiones compatibles
+# según package.json, puedes borrar 'package-lock.json' manualmente antes de ejecutar este script.
+# rm -f package-lock.json
 
-echo "\n[→] Compilando proyecto..."
-npm run build
+echo "[4/5] Instalando todas las dependencias desde cero..."
+npm install
 
-echo "\n[→] Generando paquete (.tgz)..."
-npm pack
+echo "[5/5] Compilando el proyecto y generando el paquete..."
+npm run build && npm pack
 
-echo "\n[✔] Proceso completado. El paquete está listo para publicar o compartir." 
+echo "\n[✔] Proceso completado con éxito."
+echo "El nuevo paquete .tgz está en la raíz del proyecto." 

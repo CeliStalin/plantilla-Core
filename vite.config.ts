@@ -1,79 +1,67 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import { visualizer } from 'rollup-plugin-visualizer'
 import dts from 'vite-plugin-dts'
+import pkg from './package.json'
 
-export default defineConfig({
-  plugins: [
-    react(),
-    visualizer({
-      filename: 'dist/stats.html',
-      open: true
-    }),
-    dts({
-      insertTypesEntry: true,
-    })
-  ],
-  envDir: '.',
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  server: {
-    host: '0.0.0.0',
-    port: 3000,
-    watch: {
-      usePolling: true,
-      interval: 1000,
-    },
-    headers: {
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
-      'Referrer-Policy': 'strict-origin-when-cross-origin',
-    },
-  },
-  build: {
-    lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'ConsaludCore',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
-    },
-    rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react-router-dom',
-        '@azure/msal-browser',
-        'axios',
-        'bulma'
-      ],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'jsxRuntime',
-          'react-router-dom': 'ReactRouterDOM',
-          '@azure/msal-browser': 'msal',
-          axios: 'axios',
+const peerDependencies = Object.keys(pkg.peerDependencies || {})
+
+// https://vitejs.dev/config/
+export default defineConfig(({ command }) => {
+  if (command === 'serve') {
+    // Development configuration
+    return {
+      plugins: [react()],
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, './src'),
         },
       },
-    },
-    sourcemap: true,
-    minify: true,
-    target: 'es2020',
-    emptyOutDir: true,
-    outDir: 'dist',
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-    force: true,
-  },
-  esbuild: {
-    target: 'es2020',
-  },
+      server: {
+        port: 3000,
+      }
+    }
+  } else {
+    // Build configuration (library)
+    return {
+      plugins: [
+        react(),
+        dts({
+          insertTypesEntry: true,
+          exclude: ['**/*.test.tsx', '**/*.spec.ts', 'test/**'],
+        }),
+      ],
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, './src'),
+        },
+      },
+      build: {
+        target: 'esnext',
+        outDir: 'dist',
+        lib: {
+          entry: path.resolve(__dirname, 'src/core/index.ts'),
+          name: '@consalud/core',
+          formats: ['es', 'cjs'],
+          fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'),
+        },
+        rollupOptions: {
+          external: [...peerDependencies, 'react/jsx-runtime'],
+          output: {
+            globals: {
+              react: 'React',
+              'react-dom': 'ReactDOM',
+              'react-router-dom': 'ReactRouterDOM',
+              'react/jsx-runtime': 'react/jsx-runtime',
+              '@azure/msal-browser': 'msalBrowser',
+              axios: 'axios',
+              bulma: 'bulma',
+            },
+          },
+        },
+        sourcemap: true,
+        cssCodeSplit: true,
+      },
+    }
+  }
 })
