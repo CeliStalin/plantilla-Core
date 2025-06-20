@@ -1,7 +1,7 @@
 export * from './homepage.types';
 
 // Re-export ElementMenu from interfaces
-export { ElementMenu } from '@/core/interfaces/IMenusElementos';
+export type { ElementMenu } from '@/core/interfaces/IMenusElementos';
 
 export interface HomePageProps {
   className?: string;

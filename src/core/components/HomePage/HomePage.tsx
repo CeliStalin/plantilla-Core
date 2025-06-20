@@ -88,7 +88,7 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
 
   // Development/debugging effects
   useEffect(() => {
-    if (debug && process.env.NODE_ENV === 'development') {
+    if (debug && import.meta.env.DEV) {
       console.log('🏠 HomePage Debug Mode Enabled');
       console.log('Props:', {
         enableBounce: shouldEnableBounce,
@@ -118,7 +118,7 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
 
   // Enhanced navigation handler with card click callback
   const handleAppClick = (item: any) => {
-    if (debug && process.env.NODE_ENV === 'development') {
+    if (debug && import.meta.env.DEV) {
       console.log('🎯 App card clicked:', item);
     }
     collapseMenu();

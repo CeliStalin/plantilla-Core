@@ -33,7 +33,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
 
   // Estado para controlar la animación de rotación
   const [rotateClass, setRotateClass] = useState<string>("");
-  const rotateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rotateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevCollapsedRef = useRef(isMenuCollapsed);
 
   // Inyectar estilos al montar el componente

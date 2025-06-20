@@ -1,9 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: 'dist/stats.html',
+      open: true
+    }),
+    dts({
+      insertTypesEntry: true,
+    })
+  ],
   envDir: '.',
   resolve: {
     alias: {
@@ -26,55 +37,34 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: 'src/index.ts',
+      entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'ConsaludCore',
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+      formats: ['es', 'cjs'],
+      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
       external: [
         'react',
         'react-dom',
+        'react/jsx-runtime',
         'react-router-dom',
         '@azure/msal-browser',
-        'bulma',
         'axios',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime'
+        'bulma'
       ],
-      output: [
-        {
-          format: 'es',
-          exports: 'named',
-          preserveModules: true,
-          entryFileNames: '[name].js',
-          globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-            'react-router-dom': 'ReactRouterDOM',
-            '@azure/msal-browser': 'msal',
-            bulma: 'bulma',
-            axios: 'axios',
-          },
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+          'react-router-dom': 'ReactRouterDOM',
+          '@azure/msal-browser': 'msal',
+          axios: 'axios',
         },
-        {
-          format: 'cjs',
-          exports: 'named',
-          preserveModules: true,
-          entryFileNames: '[name].cjs',
-          globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-            'react-router-dom': 'ReactRouterDOM',
-            '@azure/msal-browser': 'msal',
-            bulma: 'bulma',
-            axios: 'axios',
-          },
-        }
-      ]
+      },
     },
-    chunkSizeWarningLimit: 600,
     sourcemap: true,
-    minify: 'esbuild',
+    minify: true,
     target: 'es2020',
     emptyOutDir: true,
     outDir: 'dist',
@@ -86,7 +76,4 @@ export default defineConfig({
   esbuild: {
     target: 'es2020',
   },
-  define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
-  }
 })

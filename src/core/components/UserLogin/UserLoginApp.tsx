@@ -248,19 +248,13 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
 
   // Obtener nombre y apellido de displayName
   function getNameAndSurname() {
-    if (effectiveUserData?.displayName) {
-      const parts = effectiveUserData.displayName.split(' ');
-      if (parts.length >= 3) {
-        // Si tiene 3 o más partes, tomamos el primer nombre y el tercer elemento (primer apellido)
-        return `${parts[0]} ${parts[2]}`;
-      } else if (parts.length >= 2) {
-        // Si tiene exactamente 2 partes, las mostramos tal cual
-        return `${parts[0]} ${parts[1]}`;
-      }
-      return effectiveUserData.displayName;
-    }
-    return '';
+    if (!effectiveUserData || !effectiveUserData.displayName) return '';
+    const parts = effectiveUserData.displayName.split(' ');
+    if (parts.length >= 2) return `${parts[0]} ${parts[1]}`;
+    return effectiveUserData.displayName;
   }
 };
 
-export default UserLoginApp;
+export {
+  UserLoginApp
+};

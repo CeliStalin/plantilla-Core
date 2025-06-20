@@ -19,7 +19,7 @@ MenuCollapseContext.displayName = 'MenuCollapseContext';
 
 export function useMenuCollapse() {
   const context = useContext(MenuCollapseContext);
-  if (process.env.NODE_ENV !== 'production' && context === defaultContext) {
+  if (import.meta.env.DEV && context === defaultContext) {
     console.warn('useMenuCollapse must be used within a MenuCollapseProvider');
   }
   return context;

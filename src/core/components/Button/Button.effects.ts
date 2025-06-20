@@ -11,7 +11,7 @@ interface RippleState {
 export const useButtonEffects = (effects: ButtonEffects = {}) => {
   const [ripples, setRipples] = useState<RippleState[]>([]);
   const [isPressed, setIsPressed] = useState<boolean>(false);
-  const rippleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rippleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const createRipple = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     if (!effects.ripple) return;

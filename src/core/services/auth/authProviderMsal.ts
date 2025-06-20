@@ -38,7 +38,7 @@ function getMsalInstanceOrThrow(): PublicClientApplication {
   return msalInstance;
 }
 
-function initializeMsal(): Promise<void> {
+export function initializeMsal(): Promise<void> {
   if (!initializationPromise) {
     if (!msalConfig) {
       throw new Error('MSAL config not initialized. Call initializeMsalConfig() after setCoreEnvConfig.');
