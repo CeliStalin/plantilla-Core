@@ -248,26 +248,23 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
     isSignedIn,
     isInitializing,
     loading,
-    usuario,
-    usuarioAD,
-    roles,
     error,
     errorAD,
-    errorRoles
+    errorRoles,
+    usuario,
+    usuarioAD,
+    roles
   });
 
   return (
     <div style={pageContainerStyles}>
-      <Header 
-        logoUrl={props.logoSrc}
-        altText={`${props.appName} Logo`}
-      />
+      <Header logoUrl={props.logoSrc} altText={'Logo'}/>
 
       <div style={styles.loginContentArea}>
         <div className="container">
           <div className="columns is-centered">
             <div className="column is-narrow">
-              <div className="box has-text-centered" style={loginBoxStyles}>
+              <div style={loginBoxStyles}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h1 className="title has-text-centered" style={styles.titleStyles}>
                     <span style={{ color: props.textColor || theme.colors.black }}>Ingresa al </span>
@@ -276,7 +273,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                     </span>
                   </h1>
                 </div>
-                  
+                
                 {loading || isLoggingIn || isInitializing ? (
                   <div className="field" style={{ width: '100%' }}>
                     <div className="control">
@@ -335,7 +332,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                     </div>
                   </div>
                 )}
-                  
+                
                 <ErrorMessages 
                   error={localError || error || undefined}
                   errorAD={errorAD || undefined}

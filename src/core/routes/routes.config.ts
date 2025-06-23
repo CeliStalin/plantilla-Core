@@ -4,7 +4,7 @@ import { RouteConfig } from './types';
 export const routes: RouteConfig[] = [
   {
     path: "/login",
-    component: React.lazy(() => import('../components/Login/Login').then(module => ({ default: module.Login }))),
+    component: React.lazy(() => import('../components/Login/LoginPage')),
     public: true,
     title: "Iniciar Sesión",
     breadcrumbLabel: "Login",
