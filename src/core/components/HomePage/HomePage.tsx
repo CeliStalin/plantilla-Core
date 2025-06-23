@@ -13,7 +13,6 @@ import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLink
 import { useMenuConfig } from '@/core/hooks';
 import { useMenuCollapse } from '../../context/MenuCollapseContext';
 import { MenuCollapseProvider } from '@/core/context/MenuCollapseContext';
-import { Logo } from '@/assets';
 
 export interface HomePageWithLayoutProps extends HomePageProps {
   /**
@@ -175,7 +174,7 @@ export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
 
   if (withLayout) {
     return (
-      <Layout pageTitle="Inicio" logoSrc={Logo} footerImageSrc="">
+      <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="">
         <HomePageInner {...props} />
       </Layout>
     );

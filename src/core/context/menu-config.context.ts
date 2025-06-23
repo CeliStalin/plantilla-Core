@@ -6,7 +6,7 @@ export interface MenuConfigContextType {
 }
 
 export const defaultConfig: MenuConfigContextType = {
-  enableDynamicMenu: true ,
+  enableDynamicMenu: false ,
   enableBounceEffects: true
 };
 

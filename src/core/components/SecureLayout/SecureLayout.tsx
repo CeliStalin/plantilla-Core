@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { Layout } from '../Layout/Layout';
 import { LoadingDots } from '../Login/components/LoadingDots';
-import { Logo } from '@/assets';
 
 interface SecureLayoutProps {
   children: React.ReactNode;
@@ -116,7 +115,7 @@ const SecureLayout: React.FC<SecureLayoutProps> = ({
       enableTransitions={enableTransitions}
       transitionType={transitionType}
       transitionDuration={transitionDuration}
-      logoSrc={Logo}
+      logoSrc="/Logo.png"
       footerImageSrc=""
     >
       {children}

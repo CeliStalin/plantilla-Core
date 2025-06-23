@@ -1,6 +1,6 @@
 import React from 'react';
 import { theme } from '@/core/styles/theme';
-import { Logo } from '@/assets';
+// import { Logo } from '@/assets';
 import { UserLoginApp } from '../UserLogin/UserLoginApp';
 
 interface HeaderProps {
@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header style={styles.header}>
       <div style={styles.logoContainer}>
         <img
-          src={logoUrl || Logo}
+          src={logoUrl}
           alt={altText}
           style={styles.logo}
         />

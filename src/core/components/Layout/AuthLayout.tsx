@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header } from './Header';
-import logoIcon from '@/assets/Logo.png';
+// import logoIcon from '@/assets/Logo.png';
 import { theme } from '@/core/styles/theme';
 
 interface AuthLayoutProps {
@@ -28,7 +28,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div style={styles.container}>
       <Header 
-        logoUrl={logoIcon}
+        logoUrl="/Logo.png"
         altText="Consalud Logo"
       />
       <main style={styles.main}>
