@@ -8,4 +8,5 @@ export interface CardProps {
   variant?: 'default' | 'bordered' | 'elevated';
   padding?: 'none' | 'small' | 'medium' | 'large';
   className?: string;
+  style?: React.CSSProperties;
 }

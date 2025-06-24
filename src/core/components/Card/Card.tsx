@@ -10,11 +10,12 @@ export const Card: React.FC<CardProps> = ({
   variant = 'default',
   padding = 'medium',
   className = '',
+  style = {},
 }) => {
   const styles = useCardStyles({ variant, padding });
 
   return (
-    <div className={`${styles.card} ${className}`} style={styles.cardStyle}>
+    <div className={`${styles.card} ${className}`} style={{ ...styles.cardStyle, ...style }}>
       {(title || subtitle) && (
         <div style={styles.headerStyle}>
           {title && <h3 style={styles.titleStyle}>{title}</h3>}
