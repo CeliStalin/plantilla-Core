@@ -50,7 +50,7 @@ export const navMenuStyles = {
     height: 'calc(100vh - 4rem)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     overflow: 'hidden',
-    backgroundColor: '#f9f9f9', 
+    backgroundColor: '#FFF', 
     zIndex: 100,
     padding: 0, 
     boxShadow: isCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
@@ -92,7 +92,7 @@ export const navMenuStyles = {
   // Nuevos estilos para el botón hamburguesa
   menuToggleButton: {
     cursor: 'pointer',
-    backgroundColor: '#f9f9f9', // Solo una declaración de backgroundColor
+    backgroundColor: '#FFF', // Solo una declaración de backgroundColor
     border: 'none',
     borderRadius: 0,
     padding: 'var(--menu-button-padding, 12px 15px)',
@@ -127,7 +127,7 @@ export const navMenuStyles = {
       boxShadow: 'none !important',
     },
     '&.expanded': {
-      backgroundColor: '#f9f9f9',
+      backgroundColor: '#FFF',
       color: theme.colors.primary,
     }
   },

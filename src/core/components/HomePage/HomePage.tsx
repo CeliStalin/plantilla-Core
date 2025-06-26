@@ -59,7 +59,7 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
     ...homePageStyles.container,
     ...(isMobile ? responsiveHomePageStyles.mobile.container : {}),
     ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.container : {}),
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F8F8FA',
     maxWidth: '100%',
     margin: 0
   };

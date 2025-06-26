@@ -35,7 +35,7 @@ export const LegacyMenuCollapseContext = createContext<{ collapseMenu: () => voi
 export const Layout: React.FC<LayoutProps> = ({ 
   children, 
   pageTitle, 
-  backgroundColor = '#ffffff',
+  backgroundColor = '#F8F8FA',
   showFooter = true, // Por defecto mostrar el footer
   // Valores por defecto para transiciones
   enableTransitions = true,

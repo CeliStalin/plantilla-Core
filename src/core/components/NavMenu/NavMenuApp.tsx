@@ -235,12 +235,13 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
         style={{
           ...navMenuStyles.container(isMenuCollapsed),
           boxShadow: isMenuCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
+          backgroundColor: '#FFF',
         }}
       >
         <aside 
           className="menu" 
           style={{ 
-            backgroundColor: '#f9f9f9', 
+            backgroundColor: '#FFF', 
             height: '100%',
           }}
         >
