@@ -266,7 +266,15 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
             <div className="column is-narrow">
               <div style={loginBoxStyles}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
-                  <h1 className="title has-text-centered" style={styles.titleStyles}>
+                  <h1
+                    className="title" style={{...styles.titleStyles,
+                                              textAlign: 'left',
+                                              marginLeft: 0,
+                                              marginRight: 0,
+                                              width: '100%',
+                                              display: 'block'
+                    }}
+                  >
                     <span style={{ color: props.textColor || theme.colors.black }}>Ingresa al </span>
                     <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
                       {props.appName}
@@ -319,7 +327,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                         onClick={handleLoginRedirect}
                         disabled={isLoggingIn}
                       >
-                        Iniciar sesión con Azure AD
+                        Iniciar sesión
                       </button>
                     </div>
                     <div style={{ textAlign: 'center', width: '100%' }}>
