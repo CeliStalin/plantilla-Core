@@ -264,22 +264,39 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
         <div className="container">
           <div className="columns is-centered">
             <div className="column is-narrow">
-              <div style={loginBoxStyles}>
+              <div style={{ ...loginBoxStyles, padding: '48px' }}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h1
-                    className="title" style={{...styles.titleStyles,
-                                              textAlign: 'left',
-                                              marginLeft: 0,
-                                              marginRight: 0,
-                                              width: '100%',
-                                              display: 'block'
+                    className="title"
+                    style={{
+                      fontSize: '20px',
+                      fontWeight: 700,
+                      color: props.textColor || theme.colors.black,
+                      fontFamily: theme.typography.fontFamily,
+                      margin: 0,
+                      padding: 0,
+                      textAlign: 'left',
+                      width: '100%',
+                      lineHeight: 1.2
                     }}
                   >
-                    <span style={{ color: props.textColor || theme.colors.black }}>Ingresa al </span>
-                    <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-                      {props.appName}
-                    </span>
+                    Ingresa al <span style={{ color: theme.colors.primary, fontWeight: 500 }}>{props.appName}</span>
                   </h1>
+                  <p
+                    className="help mt-2"
+                    style={{
+                      fontSize: '14px',
+                      color: '#666',
+                      margin: '8px 0 0 0',
+                      textAlign: 'left',
+                      fontFamily: theme.typography.fontFamily,
+                      fontWeight: 400,
+                      lineHeight: 1.4,
+                      width: '100%'
+                    }}
+                  >
+                    Para iniciar sesión, debes estar conectado a la red Consalud o usar VPN.
+                  </p>
                 </div>
                 
                 {loading || isLoggingIn || isInitializing ? (
@@ -319,7 +336,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="field" style={{ width: '100%' }}>
+                  <div className="field" style={{ width: '100%', marginTop: '24px' }}>
                     <div className="control">
                       <button 
                         className="button is-fullwidth is-primary"
@@ -329,14 +346,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                       >
                         Iniciar sesión
                       </button>
-                    </div>
-                    <div style={{ textAlign: 'center', width: '100%' }}>
-                      <p className="help mt-2" style={{
-                        ...styles.networkWarning.note,
-                        color: props.textColor || styles.networkWarning.note.color
-                      }}>
-                        Nota: Para acceder, debe estar conectado a la red de Consalud o usar VPN.
-                      </p>
                     </div>
                   </div>
                 )}
