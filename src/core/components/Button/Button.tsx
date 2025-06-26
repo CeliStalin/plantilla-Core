@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoadingDots } from '../../components/Login/components/LoadingDots';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { ButtonProps } from './Button.types';
 import { useButtonStyles } from './Button.styles';
 import { useButtonEffects } from './Button.effects';
@@ -53,32 +53,18 @@ export const Button: React.FC<ButtonProps> = ({
       onMouseUp={handleMouseUpCombined}
       onMouseLeave={handleMouseUp}
       disabled={disabled || loading}
-      style={styles.buttonStyle}
+      style={{ ...styles.buttonStyle, width: '100%' }}
       {...props}
     >
-      {effects.ripple && (
-        <span className="button-ripple-container">
-          {ripples.map((ripple, index) => (
-            <span
-              key={index}
-              className="button-ripple"
-              style={{
-                left: ripple.x,
-                top: ripple.y,
-                width: ripple.size,
-                height: ripple.size,
-              }}
-            />
-          ))}
-        </span>
-      )}
-      
       {loading ? (
-        <LoadingDots size="small" color={variant === 'primary' ? '#fff' : '#000'} />
+        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          <LoadingSpinner size={size} color={variant === 'primary' ? '#fff' : '#000'} />
+          <span style={{ marginLeft: 12, whiteSpace: 'nowrap', fontWeight: 600 }}>{children}</span>
+        </span>
       ) : (
         <>
           {icon && <span style={styles.iconStyle}>{icon}</span>}
-          {children}
+          <span>{children}</span>
         </>
       )}
     </button>

@@ -6,6 +6,7 @@ import { ErrorMessages } from './components/ErrorMessages';
 import { LoadingDots } from './components/LoadingDots';
 import * as styles from './Login.styles';
 import { theme } from '../../styles/theme';
+import { Button } from '../Button/Button';
 
 export interface LoginProps { 
   backgroundColor?: string; 
@@ -264,7 +265,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
         <div className="container">
           <div className="columns is-centered">
             <div className="column is-narrow">
-              <div style={{ ...loginBoxStyles, padding: '48px' }}>
+              <div style={{ ...loginBoxStyles, padding: '48px' ,width: '80%'}}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h1
                     className="title"
@@ -301,23 +302,27 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                 
                 {loading || isLoggingIn || isInitializing ? (
                   <div className="field" style={{ width: '100%' }}>
-                    <div className="control">
-                      <button 
+                    <div className="control" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      <Button
                         className="button is-fullwidth is-primary"
                         style={{
                           ...styles.primaryButton,
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          minHeight: '48px'
+                          minHeight: '48px',
+                          minWidth: 300,
+                          paddingLeft: '2.5em',
+                          paddingRight: '1.5em'
                         }}
+                        loading={true}
                         disabled={true}
+                        fullWidth
+                        size="medium"
+                        variant="primary"
                       >
-                        <LoadingDots size="small" />
-                        <span style={{ marginLeft: '8px' }}>
-                          Cargando...
-                        </span>
-                      </button>
+                        Cargando...
+                      </Button>
                     </div>
                   </div>
                 ) : isSignedIn ? (
@@ -328,6 +333,9 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                         style={{
                           ...styles.primaryButton,
                           backgroundColor: theme.colors.danger,
+                          minWidth: 260,
+                          paddingLeft: '2.5em',
+                          paddingRight: '1.5em'
                         }}
                         onClick={handleLogout}
                       >
@@ -337,15 +345,24 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
                   </div>
                 ) : (
                   <div className="field" style={{ width: '100%', marginTop: '24px' }}>
-                    <div className="control">
-                      <button 
+                    <div className="control" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      <Button
                         className="button is-fullwidth is-primary"
-                        style={styles.primaryButton}
+                        style={{
+                          ...styles.primaryButton,
+                          minWidth: 300,
+                          paddingLeft: '2.5em',
+                          paddingRight: '1.5em'
+                        }}
                         onClick={handleLoginRedirect}
+                        loading={isLoggingIn}
                         disabled={isLoggingIn}
+                        fullWidth
+                        size="medium"
+                        variant="primary"
                       >
                         Iniciar sesión
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}

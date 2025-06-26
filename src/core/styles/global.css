@@ -2,6 +2,7 @@
 @import './typography.css';
 /* Import centralized animations */
 @import './animations.css';
+@import 'bulma/css/bulma.min.css';
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -198,4 +199,14 @@ aside.menu * {
 .app-card.bounce-enabled:hover,
 .app-card.bounce-enabled:active {
   will-change: transform, box-shadow;
+}
+
+/* Mostrar texto junto al spinner en botones Bulma is-loading */
+.button.is-loading > span,
+.button.is-loading > * {
+  opacity: 1 !important;
+  color: #fff !important;
+}
+.button[disabled] {
+  opacity: 1 !important;
 }
