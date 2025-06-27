@@ -44,11 +44,10 @@ export const keyframes = `
 export const navMenuStyles = {
   container: (isCollapsed: boolean) => ({
     width: isCollapsed ? '50px' : '220px',
-    position: 'fixed' as const,
+    position: 'relative' as const,
     left: 0,
-    top: '4rem', 
     height: 'calc(100vh - 4rem)',
-    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     overflow: 'hidden',
     backgroundColor: '#FFF', 
     zIndex: 100,
@@ -156,25 +155,31 @@ export const navMenuStyles = {
     }
   },
 
-  menuText: {
+  menuText: (isCollapsed: boolean) => ({
     marginLeft: 'var(--menu-text-spacing, 12px)',
     color: '#555',
     fontSize: 'var(--menu-text-size, 18px)',
     fontWeight: theme.typography.fontWeight.medium,
     fontFamily: theme.typography.fontFamily,
     letterSpacing: 'var(--menu-letter-spacing, 0.5px)',
-  },
+    opacity: isCollapsed ? 0 : 1,
+    transition: 'opacity 0.3s',
+    transitionDelay: isCollapsed ? '0s' : '0.1s',
+    width: isCollapsed ? 0 : 'auto',
+    overflow: 'hidden',
+    display: isCollapsed ? 'none' : 'inline',
+  }),
   
   menuContent: (isCollapsed: boolean) => ({
     opacity: isCollapsed ? 0 : 1,
-    visibility: isCollapsed ? 'hidden' as const : 'visible' as const,
-    transition: 'opacity 0.3s ease, visibility 0.3s ease',
+    transition: 'opacity 0.3s ease',
     paddingTop: isCollapsed ? '0' : '0.5rem',
     paddingRight: isCollapsed ? '0' : '1rem',
     paddingBottom: isCollapsed ? '0' : '1rem',
     paddingLeft: isCollapsed ? '0' : '1rem',
-    height: isCollapsed ? '0' : 'auto',
     overflow: 'hidden',
+    visibility: isCollapsed ? ('hidden' as const) : ('visible' as const),
+    transitionDelay: isCollapsed ? '0.4s' : '0s',
   }),
   
   // Estilo para elementos activos del menú
@@ -183,7 +188,7 @@ export const navMenuStyles = {
     color: theme.colors.primary,
     fontWeight: 500,
     borderLeft: `3px solid ${theme.colors.primary}`,
-    transition: 'all 0.2s ease-in-out',
+    transition: 'all 0.2s ease-in-out, opacity 0.3s',
     borderRadius: '4px',
   },
   
@@ -240,8 +245,7 @@ export const navMenuStyles = {
   }),
 
   // Estilos adicionales para los enlaces del menú
-  menuItem: {
-    display: 'block',
+  menuItem: (isCollapsed: boolean) => ({
     padding: '10px 12px',
     borderRadius: '4px',
     margin: '2px 0',
@@ -249,12 +253,24 @@ export const navMenuStyles = {
     fontSize: '14px',
     fontWeight: theme.typography.fontWeight.normal,
     fontFamily: theme.typography.fontFamily,
-    transition: 'all 0.2s ease',
-  },
+    transition: 'all 0.2s ease, opacity 0.3s',
+    opacity: isCollapsed ? 0 : 1,
+    display: isCollapsed ? 'none' : 'block',
+  }),
   
   // Estilos para el estado hover
   menuItemHover: {
     backgroundColor: '#f0f0f0', // Gris claro para hover
     color: theme.colors.primary,
-  }
+  },
+
+  menuItemLabel: (isCollapsed: boolean) => ({
+    display: isCollapsed ? 'none' : 'inline',
+    opacity: isCollapsed ? 0 : 1,
+    transition: 'opacity 0.3s',
+    transitionDelay: isCollapsed ? '0s' : '0.1s',
+    marginLeft: '8px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  }),
 };

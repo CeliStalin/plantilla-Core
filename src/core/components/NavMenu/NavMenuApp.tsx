@@ -14,9 +14,11 @@ import { injectMenuStyles } from './utils/styleInjector';
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
   appIconSrc?: string;
+  onAnimationStart?: () => void;
+  onAnimationEnd?: () => void;
 }
 
-const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
+const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimationStart, onAnimationEnd }) => {
   const { roles, isSignedIn } = useAuth();
   const { enableDynamicMenu } = useMenuConfig();
   const location = useLocation();
@@ -41,17 +43,21 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
     injectMenuStyles();
   }, []);
 
-  // Efecto para manejar la animación de rotación
+  // Efecto para manejar la animación de rotación y sincronización con Layout
   useEffect(() => {
     if (prevCollapsedRef.current !== isMenuCollapsed) {
       // Determinar dirección de la animación
       const direction = isMenuCollapsed ? "menu-rotate-ccw" : "menu-rotate-cw";
       setRotateClass(direction);
+      // Notificar inicio de animación
+      if (onAnimationStart) onAnimationStart();
       // Limpiar la clase después de la duración de la animación
       if (rotateTimeoutRef.current) clearTimeout(rotateTimeoutRef.current);
       rotateTimeoutRef.current = setTimeout(() => {
         setRotateClass("");
-      }, 700); // Debe coincidir con --menu-rotation-duration
+        // Notificar fin de animación
+        if (onAnimationEnd) onAnimationEnd();
+      }, 400); // Debe coincidir con la duración de la transición del menú y el main
       prevCollapsedRef.current = isMenuCollapsed;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,7 +237,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
   return (
     <div>
       <div 
-        className="nav-menu-container"
+        className="nav-menu-container"  
         style={{
           ...navMenuStyles.container(isMenuCollapsed),
           boxShadow: isMenuCollapsed ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.07)',
@@ -273,9 +279,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </div>
-            {!isMenuCollapsed && (
-              <span style={navMenuStyles.menuText}>Menú</span>
-            )}
+            <span style={navMenuStyles.menuText(isMenuCollapsed)}>Menú</span>
           </button>
           
           <div style={navMenuStyles.menuContent(isMenuCollapsed)}>
@@ -300,10 +304,11 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                       </svg>
-                      Inicio
+                      <span style={navMenuStyles.menuItemLabel(isMenuCollapsed)}>Inicio</span>
                     </span>
                   }
                   isActive={isPathActive('/home')}
+                  isMenuCollapsed={isMenuCollapsed}
                 />
                
               </MenuSection>
@@ -331,6 +336,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc }) => {
                         label={item.Descripcion}
                         isActive={isPathActive(itemPath)}
                         isApplicationItem={true}
+                        isMenuCollapsed={isMenuCollapsed}
                       />
                     );
                   })}

@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useCallback } from 'react';
+import { useState, useEffect, createContext, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import NavMenuApp from '../NavMenu/NavMenuApp';
@@ -67,7 +67,7 @@ export const Layout: React.FC<LayoutProps> = ({
   
   // Determinar el título basado en la ubicación actual si no se proporciona uno
   const currentPageTitle = pageTitle || pageTitles[location.pathname] || '';
-  
+
   return (
     <MenuCollapseProvider>
       <LegacyMenuCollapseContext.Provider value={{ collapseMenu }}>
@@ -85,27 +85,28 @@ export const Layout: React.FC<LayoutProps> = ({
           <div className="layout-body" style={{ 
             paddingTop: "4rem", 
             display: "flex",
+            flexDirection: 'row', // Asegura que el menú y el main estén en el mismo flujo
             flex: 1, // Hacer que el contenido ocupe el espacio disponible entre Header y Footer
-            position: 'relative', // Necesario para NavMenuApp si es position:absolute/fixed relativo a este
-            overflow: 'hidden' // Para evitar que layout-body genere su propio scroll si main lo maneja
+            position: 'relative',
+            overflow: 'hidden'
           }}>
             <NavMenuApp 
-              onToggle={handleMenuToggle} 
+              onToggle={handleMenuToggle}
             />
             
             <main 
               className="instant-stable navigation-stable no-flash"
               style={{ 
-                marginLeft: isMenuCollapsed ? "50px" : "220px", 
+                // marginLeft eliminado, ahora el layout es fluido
                 width: "100%", // Ocupa el ancho disponible menos el NavMenu
-                transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 backgroundColor: backgroundColor,
-                overflowY: 'auto', // Main maneja su propio scroll vertical si el contenido excede
+                overflowY: 'auto',
                 padding: "1rem",
                 boxSizing: 'border-box',
-                flex: 1, // Para que main ocupe el espacio vertical en layout-body
-                display: 'flex', // Para permitir que el contenido interno se comporte como flex item si es necesario
-                flexDirection: 'column' // Para que el contenido interno se apile verticalmente
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column'
               }}
             >
               <PageTransition

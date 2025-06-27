@@ -9,9 +9,10 @@ interface MenuItemProps {
   label: string | React.ReactNode;
   isActive?: boolean;
   isApplicationItem?: boolean;
+  isMenuCollapsed?: boolean;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isApplicationItem = false }) => {
+export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isApplicationItem = false, isMenuCollapsed = false }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const { collapseMenu } = useMenuCollapse();
@@ -30,7 +31,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isAppli
     // Si es el elemento activo, usamos el estilo activo con borde verde
     if (isActive) {
       return {
-        ...navMenuStyles.menuItem,
+        ...navMenuStyles.menuItem(isMenuCollapsed),
         ...navMenuStyles.activeLink,
         paddingLeft: '9px', // Compensa el borde izquierdo de 3px
       };
@@ -39,7 +40,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isAppli
     // Si está en hover, aplicamos un fondo gris claro
     if (isHovered) {
       return {
-        ...navMenuStyles.menuItem,
+        ...navMenuStyles.menuItem(isMenuCollapsed),
         ...navMenuStyles.normalLink,
         backgroundColor: '#f0f0f0', // Cambia a gris claro solo en hover
         borderLeft: `3px solid ${navMenuStyles.menuItemHover.backgroundColor}`,
@@ -50,7 +51,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isAppli
     
     // Estado normal (no activo, no hover): fondo transparente igual al fondo del menú
     return {
-      ...navMenuStyles.menuItem,
+      ...navMenuStyles.menuItem(isMenuCollapsed),
       ...navMenuStyles.normalLink,
       backgroundColor: '#f9f9f9', // Mismo color que el fondo del menú
       paddingLeft: '12px',
@@ -67,7 +68,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isAppli
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {label}
+        {typeof label === 'string' ? (
+          <span style={navMenuStyles.menuItemLabel(isMenuCollapsed)}>{label}</span>
+        ) : label}
       </a>
     </li>
   );
