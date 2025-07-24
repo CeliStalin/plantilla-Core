@@ -15,16 +15,20 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./index.css": "./dist/index.css"
   },
   "sideEffects": false,
   "files": [
     "dist",
-    "dist/assets"
+    "dist/assets",
+    "dist/src/core/styles",
+    "dist/index.css"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run copy-css",
+    "copy-css": "cpx \"src/core/styles/*.css\" dist/src/core/styles && cpx src/core/styles/index.css dist/ && cpx src/core/styles/index.css ./",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest --watchAll",
@@ -81,6 +85,7 @@
     "axios": "^1.10.0",
     "babel-jest": "~30.0.0",
     "bulma": "~1.0.3",
+    "cpx": "^1.5.0",
     "cssnano": "^7.0.7",
     "eslint": "~9.21.0",
     "eslint-plugin-react-hooks": "~5.1.0",
@@ -105,5 +110,6 @@
   "overrides": {
     "jsdom": "^24.0.0",
     "stable": false
-  }
+  },
+  "style": "index.css"
 }

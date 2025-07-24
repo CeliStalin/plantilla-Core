@@ -82,3 +82,21 @@ export const UserIcon: React.FC<IconProps> = ({
     <path d="M12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill={color} />
   </svg>
 );
+
+export const AccesoDirectoIcon: React.FC<IconProps> = ({ size = 24, color = '#027373', className = '' }) => (
+  <svg
+    className={className}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="12" height="13" rx="2" stroke={color} strokeWidth="1.5" />
+    <rect x="3" y="8" width="16" height="13" rx="2" stroke={color} strokeWidth="1.5" />
+    <path d="M5.8252 5.48914C5.8222 5.48914 5.8202 5.49114 5.8202 5.49414C5.8202 5.49714 5.8222 5.49914 5.8252 5.49914C5.8282 5.49914 5.8302 5.49714 5.8302 5.49414C5.8302 5.49114 5.8282 5.48914 5.8252 5.48914" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M8.36816 5.48914C8.36516 5.48914 8.36316 5.49114 8.36316 5.49414C8.36316 5.49714 8.36616 5.49914 8.36816 5.49914C8.37116 5.49914 8.37316 5.49714 8.37316 5.49414C8.37316 5.49114 8.37116 5.48914 8.36816 5.48914" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10.9072 5.48914C10.9042 5.48914 10.9022 5.49114 10.9022 5.49414C10.9022 5.49714 10.9042 5.49914 10.9072 5.49914C10.9102 5.49914 10.9122 5.49714 10.9122 5.49414C10.9122 5.49114 10.9102 5.48914 10.9072 5.48914" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);

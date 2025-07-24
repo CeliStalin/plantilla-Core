@@ -3,6 +3,8 @@ import { ElementMenu } from '@/core/interfaces/IMenusElementos';
 import { ApplicationsGridProps } from '../types/homepage.types';
 import { applicationsGridStyles } from './ApplicationsGrid/ApplicationsGrid.styles';
 import './ApplicationsGrid.css';
+import { AppGridIcon } from '@/core/components/HomePage/icons/HomePageIcons';
+import { AplicacionesIcon } from '@/core/components/HomePage/icons/AplicacionesIcon';
 
 // Hook for managing bounce effects
 const useBounceEffect = () => {
@@ -79,6 +81,12 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
 
   return (
     <div className={`applications-section ${className}`} style={applicationsGridStyles.container}>
+      <div style={applicationsGridStyles.sectionHeader}>
+        <span style={{ marginRight: 8 }}>
+          <AplicacionesIcon width={28} height={28} />
+        </span>
+        <h2 style={applicationsGridStyles.sectionTitle}>Aplicaciones</h2>
+      </div>
       <div style={applicationsGridStyles.grid}>
         {loading ? (
           <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>

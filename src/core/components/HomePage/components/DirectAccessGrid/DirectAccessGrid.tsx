@@ -1,10 +1,10 @@
 import React from 'react';
 import { DirectAccessGridProps } from '../../types';
 import { AccessCard } from './AccessCard';
-import { DirectAccessIcon } from '../../icons/HomePageIcons';
 import { LoadingCard } from '@/core/components/LoadingPlaceholder';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
 import { EXTERNAL_LINKS, EXTERNAL_LINKS_DELAYS } from '../../constants';
+import { AccesoDirectoIcon } from '@/core/components/HomePage/icons/AccesoDirectoIcon';
 
 export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({ 
   loading, 
@@ -15,7 +15,9 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
   return (
     <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>
       <div style={directAccessGridStyles.sectionHeader}>
-        <DirectAccessIcon />
+        <span style={{ marginRight: 8 }}>
+          <AccesoDirectoIcon width={28} height={28} />
+        </span>
         <h2 style={directAccessGridStyles.sectionTitle}>
           Accesos directos
         </h2>
