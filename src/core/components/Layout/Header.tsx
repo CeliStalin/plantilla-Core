@@ -1,7 +1,7 @@
 import React from 'react';
 import { theme } from '@/core/styles/theme';
 import { UserLoginApp } from '../UserLogin/UserLoginApp';
-import Logo from '../../assets/Logo'; // Updated import to use SVG component
+import Logo from '../../../assets/Logo'; // Updated import to use SVG component
 
 interface HeaderProps {
   logoUrl: string; // This prop is now effectively ignored for the main logo

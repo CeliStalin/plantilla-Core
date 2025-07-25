@@ -18,6 +18,15 @@ export const applicationsGridStyles = {
     fontWeight: 500,
     margin: 0
   },
+    divider: {
+    width: '100%',
+    height: '2px',
+    backgroundColor: '#D1D5DB',
+    marginTop: '8px',
+    marginBottom: '24px',
+    borderRadius: '1px',
+    opacity: 0.8
+  },
   
   grid: {
     display: 'grid',

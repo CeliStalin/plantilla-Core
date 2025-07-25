@@ -24,6 +24,14 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
     url: 'https://www.consalud.cl',
     alt: 'Consalud Somos CDC',
     fallbackSrc: 'https://via.placeholder.com/150x50?text=Consalud+Somos+CDC'
+  },
+  {
+    id: 'sucursal-digital',
+    title: 'Sucursal digital',
+    logoSrc: 'https://via.placeholder.com/150x50?text=Sucursal+Digital',
+    url: 'https://www.consalud.cl',
+    alt: 'Sucursal digital',
+    fallbackSrc: 'https://via.placeholder.com/150x50?text=Sucursal+Digital'
   }
 ];
 

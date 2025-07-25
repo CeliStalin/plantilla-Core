@@ -13,19 +13,33 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
   externalLinks = EXTERNAL_LINKS // Usar valor por defecto si no se proporciona
 }) => {
   return (
-    <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>
-      <div style={directAccessGridStyles.sectionHeader}>
+    <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>      <div style={directAccessGridStyles.sectionHeader}>
         <span style={{ marginRight: 8 }}>
           <AccesoDirectoIcon width={28} height={28} />
         </span>
         <h2 style={directAccessGridStyles.sectionTitle}>
           Accesos directos
-        </h2>
-      </div>
+        </h2>      </div>
+        {/* Línea divisoria */}
+      <div 
+        style={{
+          width: '100%',
+          height: '1px',
+          backgroundColor: '#E5E7EB',
+          marginTop: '8px',
+          marginBottom: '20px',
+          borderRadius: '0px',
+          opacity: 0.8,
+          border: 'none',
+          display: 'block',
+          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+        }}
+      ></div>
       
       <div style={directAccessGridStyles.grid}>
         {loading ? (
           <>
+            <LoadingCard height="120px" />
             <LoadingCard height="120px" />
             <LoadingCard height="120px" />
             <LoadingCard height="120px" />
