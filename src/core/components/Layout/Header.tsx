@@ -1,10 +1,10 @@
 import React from 'react';
 import { theme } from '@/core/styles/theme';
-// import { Logo } from '@/assets';
 import { UserLoginApp } from '../UserLogin/UserLoginApp';
+import Logo from '../../assets/Logo'; // Updated import to use SVG component
 
 interface HeaderProps {
-  logoUrl: string;
+  logoUrl: string; // This prop is now effectively ignored for the main logo
   altText: string;
   pageTitle?: string;
   rightContent?: React.ReactNode;
@@ -59,10 +59,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header style={styles.header}>
       <div style={styles.logoContainer}>
-        <img
-          src={logoUrl}
-          alt={altText}
+        <Logo // Using the SVG component directly
           style={styles.logo}
+          aria-label={altText}
         />
         {pageTitle && (
           <>

@@ -8,7 +8,7 @@ const DashboardPage: React.FC = () => {
   const userRoles = roles.map(role => role.Rol);
   
   return (
-    <Layout logoSrc="" footerImageSrc="">
+    <Layout logoSrc="/Logo.png" footerImageSrc="/Footer.svg">
       <div className="content-container" style={{ minHeight: '400px' }}>
         <DashboardContent userRoles={userRoles} />
       </div>

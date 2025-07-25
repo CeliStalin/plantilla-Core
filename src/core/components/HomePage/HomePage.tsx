@@ -61,25 +61,37 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
     ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.container : {}),
     backgroundColor: '#F8F8FA',
     maxWidth: '100%',
-    margin: 0
+    margin: 0,
+    height: '100%', // Asegurar que ocupe toda la altura disponible
+    display: 'flex',
+    flexDirection: 'column' as const,
+    minHeight: 0, // Importante para flexbox
   };
 
   const mainContentStyle = {
     ...homePageStyles.mainContent,
     ...(isMobile ? responsiveHomePageStyles.mobile.mainContent : {}),
-    ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.mainContent : {})
+    ...(isTablet && !isMobile ? responsiveHomePageStyles.tablet.mainContent : {}),
+    flex: 1, // Hacer que el contenido principal ocupe el espacio disponible
+    minHeight: 0, // Importante para flexbox
+    display: 'flex',
+    flexDirection: 'row' as const,
   };
 
   const leftColumnStyle = {
     ...homePageStyles.leftColumn,
     ...(isMobile ? responsiveHomePageStyles.mobile.leftColumn : {}),
-    ...(isTablet && !isMobile ? { maxWidth: '600px' } : {})
+    ...(isTablet && !isMobile ? { maxWidth: '600px' } : {}),
+    flex: 1, // Hacer que la columna izquierda ocupe el espacio disponible
+    minHeight: 0, // Importante para flexbox
   };
 
   const rightColumnStyle = {
     ...homePageStyles.rightColumn,
     ...(isMobile ? responsiveHomePageStyles.mobile.rightColumn : {}),
-    ...(isTablet && !isMobile ? { maxWidth: '350px' } : {})
+    ...(isTablet && !isMobile ? { maxWidth: '350px' } : {}),
+    flex: '0 0 auto', // Mantener el tamaño fijo de la columna derecha
+    minHeight: 0, // Importante para flexbox
   };
 
   // Handle backward compatibility for bounce settings
@@ -174,7 +186,7 @@ export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
 
   if (withLayout) {
     return (
-      <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="">
+      <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="/Footer.svg">
         <HomePageInner {...props} />
       </Layout>
     );

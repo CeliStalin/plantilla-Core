@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useCallback, useRef } from 'react';
+import { useState, useEffect, createContext, useCallback, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import NavMenuApp from '../NavMenu/NavMenuApp';
@@ -47,6 +47,17 @@ export const Layout: React.FC<LayoutProps> = ({
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
   const location = useLocation();
   
+  // Memoizar valores para evitar re-renderizados
+  const currentPageTitle = useMemo(() => 
+    pageTitle || pageTitles[location.pathname] || '', 
+    [pageTitle, location.pathname]
+  );
+  
+  const footerImageSrcFinal = useMemo(() => 
+    footerImageSrc || '/Footer.svg', // Cambiar a SVG
+    [footerImageSrc]
+  );
+  
   // Cargar la preferencia del usuario al montar el componente
   useEffect(() => {
     const savedPreference = localStorage.getItem('menu-collapsed-state');
@@ -55,26 +66,24 @@ export const Layout: React.FC<LayoutProps> = ({
     }
   }, []);
   
-  const handleMenuToggle = (collapsed: boolean) => {
+  const handleMenuToggle = useCallback((collapsed: boolean) => {
     setIsMenuCollapsed(collapsed);
-  };
+  }, []);
   
   // Nueva función para colapsar el menú desde hijos
   const collapseMenu = useCallback(() => {
     setIsMenuCollapsed(true);
     localStorage.setItem('menu-collapsed-state', 'true');
   }, []);
-  
-  // Determinar el título basado en la ubicación actual si no se proporciona uno
-  const currentPageTitle = pageTitle || pageTitles[location.pathname] || '';
 
   return (
     <MenuCollapseProvider>
       <LegacyMenuCollapseContext.Provider value={{ collapseMenu }}>
         <div className="layout" style={{ 
-          flex: 1, // Para que ocupe el espacio en #root
+          height: '100vh', // Altura fija para evitar scroll
           display: 'flex', 
-          flexDirection: 'column' 
+          flexDirection: 'column',
+          overflow: 'hidden', // Evitar scroll en el contenedor principal
         }}>
           <Header 
             logoUrl={logoSrc}
@@ -85,10 +94,11 @@ export const Layout: React.FC<LayoutProps> = ({
           <div className="layout-body" style={{ 
             paddingTop: "4rem", 
             display: "flex",
-            flexDirection: 'row', // Asegura que el menú y el main estén en el mismo flujo
-            flex: 1, // Hacer que el contenido ocupe el espacio disponible entre Header y Footer
+            flexDirection: 'row',
+            flex: 1,
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            minHeight: 0, // Importante para que flex funcione correctamente
           }}>
             <NavMenuApp 
               onToggle={handleMenuToggle}
@@ -97,16 +107,16 @@ export const Layout: React.FC<LayoutProps> = ({
             <main 
               className="instant-stable navigation-stable no-flash"
               style={{ 
-                // marginLeft eliminado, ahora el layout es fluido
-                width: "100%", // Ocupa el ancho disponible menos el NavMenu
+                width: "100%",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 backgroundColor: backgroundColor,
-                overflowY: 'auto',
+                overflowY: 'auto', // Permitir scroll solo en el contenido principal
                 padding: "1rem",
                 boxSizing: 'border-box',
                 flex: 1,
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                minHeight: 0, // Importante para que flex funcione correctamente
               }}
             >
               <PageTransition
@@ -115,14 +125,23 @@ export const Layout: React.FC<LayoutProps> = ({
                 disabled={!enableTransitions}
                 preset="minimal"
               >
-                {/* El contenido (children) se renderizará aquí. 
-                    Si HomePage o sus hijos tienen paddings/margins, se considerarán dentro de este main.
-                    El padding de 1rem de main está incluido en su tamaño gracias a box-sizing: border-box. */}
-                {children}
+                <div style={{ 
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minHeight: 0, // Importante para que flex funcione correctamente
+                }}>
+                  {children}
+                </div>
               </PageTransition>
             </main>
           </div>
-          {showFooter && <Footer footerImageSrc={footerImageSrc!} />} {/* Footer tomará su espacio natural o será empujado por flex:1 de layout-body */}
+          {showFooter && (
+            <Footer 
+              footerImageSrc={footerImageSrcFinal} 
+              backgroundColor={backgroundColor}
+            />
+          )}
         </div>
       </LegacyMenuCollapseContext.Provider>
     </MenuCollapseProvider>

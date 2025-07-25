@@ -20,6 +20,8 @@ html {
   font-family: var(--font-family-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  overflow: hidden; /* Evitar scroll en el html */
 }
 
 body {
@@ -28,6 +30,8 @@ body {
   line-height: var(--line-height-normal);
   color: #333;
   background-color: #ffffff;
+  height: 100%;
+  overflow: hidden; /* Evitar scroll en el body */
 }
 
 /* Asegurar que todos los elementos hereden la fuente */
@@ -48,17 +52,23 @@ p, span, div, button, input, textarea, select, label {
 .layout-body {
   width: 100%;
   max-width: 100%;
+  min-height: 0; /* Importante para flexbox */
 }
 
 .layout-body main {
   width: 100%;
   max-width: 100%;
+  min-height: 0; /* Importante para flexbox */
 }
 
 /* Asegurar que el contenedor del HomePage no tenga restricciones */
 .homepage-container {
   width: 100%;
   max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Importante para flexbox */
 }
 
 /* Eliminar bordes del menú de navegación */
@@ -115,31 +125,39 @@ aside.menu * {
   }
 }
 
-/* Footer styles */
+/* Footer styles optimizados */
 .app-footer {
-  margin-top: auto;
-  z-index: 50; /* Por debajo del header y nav pero encima del contenido */
+  flex-shrink: 0; /* Evitar que el footer se encoja */
+  z-index: 50;
+  height: auto; /* Permitir que la altura se ajuste al contenido */
 }
 
 /* Asegurar que el layout principal use flexbox correctamente */
 .layout {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  min-height: 0; /* Importante para flexbox */
 }
 
 .layout-body {
   flex: 1;
   display: flex;
+  overflow: hidden;
+  min-height: 0; /* Importante para flexbox */
 }
 
 .layout-body main {
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* Scroll solo en el contenido principal */
+  min-height: 0; /* Importante para flexbox */
 }
 
 .layout-body main > div:first-child {
   flex: 1;
+  min-height: 0; /* Importante para flexbox */
 }
 
 /* Responsive footer adjustments */

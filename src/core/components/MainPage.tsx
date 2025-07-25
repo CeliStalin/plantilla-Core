@@ -1,14 +1,15 @@
 import React from "react";
-import { Layout } from "./Layout/Layout";
+import Layout from './Layout/Layout';
 
-const MainPage: React.FC = () => {
+const Mainpage: React.FC = () => {
   return (
-    <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="">
-      <div className="content-container" style={{ minHeight: '400px' }}>
-        {/* Página de inicio completamente vacía, solo con fondo blanco */}
+    <Layout pageTitle="Main Page" logoSrc="/Logo.png" footerImageSrc="/Footer.svg">
+      <div>
+        <h1>Main Page</h1>
+        <p>This is the main page content.</p>
       </div>
     </Layout>
   );
 };
 
-export default MainPage;
+export default Mainpage;
