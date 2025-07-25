@@ -4,6 +4,10 @@
 // SVG Components
 export { default as Logo } from './Logo';
 export { default as FooterLogo } from './FooterLogo';
+export { default as MiIntranet } from './MiIntranet';
+export { default as PortalConsalud } from './PortalConsalud';
+export { default as AccesConsalud } from './AccesConsalud';
+export { default as SucursalDigital } from './SucursalDigital';
 
 // Types for SVG components
 export interface LogoProps extends React.SVGProps<SVGSVGElement> {

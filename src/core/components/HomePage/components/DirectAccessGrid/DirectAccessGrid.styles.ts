@@ -26,32 +26,30 @@ export const directAccessGridStyles = {
     borderRadius: '1px',
     opacity: 0.8
   },
-  
-  grid: {
+    grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '16px'
   },
-  
   card: {
     border: '1px solid #E0E0E0',
     borderRadius: '8px',
-    padding: '24px',
+    padding: '20px 30px',
     cursor: 'pointer',
     backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'all 0.2s ease',
-    minHeight: '100px',
+    minHeight: '80px', // Altura mínima estandarizada para todas las cards
+    height: 'auto', // Cambiar de altura fija a auto para permitir que el contenido se expanda
     textDecoration: 'none',
     color: 'inherit',
-    overflow: 'hidden'
+    overflow: 'visible' // Cambiar de hidden a visible para permitir que los SVG se muestren completamente
   },
-  
   cardImage: {
     maxHeight: '60px',
-    maxWidth: '180px',
+    maxWidth: '200px',
     width: 'auto',
     height: 'auto',
     objectFit: 'contain' as const

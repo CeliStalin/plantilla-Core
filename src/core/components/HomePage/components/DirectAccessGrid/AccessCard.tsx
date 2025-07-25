@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AccessCardProps } from '../../types';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
+import { MiIntranet, PortalConsalud, AccesConsalud, SucursalDigital } from '@/assets';
 
 export const AccessCard: React.FC<AccessCardProps> = ({ 
   title, 
@@ -41,25 +42,6 @@ export const AccessCard: React.FC<AccessCardProps> = ({
   };
 
   const getFallbackContent = () => {
-    // Si es Portal Consalud, mostrar diseño específico
-    if (title === 'Portal Consalud') {
-      return (
-        <div style={{
-          backgroundColor: '#4DD0C7',
-          color: 'white',
-          padding: '16px 24px',
-          borderRadius: '6px',
-          fontWeight: 600,
-          fontSize: '16px',
-          textAlign: 'center',
-          width: '100%',
-          maxWidth: '180px'
-        }}>
-          Portal Consalud
-        </div>
-      );
-    }
-    
     // Para otros, mostrar el logo de Consalud si está disponible
     if (title.includes('Consalud')) {
       return (
@@ -90,6 +72,140 @@ export const AccessCard: React.FC<AccessCardProps> = ({
       </div>
     );
   };
+
+  // Renderizar el componente MiIntranet si el título es "Mi Intranet"
+  if (title === 'Mi Intranet') {
+    return (
+      <div 
+        className="access-card" 
+        style={{
+          ...directAccessGridStyles.card,
+          animationDelay: `${delay}s`,
+          position: 'relative'
+        }}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        aria-label={`Abrir ${title} en nueva ventana`}
+      >
+        <MiIntranet 
+          style={{
+            width: '140px',
+            height: '50px'
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Renderizar el componente PortalConsalud si el título es "Portal Consalud"
+  if (title === 'Portal Consalud') {
+    return (
+      <div 
+        className="access-card" 
+        style={{
+          ...directAccessGridStyles.card,
+          animationDelay: `${delay}s`,
+          position: 'relative',
+          backgroundColor: '#B1EAEA'
+        }}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        aria-label={`Abrir ${title} en nueva ventana`}
+      >
+        <PortalConsalud 
+          style={{
+            width: '160px',
+            height: '80px'
+          }}
+        />
+      </div>
+    );
+  }
+  // Renderizar el componente AccesConsalud si el título es "Consalud Somos CDC"
+  if (title === 'Consalud Somos CDC') {
+    return (
+      <div 
+        className="access-card" 
+        style={{
+          ...directAccessGridStyles.card,
+          animationDelay: `${delay}s`,
+          position: 'relative',
+          backgroundColor: '#04A59B'
+        }}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        aria-label={`Abrir ${title} en nueva ventana`}
+      >
+        <AccesConsalud 
+          style={{
+            width: '160px',
+            height: '90px'
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Renderizar el componente SucursalDigital si el título es "Sucursal digital"
+  if (title === 'Sucursal digital') {
+    return (
+      <div 
+        className="access-card" 
+        style={{
+          ...directAccessGridStyles.card,
+          animationDelay: `${delay}s`,
+          position: 'relative',
+          backgroundColor: 'white'
+        }}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        aria-label={`Abrir ${title} en nueva ventana`}
+      >
+        <SucursalDigital 
+          style={{
+            width: '160px',
+            height: '90px'
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div 

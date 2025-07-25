@@ -18,6 +18,9 @@ export * from './theme';
 // Types
 export * from './types';
 
+// Assets
+export * from '../assets';
+
 // Config
 export * from './config/env';
 export * from './config/msalConfig';

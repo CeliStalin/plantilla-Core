@@ -4,18 +4,18 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'mi-intranet',
     title: 'Mi Intranet',
-    logoSrc: 'https://via.placeholder.com/150x50?text=Mi+Intranet',
+    logoSrc: '', // No se usa ya que se renderiza el componente SVG directamente
     url: 'https://www.consalud.cl',
     alt: 'Mi Intranet',
-    fallbackSrc: 'https://via.placeholder.com/150x50?text=Mi+Intranet'
+    fallbackSrc: '' // No se usa ya que se renderiza el componente SVG directamente
   },
   {
     id: 'portal-consalud',
     title: 'Portal Consalud',
-    logoSrc: 'https://via.placeholder.com/150x50?text=Portal+Consalud',
+    logoSrc: '', // No se usa ya que se renderiza el componente SVG directamente
     url: 'https://www.consalud.cl',
     alt: 'Portal Consalud',
-    fallbackSrc: 'https://via.placeholder.com/150x50?text=Portal+Consalud'
+    fallbackSrc: '' // No se usa ya que se renderiza el componente SVG directamente
   },
   {
     id: 'consalud-somos-cdc',
