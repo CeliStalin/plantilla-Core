@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { WelcomeSectionProps } from '../../types';
-import { UserIcon } from '../../icons/HomePageIcons';
+import { IconLog } from '../../icons/HomePageIcons';
 import { welcomeSectionStyles, responsiveWelcomeStyles } from './WelcomeSection.styles';
 import { useResponsive } from '../../hooks';
 
@@ -50,7 +50,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
         aria-label={`Avatar de ${userName}. Click para opciones de perfil`}
         title={`Perfil de ${userName}`}
       >
-        <UserIcon />
+        <IconLog />
       </div>
       <div style={welcomeSectionStyles.content}>
         <h1 style={welcomeSectionStyles.title}>

@@ -115,6 +115,11 @@ aside.menu * {
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000px;
   -webkit-transform-style: preserve-3d;
+  
+  /* Forzar eliminación de cualquier sombra o borde verde */
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 /* Optimización para dispositivos con menos potencia */
@@ -123,6 +128,13 @@ aside.menu * {
     /* Reducir complejidad en dispositivos pequeños */
     will-change: auto;
   }
+}
+
+/* Forzar eliminación de sombras en hover */
+.welcome-section .icon-container:hover {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 /* Footer styles optimizados */

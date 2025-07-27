@@ -9,7 +9,7 @@ export const welcomeSectionStyles = {
   },
   
   iconContainer: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#00CBBF', // Usar el mismo color del IconLog en lugar del verde del tema
     borderRadius: '50%',
     width: '80px',
     height: '80px',
@@ -22,8 +22,8 @@ export const welcomeSectionStyles = {
     position: 'relative' as const,
     overflow: 'hidden',
     willChange: 'transform, box-shadow',
-    // Sombra base 
-    boxShadow: '0 4px 8px rgba(4, 165, 155, 0.15), 0 2px 4px rgba(4, 165, 155, 0.1)',
+    // Sin sombra para eliminar el borde verde
+    boxShadow: 'none',
     // Transición suave para interacciones
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     // Asegurar que el avatar esté sobre otros elementos
@@ -64,8 +64,8 @@ export const responsiveWelcomeStyles = {
     iconContainer: {
       marginRight: 0,
       marginBottom: '16px',
-      // Reducir intensidad en móviles para mejor rendimiento
-      boxShadow: '0 2px 4px rgba(4, 165, 155, 0.1)',
+      // Sin sombra para eliminar el borde verde
+      boxShadow: 'none',
     }
   },
   
@@ -75,8 +75,8 @@ export const responsiveWelcomeStyles = {
     },
     
     iconContainer: {
-      // Efecto intermedio en tablets
-      boxShadow: '0 3px 6px rgba(4, 165, 155, 0.12)',
+      // Sin sombra para eliminar el borde verde
+      boxShadow: 'none',
     }
   }
 };

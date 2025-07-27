@@ -100,3 +100,28 @@ export const AccesoDirectoIcon: React.FC<IconProps> = ({ size = 24, color = '#02
     <path d="M10.9072 5.48914C10.9042 5.48914 10.9022 5.49114 10.9022 5.49414C10.9022 5.49714 10.9042 5.49914 10.9072 5.49914C10.9102 5.49914 10.9122 5.49714 10.9122 5.49414C10.9122 5.49114 10.9102 5.48914 10.9072 5.48914" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+
+export const IconLog: React.FC<IconProps> = ({ 
+  size = 60, 
+  color = '#00CBBF',
+  className = ''
+}) => (
+  <svg 
+    className={className}
+    width={size} 
+    height={size} 
+    viewBox="0 0 60 60" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="30" cy="30" r="30" fill={color}/>
+    <path d="M15.334 42.0011V42.0011C15.334 39.3358 17.494 37.1758 20.1593 37.1758H24.9847C27.65 37.1758 29.81 39.3358 29.81 42.0011V42.0011" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M25.5581 26.3462C27.2072 27.9952 27.2072 30.6689 25.5581 32.3179C23.9091 33.967 21.2355 33.967 19.5864 32.3179C17.9373 30.6689 17.9373 27.9952 19.5864 26.3462C21.2355 24.6971 23.9091 24.6971 25.5581 26.3462" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M38.1266 32.4094C41.7372 32.4094 44.6652 29.4814 44.6652 25.8707C44.6652 22.26 41.7386 19.332 38.1266 19.332C34.5146 19.332 31.5879 22.26 31.5879 25.8707" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M38.1348 32.4164C37.1508 32.4164 36.2188 32.1991 35.3814 31.8111L31.3574 32.6658L32.1988 28.6338C31.8081 27.7938 31.5894 26.8578 31.5894 25.8711" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M35.0829 25.9516C35.109 25.9776 35.109 26.0198 35.0829 26.0458C35.0569 26.0719 35.0147 26.0719 34.9887 26.0458C34.9626 26.0198 34.9626 25.9776 34.9887 25.9516C35.0147 25.9255 35.0569 25.9255 35.0829 25.9516" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M38.0829 25.9516C38.109 25.9776 38.109 26.0198 38.0829 26.0458C38.0569 26.0719 38.0147 26.0719 37.9887 26.0458C37.9626 26.0198 37.9626 25.9776 37.9887 25.9516C38.0147 25.9255 38.0569 25.9255 38.0829 25.9516" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M41.0829 25.9516C41.109 25.9776 41.109 26.0198 41.0829 26.0458C41.0569 26.0719 41.0147 26.0719 40.9887 26.0458C40.9626 26.0198 40.9626 25.9776 40.9887 25.9516C41.0147 25.9255 41.0569 25.9255 41.0829 25.9516" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);

@@ -97,35 +97,26 @@
   
   @keyframes iconPulse {
     0% {
-      box-shadow: 0 0 0 0 rgba(4, 165, 155, 0.4);
+      box-shadow: none;
     }
     70% {
-      box-shadow: 0 0 0 10px rgba(4, 165, 155, 0);
+      box-shadow: none;
     }
     100% {
-      box-shadow: 0 0 0 0 rgba(4, 165, 155, 0);
+      box-shadow: none;
     }
   }
   
   /* Animaciones para el avatar con efectos sutiles */
   @keyframes avatarGlow {
     0% {
-      box-shadow: 
-        0 4px 8px rgba(4, 165, 155, 0.15),
-        0 2px 4px rgba(4, 165, 155, 0.1),
-        0 0 0 0 rgba(4, 165, 155, 0.1);
+      box-shadow: none;
     }
     50% {
-      box-shadow: 
-        0 8px 16px rgba(4, 165, 155, 0.25),
-        0 4px 8px rgba(4, 165, 155, 0.15),
-        0 0 0 4px rgba(4, 165, 155, 0.05);
+      box-shadow: none;
     }
     100% {
-      box-shadow: 
-        0 4px 8px rgba(4, 165, 155, 0.15),
-        0 2px 4px rgba(4, 165, 155, 0.1),
-        0 0 0 0 rgba(4, 165, 155, 0.1);
+      box-shadow: none;
     }
   }
   
@@ -223,10 +214,7 @@
   /* Efecto hover para el avatar */
   .welcome-section .icon-container:hover {
     animation-play-state: paused;
-    box-shadow: 
-      0 12px 24px rgba(4, 165, 155, 0.3),
-      0 6px 12px rgba(4, 165, 155, 0.2),
-      0 0 0 8px rgba(4, 165, 155, 0.1);
+    box-shadow: none;
     transform: translateY(-2px) scale(1.05);
   }
   
@@ -280,12 +268,12 @@
     
     .welcome-section .icon-container {
       animation: none;
-      box-shadow: 0 4px 8px rgba(4, 165, 155, 0.15);
+      box-shadow: none;
     }
     
     .welcome-section .icon-container:hover {
       animation: none;
-      box-shadow: 0 6px 12px rgba(4, 165, 155, 0.2);
+      box-shadow: none;
       transform: none;
     }
     
