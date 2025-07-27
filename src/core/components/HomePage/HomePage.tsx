@@ -13,6 +13,7 @@ import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLink
 import { useMenuConfig } from '@/core/hooks';
 import { useMenuCollapse } from '../../context/MenuCollapseContext';
 import { MenuCollapseProvider } from '@/core/context/MenuCollapseContext';
+import { AnimationProvider } from './components/AnimationProvider';
 
 export interface HomePageWithLayoutProps extends HomePageProps {
   /**
@@ -186,15 +187,19 @@ export const HomePage: React.FC<HomePageWithLayoutProps> = (props) => {
 
   if (withLayout) {
     return (
-      <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="/Footer.svg">
-        <HomePageInner {...props} />
-      </Layout>
+      <AnimationProvider>
+        <Layout pageTitle="Inicio" logoSrc="/Logo.png" footerImageSrc="/Footer.svg">
+          <HomePageInner {...props} />
+        </Layout>
+      </AnimationProvider>
     );
   }
   return (
-    <MenuCollapseProvider>
-      <HomePageInner {...props} />
-    </MenuCollapseProvider>
+    <AnimationProvider>
+      <MenuCollapseProvider>
+        <HomePageInner {...props} />
+      </MenuCollapseProvider>
+    </AnimationProvider>
   );
 };
 

@@ -1,0 +1,52 @@
+/* DirectAccessGrid specific styles for access cards */
+.direct-access-section .access-card {
+  transition: all 0.3s ease !important;
+}
+
+.direct-access-section .access-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.direct-access-section .access-card:focus {
+  outline: 2px solid #04A59B !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure animations work in external apps */
+.access-card {
+  transition: all 0.3s ease !important;
+}
+
+.access-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.access-card:focus {
+  outline: 2px solid #04A59B !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .access-card,
+  .direct-access-section .access-card {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .access-card:hover,
+  .direct-access-section .access-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Responsive animations */
+@media screen and (max-width: 768px) {
+  .access-card,
+  .direct-access-section .access-card {
+    animation-duration: 0.3s !important;
+  }
+} 

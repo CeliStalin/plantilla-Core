@@ -45,6 +45,16 @@
   }
 }
 
+/* Chevron rotation animation for app cards */
+@keyframes rotateChevron {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(3px);
+  }
+}
+
 /* Ripple effect for buttons */
 @keyframes ripple {
   to {

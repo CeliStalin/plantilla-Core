@@ -1,0 +1,116 @@
+/* ================================================
+   EXTERNAL APPS ANIMATIONS - Consalud Core
+   ================================================ */
+
+/* This file ensures animations work in external apps that consume the core */
+
+/* Force animations to work in external apps */
+@import './animations.css';
+
+/* Ensure access-card animations work in external apps */
+.access-card {
+  transition: all 0.3s ease !important;
+}
+
+.access-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.access-card:focus {
+  outline: 2px solid #04A59B !important;
+  outline-offset: 2px !important;
+}
+
+/* Staggered animations for access cards */
+.access-card:nth-child(1) { animation-delay: 0.3s !important; }
+.access-card:nth-child(2) { animation-delay: 0.4s !important; }
+.access-card:nth-child(3) { animation-delay: 0.5s !important; }
+.access-card:nth-child(4) { animation-delay: 0.6s !important; }
+
+/* Ensure app-card animations work in external apps */
+.app-card {
+  transition: all 0.3s ease !important;
+}
+
+.app-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.app-card:hover svg {
+  animation: rotateChevron 0.3s forwards !important;
+}
+
+.app-card:focus {
+  outline: 2px solid #04A59B !important;
+  outline-offset: 2px !important;
+}
+
+/* Staggered animations for app cards */
+.app-card:nth-child(1) { animation-delay: 0.1s !important; }
+.app-card:nth-child(2) { animation-delay: 0.2s !important; }
+.app-card:nth-child(3) { animation-delay: 0.3s !important; }
+.app-card:nth-child(4) { animation-delay: 0.4s !important; }
+.app-card:nth-child(5) { animation-delay: 0.5s !important; }
+.app-card:nth-child(6) { animation-delay: 0.6s !important; }
+
+/* Welcome section animations */
+.welcome-section {
+  animation: fadeInUp 0.8s ease-out forwards !important;
+}
+
+/* Section header animations */
+.applications-section .section-header h2,
+.direct-access-section .section-header h2 {
+  position: relative !important;
+}
+
+.applications-section .section-header h2::after,
+.direct-access-section .section-header h2::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -5px !important;
+  left: 0 !important;
+  width: 0 !important;
+  height: 2px !important;
+  background-color: #04A59B !important;
+  transition: width 0.3s ease-out !important;
+}
+
+.applications-section .section-header:hover h2::after,
+.direct-access-section .section-header:hover h2::after {
+  width: 100% !important;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .access-card,
+  .app-card,
+  .welcome-section {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .access-card:hover,
+  .app-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  .app-card:hover svg {
+    animation: none !important;
+  }
+}
+
+/* Responsive animations */
+@media screen and (max-width: 768px) {
+  .access-card,
+  .app-card {
+    animation-duration: 0.3s !important;
+  }
+  
+  .welcome-section {
+    animation-duration: 0.5s !important;
+  }
+} 

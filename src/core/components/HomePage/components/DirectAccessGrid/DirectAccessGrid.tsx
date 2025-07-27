@@ -5,6 +5,8 @@ import { LoadingCard } from '@/core/components/LoadingPlaceholder';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
 import { EXTERNAL_LINKS, EXTERNAL_LINKS_DELAYS } from '../../constants';
 import { AccesoDirectoIcon } from '@/core/components/HomePage/icons/AccesoDirectoIcon';
+import '../../styles/animations.css';
+import './DirectAccessGrid.css';
 
 export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({ 
   loading, 
@@ -13,14 +15,17 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
   externalLinks = EXTERNAL_LINKS // Usar valor por defecto si no se proporciona
 }) => {
   return (
-    <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>      <div style={directAccessGridStyles.sectionHeader}>
+    <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>
+      <div style={directAccessGridStyles.sectionHeader}>
         <span style={{ marginRight: 8 }}>
           <AccesoDirectoIcon width={28} height={28} />
         </span>
         <h2 style={directAccessGridStyles.sectionTitle}>
           Accesos directos
-        </h2>      </div>
-        {/* Línea divisoria */}
+        </h2>
+      </div>
+      
+      {/* Línea divisoria */}
       <div 
         style={{
           width: '100%',

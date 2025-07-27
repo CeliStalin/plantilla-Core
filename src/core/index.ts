@@ -1,5 +1,8 @@
 // --- Core Entry Point ---
 
+// Import all styles to ensure they are included in the build
+import './styles';
+
 // Components
 export * from './components';
 
