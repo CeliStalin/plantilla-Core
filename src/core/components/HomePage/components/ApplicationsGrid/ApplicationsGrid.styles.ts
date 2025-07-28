@@ -36,7 +36,7 @@ export const applicationsGridStyles = {
   },
   
   card: {
-    border: '1px solid #E0E0E0',
+    border: '1px solid #B1EAEA',
     borderRadius: '8px',
     padding: '20px 24px',
     cursor: 'pointer',
