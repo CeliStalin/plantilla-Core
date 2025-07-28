@@ -2,6 +2,7 @@ export * from './Breadcrumb';
 export * from './Button';
 export * from './Card';
 export * from './Dashboard';
+export * from './DatePicker';
 export * from './ErrorBoundary';
 export * from './ErrorMessage';
 export * from './Footer';

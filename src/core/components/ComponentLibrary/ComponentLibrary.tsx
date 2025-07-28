@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingOverlay } from '../Loading/LoadingOverlay';
+import DatePicker from '../DatePicker';
 import { theme } from '../../styles/theme';
 import './ComponentLibrary.styles.css';
 
@@ -244,6 +245,52 @@ const ComponentLibrary: React.FC = () => {
                 <span>🚀</span>
                 Con Icono
               </button>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'datepicker',
+      title: 'DatePicker',
+      description: 'Componente para selección de fechas con calendario interactivo',
+      category: 'components',
+      component: (
+        <div className="component-showcase">
+          <div className="component-grid">
+            <div className="component-item">
+              <h4>DatePicker Básico</h4>
+              <DatePicker 
+                label="Label"
+                placeholder="Seleccionar fecha"
+                onChange={(date) => console.log('Fecha seleccionada:', date)}
+              />
+            </div>
+            <div className="component-item">
+              <h4>DatePicker con Valor Inicial</h4>
+              <DatePicker 
+                label="Fecha de Nacimiento"
+                value={new Date('2022-03-12')}
+                onChange={(date) => console.log('Fecha seleccionada:', date)}
+              />
+            </div>
+            <div className="component-item">
+              <h4>DatePicker con Rango de Fechas</h4>
+              <DatePicker 
+                label="Fecha de Reserva"
+                minDate={new Date()}
+                maxDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)}
+                onChange={(date) => console.log('Fecha seleccionada:', date)}
+              />
+            </div>
+            <div className="component-item">
+              <h4>DatePicker Deshabilitado</h4>
+              <DatePicker 
+                label="Fecha Deshabilitada"
+                disabled={true}
+                value={new Date()}
+                onChange={(date) => console.log('Fecha seleccionada:', date)}
+              />
             </div>
           </div>
         </div>
