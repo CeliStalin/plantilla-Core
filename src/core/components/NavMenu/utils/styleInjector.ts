@@ -66,6 +66,11 @@ export const injectMenuStyles = (): void => {
       border: 0;
       padding: 0;
     }
+
+    /* Forzar que el texto del menú no se transforme a mayúsculas */
+    .menu-label {
+      text-transform: none !important;
+    }
   `;
 
   // Inyectar en el head

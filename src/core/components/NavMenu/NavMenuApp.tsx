@@ -10,6 +10,7 @@ import { MenuSection } from './components/MenuSection';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import { injectMenuStyles } from './utils/styleInjector';
+import { AplicacionesIcon } from '../HomePage/icons/AplicacionesIcon';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
@@ -327,13 +328,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
               {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
                 <MenuSection title={
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    {appIconSrc && (
-                      <img 
-                        src={appIconSrc} 
-                        alt="Aplicaciones"
-                        style={{ width: '16px', height: '16px' }}
-                      />
-                    )}
+                    <AplicacionesIcon width={16} height={16} />
                     Aplicaciones
                   </span>
                 }>

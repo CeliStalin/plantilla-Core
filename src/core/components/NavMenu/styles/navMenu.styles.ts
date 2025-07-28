@@ -211,13 +211,13 @@ export const navMenuStyles = {
     color: '#666',
     fontSize: '13px',
     letterSpacing: '0.5px',
-    textTransform: 'uppercase' as const,
     fontWeight: theme.typography.fontWeight.semibold,
     fontFamily: theme.typography.fontFamily,
     borderRadius: '4px',
     marginBottom: '0.5rem',
     backgroundColor: 'transparent',
     transition: 'background-color 0.2s ease',
+    textTransform: 'none', // Forzar que no se transforme a mayúsculas
     '&:hover': {backgroundColor: 'rgba(0, 0, 0, 0.05)'},
     '& img': {marginRight: '6px',  }
   },

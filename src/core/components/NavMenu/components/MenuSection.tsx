@@ -28,6 +28,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ title, children }) => 
           backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
           padding: '8px 12px',
           borderRadius: '4px',
+          textTransform: 'none', // Forzar que no se transforme a mayúsculas
         }}
         onClick={toggleSection}
         onMouseEnter={() => setIsHovered(true)}
