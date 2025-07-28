@@ -3,6 +3,7 @@ import { IUser } from '../../interfaces/IUserAz';
 import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { LoadingDots } from '../Login/components/LoadingDots';
+import IconUserSesion from '../../../assets/IconUserSesion';
 
 interface UserLoginAppProps {
   logoutIconSrc: string;
@@ -93,7 +94,7 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
   };
 
   const effectiveUserData = usuario || user || localUserData; // Usar cualquiera que esté disponible
-  const avatarSrc = effectiveUserData?.photo || 'https://www.gravatar.com/avatar?d=mp';
+  const avatarSrc = effectiveUserData?.photo || null;
   
   const handleLogout = async () => {
     // Evitar múltiples clicks
@@ -164,18 +165,35 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
             backgroundColor: showInfo ? 'rgba(0, 0, 0, 0.1)' : 'transparent' 
           }}
         >
-          <img
-            src={avatarSrc}
-            alt="Usuario"
-            style={{
+          {avatarSrc ? (
+            <img
+              src={avatarSrc}
+              alt="Usuario"
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                border: '2px solid #ffffff',
+                boxShadow: '0 0 6px rgba(0, 0, 0, 0.1)',
+                marginRight: '10px',
+              }}
+            />
+          ) : (
+            <div style={{
               width: '48px',
               height: '48px',
               borderRadius: '50%',
               border: '2px solid #ffffff',
               boxShadow: '0 0 6px rgba(0, 0, 0, 0.1)',
               marginRight: '10px',
-            }}
-          />
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'transparent'
+            }}>
+              <IconUserSesion width="24" height="24" />
+            </div>
+          )}
           
           {effectiveUserData && effectiveUserData.displayName && (
             <div style={{ color: '#ffffff', fontSize: '0.9rem' }}>
