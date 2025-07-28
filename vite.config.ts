@@ -19,6 +19,15 @@ export default defineConfig(({ command }) => {
       },
       server: {
         port: 3000,
+      },
+      define: {
+        // Definir variables globales para evitar errores de process
+        'process.env': {},
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        'process.env.npm_package_name': JSON.stringify(pkg.name),
+        'import.meta.env.VITE_CORE_DEVELOPMENT': JSON.stringify('true'),
+        'import.meta.env.VITE_PACKAGE_NAME': JSON.stringify(pkg.name),
+        'import.meta.env.VITE_IS_CORE_PROJECT': JSON.stringify('true'),
       }
     }
   } else {
@@ -35,6 +44,15 @@ export default defineConfig(({ command }) => {
         alias: {
           '@': path.resolve(__dirname, './src'),
         },
+      },
+      define: {
+        // Definir variables globales para producción
+        'process.env': {},
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        'process.env.npm_package_name': JSON.stringify(pkg.name),
+        'import.meta.env.VITE_CORE_DEVELOPMENT': JSON.stringify('true'),
+        'import.meta.env.VITE_PACKAGE_NAME': JSON.stringify(pkg.name),
+        'import.meta.env.VITE_IS_CORE_PROJECT': JSON.stringify('true'),
       },
       build: {
         target: 'esnext',

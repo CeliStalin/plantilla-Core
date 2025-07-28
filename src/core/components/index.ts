@@ -20,3 +20,4 @@ export * from './LoadingPlaceholder';
 export * from './NotFound';
 export * from './ProtectedRoute';
 export * from './Unauthorized';
+export * from './ComponentLibrary';

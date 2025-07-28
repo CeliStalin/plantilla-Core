@@ -21,6 +21,7 @@ export const useMenuItems = () => {
       console.log('[useMenuItems] isSignedIn:', isSignedIn);
       console.log('[useMenuItems] enableDynamicMenu:', enableDynamicMenu);
       console.log('[useMenuItems] roles:', roles);
+      
       // Si no está habilitado el menú dinámico, no cargar
       if (!enableDynamicMenu) { 
         setMenuItems([]);
@@ -65,7 +66,9 @@ export const useMenuItems = () => {
 
       try {
         const items = await ApiGetMenus(currentRole);
-        setMenuItems(items || []);
+        let finalItems = items || [];
+        
+        setMenuItems(finalItems);
         hasLoadedRef.current = true;
         lastRoleRef.current = currentRole;
       } catch (err) {

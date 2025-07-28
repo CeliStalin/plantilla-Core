@@ -75,6 +75,16 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
     return roles.some(role => role.Rol === "Developers");
   }, [roles]);
 
+  // Verificar si estamos en desarrollo del core
+  const isCoreDevelopment = useMemo(() => {
+    return import.meta.env.DEV && 
+           typeof window !== 'undefined' && 
+           (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+           (document.querySelector('[data-core="true"]') !== null ||
+            document.querySelector('.core-development') !== null ||
+            document.getElementById('core-development-root') !== null);
+  }, []);
+
   useEffect(() => {
     if (onToggle) {
       // Informamos al componente padre que el menú está desplegado inicialmente
@@ -327,6 +337,17 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
                     Aplicaciones
                   </span>
                 }>
+                  {/* Librería Core - Solo visible en desarrollo del core */}
+                  {hasDevelopersRole && isCoreDevelopment && (
+                    <MenuItem 
+                      key="library"
+                      to="/library"
+                      label="Librería Core"
+                      isActive={isPathActive('/library')}
+                      isApplicationItem={true}
+                      isMenuCollapsed={isMenuCollapsed}
+                    />
+                  )}
                   {menuItems.map((item) => {
                     const itemPath = buildMenuItemPath(item.Controlador, item.Accion);
                     return (

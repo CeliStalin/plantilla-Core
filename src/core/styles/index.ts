@@ -6,9 +6,6 @@ import '../components/HomePage/styles/animations.css';
 import '../components/HomePage/components/ApplicationsGrid/ApplicationsGrid.css';
 import '../components/HomePage/components/DirectAccessGrid/DirectAccessGrid.css';
 
-// Export theme
-export * from './theme';
-
 // Re-export individual typography utilities for direct access
 export {
   FONT_FACES,
@@ -22,7 +19,7 @@ export {
   generateTypographyVariables
 } from './typography';
 
-// Re-export theme for convenience
+// Re-export theme for convenience (solo una vez)
 export { theme } from './theme';
 
 // Re-export types for better TypeScript support
@@ -38,4 +35,4 @@ export type {
   Theme,
   ThemeColors,
   TextColors
-} from '../theme'; // Cambiado de './theme' a '../theme'
+} from '../theme';

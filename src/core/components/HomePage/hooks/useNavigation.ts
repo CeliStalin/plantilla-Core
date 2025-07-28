@@ -6,6 +6,12 @@ export const useNavigation = () => {
   const navigate = useNavigate();
 
   const navigateToApp = useCallback((app: ElementMenu) => {
+    // Manejar casos especiales primero
+    if (app.Controlador === 'library') {
+      navigate('/library');
+      return;
+    }
+
     if (!app.Controlador || !app.Accion) {
       console.warn('Invalid app navigation data:', app);
       return;

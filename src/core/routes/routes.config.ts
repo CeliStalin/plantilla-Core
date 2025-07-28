@@ -38,5 +38,14 @@ export const routes: RouteConfig[] = [
     title: "No Autorizado",
     breadcrumbLabel: "Sin Acceso",
     hideBreadcrumb: true
+  },
+  // Ruta de la librería de componentes (solo visible en desarrollo)
+  {
+    path: "/library",
+    component: React.lazy(() => import('../components/ComponentLibrary/ComponentLibraryWrapper')),
+    public: true,
+    title: "Librería de Componentes",
+    breadcrumbLabel: "Componentes",
+    hideBreadcrumb: false
   }
 ];

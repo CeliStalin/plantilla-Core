@@ -92,7 +92,7 @@ export const Layout: React.FC<LayoutProps> = ({
           />
           
           <div className="layout-body" style={{ 
-            paddingTop: "4rem", 
+            paddingTop: "4rem",
             display: "flex",
             flexDirection: 'row',
             flex: 1,
@@ -111,7 +111,7 @@ export const Layout: React.FC<LayoutProps> = ({
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 backgroundColor: backgroundColor,
                 overflowY: 'auto', // Permitir scroll solo en el contenido principal
-                padding: "1rem",
+                padding: "1.5rem",
                 boxSizing: 'border-box',
                 flex: 1,
                 display: 'flex',
