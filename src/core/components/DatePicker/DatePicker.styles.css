@@ -428,3 +428,33 @@
     background: #9ca3af;
   }
 } 
+
+/* Estilos para estado de error */
+.datepicker-input-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 1px #dc3545 !important;
+}
+
+.datepicker-input-error:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important;
+}
+
+.datepicker-container.error .datepicker-label {
+  color: #dc3545;
+}
+
+/* Mensaje de error (opcional) */
+.datepicker-error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.datepicker-error-message::before {
+  content: "⚠️";
+  font-size: 0.75rem;
+} 

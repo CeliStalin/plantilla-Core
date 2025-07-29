@@ -78,7 +78,7 @@ export default defineConfig(({ command }) => {
           },
         },
         sourcemap: true,
-        cssCodeSplit: true,
+        cssCodeSplit: false, // Cambiar a false para incluir todos los estilos en un solo archivo
       },
     }
   }

@@ -1,3 +1,107 @@
+/* ================================================
+   CONSALUD CORE STYLES
+   ================================================ */
+
+/* Importar estilos base (global.css ya incluye typography y animations) */
 @import './global.css';
-@import './typography.css';
-@import './animations.css'; 
+
+/* Importar estilos de componentes */
+@import '../components/DatePicker/DatePicker.styles.css';
+
+/* Variables CSS adicionales para componentes externos */
+:root {
+  --primary-color: #04A59B;
+  --secondary-color: #667eea;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --info-color: #3b82f6;
+  --light-color: #f8fafc;
+  --dark-color: #1f2937;
+  
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  
+  --border-color: #e5e7eb;
+  --border-radius: 8px;
+  --border-radius-sm: 4px;
+  --border-radius-lg: 12px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+}
+
+/* Estilos base para componentes externos */
+.consalud-core {
+  font-family: var(--font-family-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Utilidades comunes */
+.consalud-core .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.consalud-core .visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Animaciones adicionales */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Clases de utilidad para animaciones */
+.consalud-core .fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.consalud-core .slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.consalud-core .spin {
+  animation: spin 1s linear infinite;
+} 

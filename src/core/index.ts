@@ -2,11 +2,15 @@
 // CORE COMPONENTS EXPORTS
 // ================================================
 
+// Importar estilos CSS
+import './styles/index.css';
+
 // Exportaciones principales de componentes
 export * from './components/Breadcrumb';
 export * from './components/Button';
 export * from './components/Card';
 export * from './components/Dashboard';
+export * from './components/DatePicker';
 export * from './components/ErrorBoundary';
 export * from './components/ErrorMessage';
 export * from './components/Footer';
@@ -86,6 +90,7 @@ export const Core = {
     // Lista de componentes disponibles
     Button: 'Button component with effects and variants',
     Card: 'Card component with header, content and footer',
+    DatePicker: 'DatePicker component with calendar navigation and year selection',
     Typography: 'Typography system with Work Sans font',
     Loading: 'Loading components and overlays',
     ErrorBoundary: 'Error boundary for React components',

@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import './DatePicker.styles.css';
 
 export interface DatePickerProps {
-  value?: Date;
-  onChange?: (date: Date) => void;
+  value?: Date | null;
+  onChange?: (date: Date | null) => void;
   placeholder?: string;
   label?: string;
   disabled?: boolean;
   className?: string;
   minDate?: Date;
   maxDate?: Date;
+  error?: boolean;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -20,7 +21,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
   disabled = false,
   className = '',
   minDate,
-  maxDate
+  maxDate,
+  error = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(value || new Date());
@@ -54,6 +56,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
     if (value) {
       setSelectedDate(value);
       setCurrentMonth(value);
+    } else {
+      setSelectedDate(null);
     }
   }, [value]);
 
@@ -100,7 +104,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
     return days;
   };
 
-  const isSameDay = (date1: Date, date2: Date): boolean => {
+  const isSameDay = (date1: Date, date2: Date | null): boolean => {
+    if (!date2) return false;
     return date1.getDate() === date2.getDate() &&
            date1.getMonth() === date2.getMonth() &&
            date1.getFullYear() === date2.getFullYear();
@@ -275,7 +280,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 
   return (
-    <div className={`datepicker-container ${className}`} ref={datePickerRef}>
+    <div className={`datepicker-container ${className} ${error ? 'error' : ''}`} ref={datePickerRef}>
       {label && (
         <label className="datepicker-label">
           {label}
@@ -284,7 +289,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       <div className="datepicker-input-container">
         <input
           type="text"
-          className="datepicker-input"
+          className={`datepicker-input ${error ? 'datepicker-input-error' : ''}`}
           value={selectedDate ? formatDate(selectedDate) : ''}
           placeholder={placeholder}
           readOnly

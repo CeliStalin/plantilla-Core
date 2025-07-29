@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run copy-css",
-    "copy-css": "cpx \"src/core/styles/*.css\" dist/src/core/styles && cpx src/core/styles/index.css dist/ && cpx src/core/styles/index.css ./",
+    "copy-css": "cpx \"src/core/styles/*.css\" dist/src/core/styles && cpx \"src/core/components/*/styles/*.css\" dist/src/core/components/ && cpx \"src/core/components/*/*.css\" dist/src/core/components/ && cpx src/core/styles/index.css dist/ && cpx src/core/styles/index.css ./ && cpx \"src/core/components/DatePicker/*.css\" dist/src/core/components/DatePicker/",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest --watchAll",

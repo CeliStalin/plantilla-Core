@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingOverlay } from '../Loading/LoadingOverlay';
-import DatePicker from '../DatePicker';
+import { DatePicker } from '../DatePicker';
 import { theme } from '../../styles/theme';
 import './ComponentLibrary.styles.css';
 
