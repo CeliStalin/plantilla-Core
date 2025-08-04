@@ -1,4 +1,4 @@
-/* ================================================
+  /* ================================================
    DATEPICKER STYLES
    ================================================ */
 
@@ -61,12 +61,16 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  font-size: 18px;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
   color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
 .datepicker-icon:hover {
@@ -77,6 +81,13 @@
 .datepicker-icon:disabled {
   color: #9ca3af;
   cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.datepicker-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .datepicker-dropdown {
@@ -84,7 +95,7 @@
   top: 100%;
   left: 0;
   z-index: 1000;
-  background: white;
+  background: #ffffff !important;
   border: 2px solid #04A59B;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -92,6 +103,13 @@
   margin-top: 4px;
   min-width: 280px;
   animation: datepickerFadeIn 0.2s ease-out;
+  color: #000000 !important;
+}
+
+/* Asegurar que el fondo sea blanco en modo claro */
+.datepicker-dropdown:not([data-theme="dark"]) {
+  background: #ffffff !important;
+  color: #000000 !important;
 }
 
 @keyframes datepickerFadeIn {
@@ -117,7 +135,7 @@
   border: none;
   font-size: 18px;
   font-weight: bold;
-  color: #6b7280;
+  color: #000000 !important;
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
@@ -127,22 +145,27 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .datepicker-nav-button:hover {
-  background-color: #f3f4f6;
-  color: #04A59B;
+  background-color: #10b981 !important; /* Verde */
+  color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-nav-button:disabled {
-  color: #d1d5db;
+  color: #9ca3af !important;
   cursor: not-allowed;
+  opacity: 0.5 !important;
+  -webkit-text-fill-color: #9ca3af !important;
 }
 
 .datepicker-month-year {
   font-size: 16px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 600 !important;
+  color: #000000 !important;
   text-transform: capitalize;
   background: none;
   border: none;
@@ -152,11 +175,15 @@
   transition: all 0.2s ease-in-out;
   text-align: center;
   min-width: 120px;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .datepicker-month-year:hover {
-  background-color: #f3f4f6;
-  color: #04A59B;
+  background-color: #10b981 !important; /* Verde */
+  color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-weekdays {
@@ -166,15 +193,19 @@
   margin-bottom: 8px;
 }
 
+/* Estilos adicionales para mejorar contraste */
 .datepicker-weekday {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 32px;
   font-size: 12px;
-  font-weight: 500;
-  color: #6b7280;
+  font-weight: 500 !important;
+  color: #000000 !important;
   text-transform: lowercase;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .datepicker-days {
@@ -189,19 +220,23 @@
   justify-content: center;
   height: 36px;
   font-size: 14px;
-  font-weight: 400;
-  color: #374151;
+  font-weight: 500 !important;
+  color: #000000 !important;
   background: none;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   position: relative;
+  min-width: 36px;
+  text-shadow: none !important;
+  opacity: 1 !important;
 }
 
 .datepicker-day:hover:not(.datepicker-day-disabled) {
-  background-color: #f3f4f6;
-  color: #04A59B;
+  background-color: #10b981 !important; /* Verde */
+  color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-day:focus {
@@ -212,7 +247,7 @@
 .datepicker-day-selected {
   background-color: #04A59B !important;
   color: white !important;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 .datepicker-day-selected:hover {
@@ -220,18 +255,21 @@
 }
 
 .datepicker-day-other-month {
-  color: #d1d5db;
+  color: #4a5568 !important;
+  font-weight: 400 !important;
+  opacity: 0.7 !important;
 }
 
 .datepicker-day-disabled {
-  color: #d1d5db;
+  color: #a0aec0 !important;
   cursor: not-allowed;
   background-color: #f9fafb;
+  font-weight: 400 !important;
 }
 
 .datepicker-day-disabled:hover {
   background-color: #f9fafb;
-  color: #d1d5db;
+  color: #a0aec0 !important;
 }
 
 /* Estilos para la vista de meses */
@@ -247,25 +285,30 @@
   justify-content: center;
   height: 40px;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 500 !important;
+  color: #000000 !important;
   background: none;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 8px 4px;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .datepicker-month:hover {
-  background-color: #f3f4f6;
-  color: #04A59B;
+  background-color: #10b981 !important; /* Verde */
+  color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-month-selected {
   background-color: #04A59B !important;
   color: white !important;
-  font-weight: 600;
+  font-weight: 600 !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-month-selected:hover {
@@ -306,25 +349,30 @@
   justify-content: center;
   height: 36px;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 500 !important;
+  color: #000000 !important;
   background: none;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 8px 4px;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .datepicker-year:hover {
-  background-color: #f3f4f6;
-  color: #04A59B;
+  background-color: #10b981 !important; /* Verde */
+  color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-year-selected {
   background-color: #04A59B !important;
   color: white !important;
-  font-weight: 600;
+  font-weight: 600 !important;
+  -webkit-text-fill-color: white !important;
 }
 
 .datepicker-year-selected:hover {
@@ -370,49 +418,70 @@
   }
   
   .datepicker-dropdown {
-    background-color: #1f2937;
+    background-color: #1f2937 !important;
     border-color: #04A59B;
   }
   
   .datepicker-month-year {
-    color: #f9fafb;
+    color: #f9fafb !important;
   }
 
   .datepicker-month-year:hover {
     background-color: #374151;
+    color: #04A59B !important;
   }
 
   .datepicker-day {
-    color: #f9fafb;
+    color: #f9fafb !important;
   }
   
   .datepicker-day:hover:not(.datepicker-day-disabled) {
-    background-color: #374151;
+    background-color: #10b981 !important; /* Verde */
+    color: white !important;
+    -webkit-text-fill-color: white !important;
   }
   
   .datepicker-day-other-month {
-    color: #6b7280;
+    color: #9ca3af !important;
   }
   
   .datepicker-day-disabled {
-    color: #6b7280;
+    color: #6b7280 !important;
     background-color: #111827;
   }
 
+  .datepicker-nav-button {
+    color: #9ca3af !important;
+  }
+
+  .datepicker-nav-button:hover {
+    background-color: #10b981 !important; /* Verde */
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+  }
+
+  .datepicker-nav-button:disabled {
+    color: #4b5563 !important;
+  }
+
   .datepicker-month {
-    color: #f9fafb;
+    color: #f9fafb !important;
   }
 
   .datepicker-month:hover {
-    background-color: #374151;
+    background-color: #10b981 !important; /* Verde */
+    color: white !important;
+    -webkit-text-fill-color: white !important;
   }
 
   .datepicker-year {
-    color: #f9fafb;
+    color: #f9fafb !important;
   }
 
   .datepicker-year:hover {
-    background-color: #374151;
+    background-color: #10b981 !important; /* Verde */
+    color: white !important;
+    -webkit-text-fill-color: white !important;
   }
 
   /* Scrollbar para modo oscuro */
@@ -457,4 +526,95 @@
 .datepicker-error-message::before {
   content: "⚠️";
   font-size: 0.75rem;
+} 
+
+/* Estilos específicos para forzar visibilidad - Máxima especificidad */
+.datepicker-container .datepicker-dropdown .datepicker-day {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-day:not(.datepicker-day-other-month):not(.datepicker-day-disabled):not(.datepicker-day-selected) {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-month-year {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-nav-button {
+  color: #000000 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-weekday {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Estilos específicos para meses */
+.datepicker-container .datepicker-dropdown .datepicker-month {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-month:not(.datepicker-month-selected) {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Estilos específicos para años */
+.datepicker-container .datepicker-dropdown .datepicker-year {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.datepicker-container .datepicker-dropdown .datepicker-year:not(.datepicker-year-selected) {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Asegurar que el fondo sea completamente blanco */
+.datepicker-container .datepicker-dropdown {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Forzar visibilidad en todos los navegadores */
+.datepicker-day,
+.datepicker-month-year,
+.datepicker-nav-button,
+.datepicker-weekday,
+.datepicker-month,
+.datepicker-year {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 } 

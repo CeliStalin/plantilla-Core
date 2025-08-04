@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './DatePicker.styles.css';
+import CalendarIcon from './CalendarIcon';
 
 export interface DatePickerProps {
   value?: Date | null;
@@ -81,16 +82,24 @@ const DatePicker: React.FC<DatePickerProps> = ({
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const firstDayOfWeek = firstDay.getDay();
+    
+    // Obtener el día de la semana del primer día (0 = domingo, 1 = lunes, etc.)
+    // Ajustar para que lunes sea 0, domingo sea 6
+    let firstDayOfWeek = firstDay.getDay() - 1;
+    if (firstDayOfWeek === -1) firstDayOfWeek = 6; // Domingo
     
     const days: Date[] = [];
     
     // Añadir días del mes anterior para completar la primera semana
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
-      days.push(new Date(year, month, -i));
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      const prevMonth = month === 0 ? 11 : month - 1;
+      const prevYear = month === 0 ? year - 1 : year;
+      const lastDayPrevMonth = new Date(prevYear, prevMonth + 1, 0).getDate();
+      const dayToAdd = lastDayPrevMonth - firstDayOfWeek + i + 1;
+      days.push(new Date(prevYear, prevMonth, dayToAdd));
     }
     
-    // Añadir todos los días del mes
+    // Añadir todos los días del mes actual
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(new Date(year, month, i));
     }
@@ -98,7 +107,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
     // Añadir días del mes siguiente para completar la última semana
     const remainingDays = 42 - days.length; // 6 semanas * 7 días
     for (let i = 1; i <= remainingDays; i++) {
-      days.push(new Date(year, month + 1, i));
+      const nextMonth = month === 11 ? 0 : month + 1;
+      const nextYear = month === 11 ? year + 1 : year;
+      days.push(new Date(nextYear, nextMonth, i));
     }
     
     return days;
@@ -302,7 +313,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           onClick={handleInputClick}
           disabled={disabled}
         >
-          📅
+          <CalendarIcon width={18} height={18} />
         </button>
       </div>
       

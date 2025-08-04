@@ -270,6 +270,7 @@ const ComponentLibrary: React.FC = () => {
               <h4>DatePicker con Valor Inicial</h4>
               <DatePicker 
                 label="Fecha de Nacimiento"
+                placeholder="Seleccionar fecha de nacimiento"
                 value={new Date('2022-03-12')}
                 onChange={(date) => console.log('Fecha seleccionada:', date)}
               />
@@ -278,6 +279,7 @@ const ComponentLibrary: React.FC = () => {
               <h4>DatePicker con Rango de Fechas</h4>
               <DatePicker 
                 label="Fecha de Reserva"
+                placeholder="Seleccionar fecha de reserva"
                 minDate={new Date()}
                 maxDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)}
                 onChange={(date) => console.log('Fecha seleccionada:', date)}
@@ -287,6 +289,7 @@ const ComponentLibrary: React.FC = () => {
               <h4>DatePicker Deshabilitado</h4>
               <DatePicker 
                 label="Fecha Deshabilitada"
+                placeholder="Seleccionar fecha"
                 disabled={true}
                 value={new Date()}
                 onChange={(date) => console.log('Fecha seleccionada:', date)}
