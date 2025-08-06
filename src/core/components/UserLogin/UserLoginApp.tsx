@@ -37,6 +37,12 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
         const parsedUser = JSON.parse(userString);
         console.log("Usuario encontrado en localStorage:", parsedUser.displayName);
         setLocalUserData(parsedUser);
+        
+        // Verificar si falta la foto y obtenerla si es necesario
+        if (!parsedUser.photo && loadUserData) {
+          console.log("Usuario en localStorage sin foto, intentando obtener...");
+          loadUserData();
+        }
       } else {
         console.log("No se encontró información de usuario en localStorage");
         // Si no hay datos en localStorage pero debería haberlos, intentar cargarlos
@@ -95,6 +101,14 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
 
   const effectiveUserData = usuario || user || localUserData; // Usar cualquiera que esté disponible
   const avatarSrc = effectiveUserData?.photo || null;
+  
+  // Verificar si falta la foto y obtenerla automáticamente
+  useEffect(() => {
+    if (effectiveUserData && !effectiveUserData.photo && loadUserData) {
+      console.log("Usuario sin foto detectado, obteniendo foto automáticamente...");
+      loadUserData();
+    }
+  }, [effectiveUserData, loadUserData]);
   
   const handleLogout = async () => {
     // Evitar múltiples clicks

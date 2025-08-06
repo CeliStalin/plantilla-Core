@@ -88,6 +88,56 @@ export class AuthService {
     });
   }
 
+  public static async getUserPhoto(): Promise<string | null> {
+    return this.retryWithBackoff(async () => {
+      try {
+        // Asegurarse de que MSAL esté inicializado
+        await AuthProvider.initialize();
+        
+        // Verificar autenticación antes de obtener token
+        const isAuthenticated = await AuthProvider.isAuthenticated();
+        if (!isAuthenticated) {
+          throw new Error('Usuario no autenticado');
+        }
+        
+        // Obtener token
+        console.log('[AuthService] Obteniendo token para foto de usuario...');
+        const token = await AuthProvider.getAccessToken(['user.read']);
+        
+        console.log('[AuthService] Token obtenido, realizando llamada a Graph API para foto...');
+        const response = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            console.log('[AuthService] Usuario no tiene foto de perfil');
+            return null;
+          }
+          throw new Error(`Error al obtener foto: ${response.status} - ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        
+        // Convertir blob a base64 para persistencia
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64String = reader.result as string;
+            console.log('[AuthService] Foto convertida a base64 exitosamente');
+            resolve(base64String);
+          };
+          reader.readAsDataURL(blob);
+        });
+      } catch (error) {
+        console.error('[AuthService] Error al obtener foto de usuario:', error);
+        return null;
+      }
+    });
+  }
+
   public static async getUsuarioAD(email: string): Promise<UsuarioAd> {
     return this.retryWithBackoff(async () => {
       try {
@@ -160,3 +210,4 @@ export class AuthService {
 export const getMe = () => AuthService.getMe();
 export const getUsuarioAD = (email: string) => AuthService.getUsuarioAD(email);
 export const getRoles = (email: string) => AuthService.getRoles(email);
+export const getUserPhoto = () => AuthService.getUserPhoto();

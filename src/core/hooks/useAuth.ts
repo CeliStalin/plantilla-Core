@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { AuthProvider } from '../services/auth/authProviderMsal';
 import { getMe, getUsuarioAD, getRoles } from '../services/auth/authService';
+import { AuthService } from '../services/auth/authService';
 import useLocalStorage from './useLocalStorage';
 import { IUser } from '../interfaces/IUserAz';
 import { RolResponse } from '../interfaces/IRol';
@@ -132,7 +133,33 @@ export const useAuth = (): UseAuthReturn => {
     
     // Si ya tenemos todos los datos, no volvemos a cargarlos
     if (usuario && usuarioAD && roles.length > 0 && !loading) {
-      console.log("[useAuth] Datos de usuario ya cargados, omitiendo carga");
+      // PERO verificar si falta la foto y obtenerla si es necesario
+      if (usuario && !usuario.photo) {
+        console.log("[useAuth] Datos cargados pero sin foto, intentando obtener foto...");
+        try {
+          const photoUrl = await AuthService.getUserPhoto();
+          if (photoUrl) {
+            console.log("[useAuth] Foto obtenida para datos existentes:", photoUrl);
+            const updatedUsuario = { ...usuario, photo: photoUrl };
+            setUsuario(updatedUsuario);
+            
+            // También actualizar localStorage
+            try {
+              const storedUser = localStorage.getItem('usuario');
+              if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                const updatedStoredUser = { ...parsedUser, photo: photoUrl };
+                localStorage.setItem('usuario', JSON.stringify(updatedStoredUser));
+                console.log("[useAuth] Usuario actualizado en localStorage con foto");
+              }
+            } catch (e) {
+              console.error("[useAuth] Error al actualizar localStorage:", e);
+            }
+          }
+        } catch (error) {
+          console.warn("[useAuth] Error al obtener foto para datos existentes:", error);
+        }
+      }
       return;
     }
 
@@ -183,6 +210,25 @@ export const useAuth = (): UseAuthReturn => {
         }
       } else {
         console.log("[useAuth] Datos de usuario obtenidos correctamente:", userData.displayName);
+        
+        // Obtener la foto del usuario si no está presente
+        if (!userData.photo) {
+          console.log("[useAuth] No hay foto en datos básicos, intentando obtener foto...");
+          try {
+            const photoUrl = await AuthService.getUserPhoto();
+            if (photoUrl) {
+              console.log("[useAuth] Foto obtenida exitosamente:", photoUrl);
+              userData.photo = photoUrl;
+            } else {
+              console.log("[useAuth] No se pudo obtener foto del usuario");
+            }
+          } catch (error) {
+            console.warn("[useAuth] Error al obtener foto de usuario:", error);
+          }
+        } else {
+          console.log("[useAuth] Foto ya presente en datos del usuario");
+        }
+        
         setUsuario(userData);
         cache.current.set(userData.id, userData);
         
