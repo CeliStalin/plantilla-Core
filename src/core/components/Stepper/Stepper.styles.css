@@ -1,0 +1,565 @@
+/* ================================================
+   STEPPER COMPONENT STYLES
+   ================================================ */
+
+.stepper {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+}
+
+/* ================================================
+   ORIENTATION STYLES
+   ================================================ */
+
+.stepper-horizontal {
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0;
+  position: relative;
+}
+
+.stepper-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: #404040;
+  border-radius: 2px;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.stepper-horizontal::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 4px;
+  background: linear-gradient(90deg, #04A59B 0%, #00d4aa 100%);
+  border-radius: 2px;
+  z-index: 2;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  width: calc(var(--progress-width, 0%) * (100% - 40px) / 100%);
+  box-shadow: 0 0 8px rgba(4, 165, 155, 0.3);
+}
+
+/* Mejorar la visibilidad de la barra de progreso */
+.stepper-horizontal .stepper-step-completed + .stepper-connector .stepper-connector-line::after {
+  width: 100%;
+  background: linear-gradient(90deg, #04A59B 0%, #00d4aa 100%);
+  box-shadow: 0 0 8px rgba(4, 165, 155, 0.3);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepper-vertical {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ================================================
+   SIZE VARIATIONS
+   ================================================ */
+
+.stepper-small .stepper-step-icon-wrapper {
+  width: 32px;
+  height: 32px;
+  font-size: 0.75rem;
+}
+
+.stepper-small .stepper-step-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.stepper-small .stepper-step-description {
+  font-size: 0.75rem;
+}
+
+.stepper-medium .stepper-step-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  font-size: 0.875rem;
+}
+
+.stepper-medium .stepper-step-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.stepper-medium .stepper-step-description {
+  font-size: 0.875rem;
+}
+
+.stepper-large .stepper-step-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+.stepper-large .stepper-step-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.stepper-large .stepper-step-description {
+  font-size: 1rem;
+}
+
+/* ================================================
+   STEP CONTENT STYLES
+   ================================================ */
+
+.stepper-step {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+}
+
+.stepper-step-horizontal {
+  flex-direction: column;
+  text-align: center;
+  min-width: 120px;
+}
+
+.stepper-step-vertical {
+  flex-direction: row;
+  text-align: left;
+}
+
+.stepper-step-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 3;
+}
+
+.stepper-step-horizontal .stepper-step-content {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stepper-step-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #2d2d2d;
+  border: 2px solid #404040;
+  color: #9ca3af;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.stepper-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.stepper-step-title {
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.2;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.stepper-step-description {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* ================================================
+   STEP STATUS STYLES
+   ================================================ */
+
+.stepper-step-pending .stepper-step-icon-wrapper {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #9ca3af;
+}
+
+.stepper-step-pending .stepper-step-title {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.stepper-step-pending .stepper-step-description {
+  color: #6b7280;
+}
+
+.stepper-step-active .stepper-step-icon-wrapper {
+  background: linear-gradient(135deg, #04A59B 0%, #00d4aa 100%);
+  border-color: #04A59B;
+  color: #ffffff;
+  animation: stepper-pulse 2s infinite;
+  box-shadow: 0 0 0 4px rgba(4, 165, 155, 0.2), 0 4px 12px rgba(4, 165, 155, 0.3);
+  transform: scale(1.05);
+}
+
+.stepper-step-active .stepper-step-title {
+  color: #04A59B;
+  font-weight: 600;
+}
+
+.stepper-step-active .stepper-step-description {
+  color: #04A59B;
+}
+
+.stepper-step-completed .stepper-step-icon-wrapper {
+  background: linear-gradient(135deg, #04A59B 0%, #00d4aa 100%);
+  border-color: #04A59B;
+  color: #ffffff;
+  animation: stepper-check-appear 0.3s ease-out;
+  box-shadow: 0 2px 8px rgba(4, 165, 155, 0.3);
+}
+
+.stepper-step-completed .stepper-step-title {
+  color: #04A59B;
+  font-weight: 600;
+}
+
+.stepper-step-completed .stepper-step-description {
+  color: #04A59B;
+}
+
+.stepper-step-error .stepper-step-icon-wrapper {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  border-color: #ef4444;
+  color: #ffffff;
+  animation: stepper-error-appear 0.3s ease-out, stepper-shake 0.5s ease-in-out;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.stepper-step-error .stepper-step-title {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.stepper-step-error .stepper-step-description {
+  color: #ef4444;
+}
+
+/* ================================================
+   ICON STYLES
+   ================================================ */
+
+.stepper-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.stepper-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stepper-icon-completed svg {
+  animation: stepper-check-appear 0.3s ease-out;
+}
+
+.stepper-icon-error svg {
+  animation: stepper-error-appear 0.3s ease-out;
+}
+
+/* ================================================
+   CONNECTOR STYLES
+   ================================================ */
+
+.stepper-connector {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 100%;
+  height: 4px;
+  z-index: 1;
+}
+
+.stepper-horizontal .stepper-connector {
+  transform: translateX(-50%);
+}
+
+.stepper-vertical .stepper-connector {
+  left: 20px;
+  top: 40px;
+  width: 4px;
+  height: 100%;
+  transform: translateY(-50%);
+}
+
+.stepper-connector-line {
+  width: 100%;
+  height: 100%;
+  background: #404040;
+  border-radius: 2px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.stepper-connector-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #04A59B 0%, #00d4aa 100%);
+  border-radius: 2px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(4, 165, 155, 0.3);
+}
+
+.stepper-step-completed + .stepper-connector .stepper-connector-line::after {
+  width: 100%;
+}
+
+/* ================================================
+   INTERACTION STYLES
+   ================================================ */
+
+.stepper-step-clickable {
+  cursor: pointer;
+}
+
+.stepper-step-clickable:hover {
+  transform: translateY(-2px);
+}
+
+.stepper-step-clickable:hover .stepper-step-icon-wrapper {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.stepper-step-clickable:active {
+  transform: translateY(0);
+}
+
+.stepper-step-clickable:active .stepper-step-icon-wrapper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stepper-step-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stepper-step-disabled:hover {
+  transform: none;
+}
+
+.stepper-step-disabled:hover .stepper-step-icon-wrapper {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ================================================
+   VARIANT STYLES
+   ================================================ */
+
+.stepper-outlined .stepper-step-icon-wrapper {
+  background: transparent;
+  border-width: 2px;
+}
+
+.stepper-filled .stepper-step-icon-wrapper {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.stepper-filled .stepper-step-pending .stepper-step-icon-wrapper {
+  background: #1f2937;
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+/* ================================================
+   ANIMATIONS
+   ================================================ */
+
+@keyframes stepper-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(4, 165, 155, 0.2), 0 4px 12px rgba(4, 165, 155, 0.3);
+    transform: scale(1.05);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(4, 165, 155, 0.1), 0 8px 20px rgba(4, 165, 155, 0.4);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes stepper-check-appear {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stepper-error-appear {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stepper-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+/* ================================================
+   RESPONSIVE STYLES
+   ================================================ */
+
+@media (max-width: 768px) {
+  .stepper-horizontal {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stepper-horizontal::before,
+  .stepper-horizontal::after {
+    display: none;
+  }
+
+  .stepper-step-horizontal {
+    flex-direction: row;
+    text-align: left;
+    min-width: auto;
+  }
+
+  .stepper-step-horizontal .stepper-step-content {
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+
+  .stepper-connector {
+    display: none;
+  }
+}
+
+/* ================================================
+   ACCESSIBILITY STYLES
+   ================================================ */
+
+.stepper-step-clickable:focus {
+  outline: none;
+}
+
+.stepper-step-clickable:focus .stepper-step-icon-wrapper {
+  box-shadow: 0 0 0 3px rgba(4, 165, 155, 0.3);
+}
+
+/* ================================================
+   DARK MODE STYLES (Default for this theme)
+   ================================================ */
+
+.stepper-step-icon-wrapper {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #9ca3af;
+}
+
+.stepper-step-title {
+  color: #ffffff;
+}
+
+.stepper-step-description {
+  color: #9ca3af;
+}
+
+.stepper-connector-line {
+  background: #404040;
+}
+
+.stepper-horizontal::before {
+  background: #404040;
+}
+
+.stepper-horizontal::after {
+  background: linear-gradient(90deg, #04A59B 0%, #00d4aa 100%);
+}
+
+.stepper-step-pending .stepper-step-icon-wrapper {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #9ca3af;
+}
+
+.stepper-step-pending .stepper-step-title {
+  color: #9ca3af;
+}
+
+.stepper-step-pending .stepper-step-description {
+  color: #6b7280;
+}
+
+/* ================================================
+   REDUCED MOTION STYLES
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper-step,
+  .stepper-step-icon-wrapper,
+  .stepper-connector-line::after {
+    transition: none;
+    animation: none;
+  }
+
+  .stepper-horizontal::after {
+    transition: none;
+  }
+
+  .stepper-step-clickable:hover {
+    transform: none;
+  }
+
+  .stepper-step-clickable:hover .stepper-step-icon-wrapper {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+} 

@@ -447,7 +447,7 @@
   
   .datepicker-day-disabled {
     color: #6b7280 !important;
-    background-color: #111827;
+    background-color: #f9fafb; /* Cambiado de #111827 (negro) a #f9fafb (gris claro) */
   }
 
   .datepicker-nav-button {

@@ -217,7 +217,6 @@ export const useAuth = (): UseAuthReturn => {
           try {
             const photoUrl = await AuthService.getUserPhoto();
             if (photoUrl) {
-              console.log("[useAuth] Foto obtenida exitosamente:", photoUrl);
               userData.photo = photoUrl;
             } else {
               console.log("[useAuth] No se pudo obtener foto del usuario");
