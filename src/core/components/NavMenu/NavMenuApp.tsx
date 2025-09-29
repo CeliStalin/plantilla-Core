@@ -159,7 +159,6 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
         lastRoleRef.current = currentRole;
       } catch (error) {
         setMenuItems([]);
-        console.error("Error al cargar menús:", error instanceof Error ? error.message : String(error));
       } finally {
         setLoading(false);
         initialLoadRef.current = false;

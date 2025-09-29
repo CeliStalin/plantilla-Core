@@ -20,10 +20,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({ to, label, isActive, isAppli
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (to && to.trim() !== '') {
-      console.log('[MenuItem] Navegando a:', to);
       navigate(to, { replace: false });
     } else {
-      console.warn("MenuItem: Intento de navegación a una ruta vacía");
     }
   };
   

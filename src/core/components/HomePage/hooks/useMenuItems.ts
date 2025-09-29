@@ -18,9 +18,6 @@ export const useMenuItems = () => {
 
   useEffect(() => {
     const fetchMenuItems = async () => {
-      console.log('[useMenuItems] isSignedIn:', isSignedIn);
-      console.log('[useMenuItems] enableDynamicMenu:', enableDynamicMenu);
-      console.log('[useMenuItems] roles:', roles);
       
       // Si no está habilitado el menú dinámico, no cargar
       if (!enableDynamicMenu) { 
@@ -42,7 +39,6 @@ export const useMenuItems = () => {
       // Determinar el rol actual
       const currentRole = roles.find(r => r.Rol === 'Developers')?.Rol || 
                          (roles.length > 0 ? roles[0].Rol : '');
-      console.log('[useMenuItems] Rol seleccionado para menú:', currentRole);
 
       // Si ya hemos cargado con el mismo rol, no volver a cargar
       if (hasLoadedRef.current && lastRoleRef.current === currentRole) {
@@ -72,7 +68,6 @@ export const useMenuItems = () => {
         hasLoadedRef.current = true;
         lastRoleRef.current = currentRole;
       } catch (err) {
-        console.error("Error fetching menu items:", err);
         setError(err instanceof Error ? err.message : 'Error desconocido');
         setMenuItems([]);
       } finally {

@@ -70,10 +70,8 @@ if (import.meta.env.DEV || (typeof window !== 'undefined' && window.location.hos
   // Importación dinámica para componentes de desarrollo
   import('./components/ComponentLibrary').then(module => {
     // Los componentes se cargan dinámicamente en desarrollo
-    console.log('Development components loaded:', Object.keys(module));
   }).catch(error => {
     // Silenciar error si los componentes no existen
-    console.warn('Development components not available:', error);
   });
 }
 

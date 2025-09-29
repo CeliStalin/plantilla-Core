@@ -12,7 +12,6 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
 
   // Manejo de interacciones del avatar
   const handleAvatarClick = useCallback(() => {
-    console.log('Avatar clicked - ready for future functionality');
   }, []);
 
   const handleAvatarKeyDown = useCallback((e: React.KeyboardEvent) => {

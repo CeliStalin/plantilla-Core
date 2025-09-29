@@ -82,7 +82,6 @@ export class TokenManagementService {
       const account = await this.loadAccountFromMsal();
       return !!account;
     } catch (error) {
-      console.error("Error verificando autenticación:", error);
       return false;
     }
   }
@@ -117,7 +116,6 @@ export class TokenManagementService {
       this.cacheTokenResponse(response);
       return response.accessToken;
     } catch (error) {
-      console.error('Error adquiriendo token:', error);
       
       // Limpiar caché si hay error
       this.clearTokenCache();

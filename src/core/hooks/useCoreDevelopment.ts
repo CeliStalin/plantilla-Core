@@ -22,16 +22,7 @@ export const useCoreDevelopment = () => {
     
     const showComponentLibrary = isDevelopment && (isCoreProject || isCorePackage) && config.library.enabled;
     
-    // Logs para debugging
-    console.log('[useCoreDevelopment] Debug info:', {
-      isDevelopment,
-      isCoreProject,
-      isCorePackage,
-      configPackageName: config.packageName,
-      vitePackageName: import.meta.env.VITE_PACKAGE_NAME,
-      libraryEnabled: config.library.enabled,
-      showComponentLibrary
-    });
+    // Debug info available if needed
     
     return {
       isDevelopment,

@@ -33,7 +33,6 @@ const ApiRoles = async(mail: string): Promise<RolResponse[]> => {
           ? ex.message 
           : String(ex);
       
-      console.error(`[ApiRoles] Error al obtener roles para ${mail}:`, errorMessage);
       throw new Error(`Error al obtener roles para ${mail}: ${errorMessage}`);
   }
 }
@@ -63,7 +62,6 @@ const ApiGetUsuarioAd = async (mail: string): Promise<UsuarioAd > => {
           ? ex.message 
           : String(ex);
       
-      console.error(`[ApiGetUsuarioAd] Error al obtener usuario para ${mail}:`, errorMessage);
       throw new Error(`Error al obtener roles para ${mail}: ${errorMessage}`);
     }
 };
@@ -97,7 +95,6 @@ const ApiGetMenus = async (rol :string) : Promise<ElementMenu[] | null>   =>  {
     ? ex.message 
     : String(ex);
     
-    console.error(`[ApiGetMenus] Error al obtener menús para rol ${rol}:`, errorMessage);
     throw new Error(`Error al obtener roles para ${rol}: ${errorMessage}`);
   }
 }

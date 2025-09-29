@@ -25,7 +25,6 @@ export class AuthService {
         if (error instanceof Error) {
           if (error.message.includes('No hay una sesión activa') && attempt === 0) {
             // Primer intento fallido por sesión, esperar un poco e intentar de nuevo
-            console.log(`[AuthService] Reintentando operación, intento ${attempt + 1}/${maxRetries + 1}`);
             await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, attempt)));
             continue;
           }
@@ -63,10 +62,8 @@ export class AuthService {
         }
         
         // Obtener token
-        console.log('[AuthService] Obteniendo token para Microsoft Graph...');
         const token = await AuthProvider.getAccessToken(['user.read']);
         
-        console.log('[AuthService] Token obtenido, realizando llamada a Graph API...');
         const response = await fetch('https://graph.microsoft.com/v1.0/me', {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -79,10 +76,8 @@ export class AuthService {
         }
 
         const data = await response.json();
-        console.log('[AuthService] Datos de usuario obtenidos exitosamente:', data.displayName);
         return data;
       } catch (error) {
-        console.error('[AuthService] Error en getMe:', error);
         throw error;
       }
     });
@@ -101,10 +96,8 @@ export class AuthService {
         }
         
         // Obtener token
-        console.log('[AuthService] Obteniendo token para foto de usuario...');
         const token = await AuthProvider.getAccessToken(['user.read']);
         
-        console.log('[AuthService] Token obtenido, realizando llamada a Graph API para foto...');
         const response = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -113,7 +106,6 @@ export class AuthService {
 
         if (!response.ok) {
           if (response.status === 404) {
-            console.log('[AuthService] Usuario no tiene foto de perfil');
             return null;
           }
           throw new Error(`Error al obtener foto: ${response.status} - ${response.statusText}`);
@@ -126,13 +118,11 @@ export class AuthService {
           const reader = new FileReader();
           reader.onloadend = () => {
             const base64String = reader.result as string;
-            console.log('[AuthService] Foto convertida a base64 exitosamente');
             resolve(base64String);
           };
           reader.readAsDataURL(blob);
         });
       } catch (error) {
-        console.error('[AuthService] Error al obtener foto de usuario:', error);
         return null;
       }
     });
@@ -147,7 +137,6 @@ export class AuthService {
           "Content-Type": "application/json; charset=utf-8",
         };
         
-        console.log('[AuthService] Obteniendo datos de AD para:', email);
         const response = await fetch(apiUrl, {
           method: "GET",
           headers
@@ -159,7 +148,6 @@ export class AuthService {
         
         const rawData = await response.json();
         const mappedData = mapRawToUsuarioAd(rawData);
-        console.log('[AuthService] Datos de AD obtenidos exitosamente');
         return mappedData;
         
       } catch (error) {
@@ -167,7 +155,6 @@ export class AuthService {
             ? error.message 
             : String(error);
             
-        console.error(`[AuthService] Error al obtener usuario AD para ${email}:`, errorMessage);
         throw new Error(`Error al obtener usuario para ${email}: ${errorMessage}`);
       }
     });
@@ -182,7 +169,6 @@ export class AuthService {
           [GetNameApiKey()]: GetKeyApiKey(),
           "Content-Type": "application/json; charset=utf-8",
         };
-        // console.log('[AuthService.getRoles] URL construida:', apiUrl);
         const response = await fetch(apiUrl, {
           method: "GET",
           headers
@@ -191,15 +177,12 @@ export class AuthService {
           throw new Error(`${response.status} - ${response.statusText}`);
         }
         const rawData = await response.json();
-        // console.log('[AuthService.getRoles] Respuesta cruda de la API:', rawData);
         const mappedData = mapRawArrayToRolResponseArray(rawData);
-        console.log(`[AuthService] Roles obtenidos exitosamente: ${mappedData.length} roles`);
         return mappedData;
       } catch (error) {
         const errorMessage = error instanceof Error 
             ? error.message 
             : String(error);
-        console.error(`[AuthService] Error al obtener roles para ${email}:`, errorMessage);
         throw new Error(`Error al obtener roles para ${email}: ${errorMessage}`);
       }
     });

@@ -22,16 +22,12 @@ export const msalConfig: Configuration = {
         if (import.meta.env.DEV) {
           switch (level) {
             case LogLevel.Error:
-              console.error(message);
               break;
             case LogLevel.Warning:
-              console.warn(message);
               break;
             case LogLevel.Info:
-              console.info(message);
               break;
             case LogLevel.Verbose:
-              console.debug(message);
               break;
           }
         }

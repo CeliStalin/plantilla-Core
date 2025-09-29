@@ -39,14 +39,11 @@ export const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   className = '',
   enableBounce = false
 }) => {
-  console.log('ApplicationsGrid - enableBounce:', enableBounce);
-  console.log('ApplicationsGrid - menuItems:', menuItems);
 
   const { triggerBounce, isCardClicked } = useBounceEffect();
 
   const handleAppClick = useCallback((app: ElementMenu) => {
     if (!app || !app.Id) {
-      console.warn('ApplicationsGrid: Invalid app object or missing Id', app);
       return;
     }
     

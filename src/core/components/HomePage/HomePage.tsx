@@ -101,13 +101,7 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
   // Development/debugging effects
   useEffect(() => {
     if (debug && import.meta.env.DEV) {
-      console.log('🏠 HomePage Debug Mode Enabled');
-      console.log('Props:', {
-        enableBounce: shouldEnableBounce,
-        bounceIntensity,
-        animationDuration,
-        enableInteractiveEffects
-      });
+      // Debug info available if needed
     }
     if (onMounted && typeof onMounted === 'function') {
       onMounted();
@@ -131,7 +125,6 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
   // Enhanced navigation handler with card click callback
   const handleAppClick = (item: any) => {
     if (debug && import.meta.env.DEV) {
-      console.log('🎯 App card clicked:', item);
     }
     collapseMenu();
     if (onCardClick && typeof onCardClick === 'function') {

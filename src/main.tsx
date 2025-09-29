@@ -8,7 +8,6 @@ import App from './App';
 import './core/styles/global.css';
 
 // Inicializa la configuración del core usando variables de entorno de Vite
-console.log('Todas las variables de entorno disponibles en main:', import.meta.env);
 setCoreEnvConfig({
   VITE_AMBIENTE: import.meta.env.VITE_AMBIENTE,
   VITE_APP_AMBIENTE: import.meta.env.VITE_APP_AMBIENTE,
@@ -30,21 +29,12 @@ setCoreEnvConfig({
   VITE_APP_AUTHORITY: import.meta.env.VITE_APP_AUTHORITY,
 });
 
-// Verificación directa de variables de entorno y coreEnvConfig
-console.log('Verificación directa en main (import.meta.env):', {
-  VITE_APP_CLIENT_ID: import.meta.env.VITE_APP_CLIENT_ID,
-  VITE_CLIENT_ID: import.meta.env.VITE_CLIENT_ID,
-  VITE_APP_AUTHORITY: import.meta.env.VITE_APP_AUTHORITY,
-  VITE_AUTHORITY: import.meta.env.VITE_AUTHORITY,
-});
+// Environment variables configured
 
 import { setCoreEnvConfig as getCoreEnvConfig } from './core/utils/GetEnvVariables';
 // @ts-ignore
-console.log('Verificación directa en coreEnvConfig:', window.coreEnvConfig || 'No window.coreEnvConfig');
 
 initializeMsalConfig();
-console.log('Variables de entorno en main:', import.meta.env.VITE_AMBIENTE);
-console.log('Variables de entorno en main:', import.meta.env.VITE_NAME_API_KEY);
 
 function Root() {
   const [ready, setReady] = useState(false);

@@ -79,7 +79,6 @@ export const useAuth = (): UseAuthReturn => {
         const redirectResponse = await AuthProvider.handleRedirectPromise();
         
         if (redirectResponse && redirectResponse.account) {
-          console.log("Respuesta de redirección procesada en useAuth");
           
           // Actualizar SecureStorageWrapper
           SecureStorageWrapper.setAuthenticationState(true);
@@ -105,7 +104,6 @@ export const useAuth = (): UseAuthReturn => {
           }
         }
       } catch (error) {
-        console.error('[useAuth] Error en inicialización:', error);
       } finally {
         if (mounted && !isLoggingOut) {
           setIsInitializing(false);
@@ -135,11 +133,9 @@ export const useAuth = (): UseAuthReturn => {
     if (usuario && usuarioAD && roles.length > 0 && !loading) {
       // PERO verificar si falta la foto y obtenerla si es necesario
       if (usuario && !usuario.photo) {
-        console.log("[useAuth] Datos cargados pero sin foto, intentando obtener foto...");
         try {
           const photoUrl = await AuthService.getUserPhoto();
           if (photoUrl) {
-            console.log("[useAuth] Foto obtenida para datos existentes:", photoUrl);
             const updatedUsuario = { ...usuario, photo: photoUrl };
             setUsuario(updatedUsuario);
             
@@ -150,14 +146,11 @@ export const useAuth = (): UseAuthReturn => {
                 const parsedUser = JSON.parse(storedUser);
                 const updatedStoredUser = { ...parsedUser, photo: photoUrl };
                 localStorage.setItem('usuario', JSON.stringify(updatedStoredUser));
-                console.log("[useAuth] Usuario actualizado en localStorage con foto");
               }
             } catch (e) {
-              console.error("[useAuth] Error al actualizar localStorage:", e);
             }
           }
         } catch (error) {
-          console.warn("[useAuth] Error al obtener foto para datos existentes:", error);
         }
       }
       return;
@@ -167,20 +160,17 @@ export const useAuth = (): UseAuthReturn => {
     try {
       const isValidSession = await AuthProvider.isAuthenticated();
       if (!isValidSession) {
-        console.warn("[useAuth] Sesión no válida detectada, actualizando estado...");
         SecureStorageWrapper.setAuthenticationState(false);
         setIsSignedIn(false);
         return;
       }
     } catch (error) {
-      console.error("[useAuth] Error al verificar sesión:", error);
       setError("Error al verificar la sesión");
       return;
     }
 
     // Solo mostrar loading si realmente vamos a hacer llamadas
     if (!usuario || !usuarioAD || roles.length === 0) {
-      console.log("[useAuth] Iniciando carga de datos de usuario...");
       setLoading(true);
       // Limpiar errores previos al iniciar nueva carga
       setError(null);
@@ -190,42 +180,34 @@ export const useAuth = (): UseAuthReturn => {
 
     try {
       // Obtener datos del usuario con mejor manejo de errores
-      console.log("[useAuth] Obteniendo datos de Microsoft Graph...");
       const userData = await getMe();
       
       if (typeof userData === 'string') {
         try {
           const parsedError = JSON.parse(userData);
           if (parsedError.Error) {
-            console.error('[useAuth] Error al obtener datos de usuario:', parsedError.Error);
             setError(parsedError.Error);
             setUsuario(null);
             return; // Salir si hay error
           }
         } catch (e) {
-          console.error('[useAuth] Error al procesar la respuesta:', e);
           setError('Error al procesar la respuesta del usuario');
           setUsuario(null);
           return; // Salir si hay error
         }
       } else {
-        console.log("[useAuth] Datos de usuario obtenidos correctamente:", userData.displayName);
         
         // Obtener la foto del usuario si no está presente
         if (!userData.photo) {
-          console.log("[useAuth] No hay foto en datos básicos, intentando obtener foto...");
           try {
             const photoUrl = await AuthService.getUserPhoto();
             if (photoUrl) {
               userData.photo = photoUrl;
             } else {
-              console.log("[useAuth] No se pudo obtener foto del usuario");
             }
           } catch (error) {
-            console.warn("[useAuth] Error al obtener foto de usuario:", error);
           }
         } else {
-          console.log("[useAuth] Foto ya presente en datos del usuario");
         }
         
         setUsuario(userData);
@@ -239,7 +221,6 @@ export const useAuth = (): UseAuthReturn => {
         
         const email = userData.mail || userData.userPrincipalName;
         if (email) {
-          console.log("[useAuth] Usando email para obtener datos adicionales:", email);
 
           //Ejecutar llamadas en paralelo para mejorar rendimiento
           const [adDataResult, rolesDataResult] = await Promise.allSettled([
@@ -249,17 +230,14 @@ export const useAuth = (): UseAuthReturn => {
 
           // Procesar resultado de AD
           if (adDataResult.status === 'fulfilled') {
-            console.log("[useAuth] Datos de AD obtenidos correctamente");
             setUsuarioAD(adDataResult.value);
             setErrorAD(null);
           } else {
-            console.error('[useAuth] Error al obtener datos de AD:', adDataResult.reason);
             setErrorAD(adDataResult.reason instanceof Error ? adDataResult.reason.message : String(adDataResult.reason));
           }
 
           // Procesar resultado de roles
           if (rolesDataResult.status === 'fulfilled') {
-            console.log(`[useAuth] Roles obtenidos: ${rolesDataResult.value.length}`);
             setRoles(rolesDataResult.value);
             setErrorRoles(null);
             
@@ -271,23 +249,19 @@ export const useAuth = (): UseAuthReturn => {
               });
             }
           } else {
-            console.error('[useAuth] Error al obtener roles:', rolesDataResult.reason);
             setErrorRoles(rolesDataResult.reason instanceof Error ? rolesDataResult.reason.message : String(rolesDataResult.reason));
           }
         } else {
-          console.warn("[useAuth] El usuario no tiene email o userPrincipalName para obtener datos adicionales");
           setErrorAD("No se pudo obtener email del usuario");
           setErrorRoles("No se pudo obtener email del usuario");
         }
       }
     } catch (err) {
-      console.error('[useAuth] Error general al cargar datos de usuario:', err);
       
       // Distinguir entre diferentes tipos de errores
       const errorMessage = err instanceof Error ? err.message : String(err);
       
       if (errorMessage.includes('No hay una sesión activa')) {
-        console.warn("[useAuth] Sesión expirada, marcando como no autenticado");
         SecureStorageWrapper.setAuthenticationState(false);
         setIsSignedIn(false);
         setError("La sesión ha expirado. Por favor, inicia sesión nuevamente.");
@@ -298,14 +272,12 @@ export const useAuth = (): UseAuthReturn => {
       }
     } finally {
       setLoading(false);
-      console.log("[useAuth] Carga de datos de usuario completada");
     }
   }, [isSignedIn, usuario, usuarioAD, roles.length, loading, setIsSignedIn]);
 
   // Asegurarnos de que loadUserData se llame cuando el usuario inicie sesión
   useEffect(() => {
     if (isSignedIn && !loading) {
-      console.log("Usuario autenticado, cargando datos...");
       loadUserData();
     }
   }, [isSignedIn, loadUserData]);
@@ -345,7 +317,6 @@ export const useAuth = (): UseAuthReturn => {
       
       return authenticated;
     } catch (error) {
-      console.error('[useAuth] Error al verificar autenticación:', error);
       return false;
     }
   }, [isSignedIn, setIsSignedIn]);
@@ -364,7 +335,6 @@ export const useAuth = (): UseAuthReturn => {
       
       setIsSignedIn(true);
     } catch (err) {
-      console.error('[useAuth] Error en proceso de login:', err);
       setError(err instanceof Error ? err.message : String(err));
       throw err;
     } finally {
@@ -411,7 +381,6 @@ export const useAuth = (): UseAuthReturn => {
       // Redirección manual al login después del logout
       window.location.href = '/login';
     } catch (err) {
-      console.error('[useAuth] Error en proceso de logout:', err);
       setError(err instanceof Error ? err.message : String(err));
       
       // Limpieza manual en caso de error
@@ -430,7 +399,6 @@ export const useAuth = (): UseAuthReturn => {
         // Redirección al login en caso de error
         window.location.href = '/login';
       } catch (e) {
-        console.error('[useAuth] Error en limpieza manual:', e);
       }
       
       throw err;
@@ -471,7 +439,6 @@ export const useAuth = (): UseAuthReturn => {
     
     // Si no hay roles asignados, denegar acceso
     if (!roles || roles.length === 0) {
-      console.log('Usuario sin roles intentando acceder a ruta protegida');
       return false;
     }
     
@@ -492,10 +459,7 @@ export const useAuth = (): UseAuthReturn => {
     );
     
     if (!hasPermission) {
-      console.log(
-        `Usuario sin permisos. Roles requeridos: [${allowedRoles.join(', ')}], ` +
-        `Roles de usuario: [${roles.map(r => r.Rol).join(', ')}]`
-      );
+      // Usuario sin permisos
     }
     
     return hasPermission;

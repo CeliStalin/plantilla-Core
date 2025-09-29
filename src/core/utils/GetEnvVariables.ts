@@ -26,7 +26,6 @@ let coreEnvConfig: CoreEnvConfig = {};
 
 function setCoreEnvConfig(config: CoreEnvConfig) {
   coreEnvConfig = config;
-  console.log('coreEnvConfig inicializado:', coreEnvConfig);
 }
 
 const getEnv = (key: keyof CoreEnvConfig): string | undefined => {
@@ -73,7 +72,6 @@ const FetchWithTimeout = async (resource: RequestInfo | URL, options: FetchTimeo
     const errorMessage = (error as Error).name === 'AbortError'
       ? new Error(`La petición ha excedido el tiempo límite de ${timeout}ms`)
       : error;
-    console.error(`[FetchWithTimeout] Error en petición: ${errorMessage}`);
     throw errorMessage;
   } finally {
     clearTimeout(timeoutId);
@@ -87,13 +85,11 @@ const GetTimeout = (): FetchTimeoutOptions => {
 
 const GetMsalAuthority = (): string => {
   const value = coreEnvConfig['VITE_APP_AUTHORITY'] || coreEnvConfig['VITE_AUTHORITY'] || '';
-  console.log('GetMsalAuthority:', value);
   return value;
 };
 
 const GetMsalClientId = (): string => {
   const value = coreEnvConfig['VITE_APP_CLIENT_ID'] || coreEnvConfig['VITE_CLIENT_ID'] || '';
-  console.log('GetMsalClientId:', value);
   return value;
 };
 

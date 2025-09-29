@@ -13,7 +13,6 @@ export const useNavigation = () => {
     }
 
     if (!app.Controlador || !app.Accion) {
-      console.warn('Invalid app navigation data:', app);
       return;
     }
 

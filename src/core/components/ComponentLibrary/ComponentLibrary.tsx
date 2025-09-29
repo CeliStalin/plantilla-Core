@@ -263,7 +263,7 @@ const ComponentLibrary: React.FC = () => {
               <DatePicker 
                 label="Label"
                 placeholder="Seleccionar fecha"
-                onChange={(date) => console.log('Fecha seleccionada:', date)}
+                onChange={(date) => {}}
               />
             </div>
             <div className="component-item">
@@ -272,7 +272,7 @@ const ComponentLibrary: React.FC = () => {
                 label="Fecha de Nacimiento"
                 placeholder="Seleccionar fecha de nacimiento"
                 value={new Date('2022-03-12')}
-                onChange={(date) => console.log('Fecha seleccionada:', date)}
+                onChange={(date) => {}}
               />
             </div>
             <div className="component-item">
@@ -282,7 +282,7 @@ const ComponentLibrary: React.FC = () => {
                 placeholder="Seleccionar fecha de reserva"
                 minDate={new Date()}
                 maxDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)}
-                onChange={(date) => console.log('Fecha seleccionada:', date)}
+                onChange={(date) => {}}
               />
             </div>
             <div className="component-item">
@@ -292,7 +292,7 @@ const ComponentLibrary: React.FC = () => {
                 placeholder="Seleccionar fecha"
                 disabled={true}
                 value={new Date()}
-                onChange={(date) => console.log('Fecha seleccionada:', date)}
+                onChange={(date) => {}}
               />
             </div>
           </div>

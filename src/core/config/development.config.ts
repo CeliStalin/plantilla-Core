@@ -87,26 +87,7 @@ export const isCoreDevelopment = (): boolean => {
   
   const result = basicConditions && hasEnoughCoreIndicators;
   
-  // Log para debugging
-  if (typeof window !== 'undefined') {
-    console.log('[isCoreDevelopment] Debug:', {
-      isDev,
-      isLocalhost,
-      packageName,
-      isCorePackage,
-      isCoreDevEnv,
-      isCoreProject,
-      hasCoreElements,
-      isCoreContext,
-      isCoreTitle,
-      basicConditions,
-      coreSpecificCount,
-      hasEnoughCoreIndicators,
-      result,
-      url: window.location.href,
-      title: document.title
-    });
-  }
+  // Debug info available if needed
   
   return result;
 };

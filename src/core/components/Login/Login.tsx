@@ -63,7 +63,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
         // Solo limpiar localStorage/sessionStorage si no estamos en medio de un flujo de redirección
         // ya que podríamos estar volviendo de una redirección de autenticación
         try {
-          console.log("Limpiando caché local...");
           
           // Mantener solo algunas claves específicas que no deben limpiarse
           const keysToKeep = ['theme', 'language', 'sidebar-collapsed'];
@@ -86,12 +85,9 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
           // Limpiar cuentas en MSAL
           await AuthProvider.clearAccounts();
           
-          console.log("Caché limpiada correctamente");
         } catch (error) {
-          console.error("Error al limpiar caché:", error);
         }
       } else {
-        console.log("Se detectó flujo de redirección, omitiendo limpieza de caché");
       }
     };
 
@@ -106,7 +102,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
         setIsCheckingNetwork(true);
         try {
           // Función para verificar acceso a la red corporativa
-          console.log("Verificando acceso a la red corporativa...");
           
           // Intentar hacer una solicitud simple a un endpoint de la API
           // Este endpoint debería ser accesible solo desde la red corporativa o VPN
@@ -123,19 +118,15 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
           
           // Si llegamos aquí, podemos acceder a la API
           setNetworkAccess(true);
-          console.log("Acceso a red corporativa verificado");
           
         } catch (error) {
           if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-            console.warn("Sin acceso a la red corporativa:", error);
             setNetworkAccess(false);
           } else if (error instanceof TypeError && error.message.includes('CORS')) {
             // Si es un error de CORS, podríamos estar en la red correcta pero con restricciones
             // En ese caso, consideramos que hay acceso a la red
-            console.warn("Error CORS, pero posiblemente en red corporativa:", error);
             setNetworkAccess(true);
           } else {
-            console.error("Error al verificar acceso a red:", error);
             setNetworkAccess(null); // Estado indeterminado
           }
         } finally {
@@ -156,7 +147,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
       
       // Redirigir a la ruta guardada o a /home por defecto
       const redirectTo = savedRedirectPath || '/home';
-      console.log(`Usuario ya autenticado en Login, redirigiendo a: ${redirectTo}`);
       
       // Limpiar el path guardado
       if (savedRedirectPath) {
@@ -188,7 +178,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
       // Usar loginRedirect
       await AuthProvider.loginRedirect();
     } catch (error) {
-      console.error('Error durante login redirect:', error);
       setLocalError(error instanceof Error ? error.message : String(error));
       setIsLoggingIn(false);
     }
@@ -216,7 +205,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
         window.location.href = '/login';
       }, 1000);
     } catch (error) {
-      console.error('Error durante logout en componente Login:', error);
       setLocalError(error instanceof Error ? error.message : String(error));
       // Fallback: Redirigir manualmente al login en caso de error
       window.location.href = '/login';
@@ -226,7 +214,6 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
   // Ejecutar onLoginSuccess cuando el usuario se autentique exitosamente
   useEffect(() => {
     if (isSignedIn && !isInitializing && !loading && usuario) {
-      console.log('Usuario autenticado exitosamente, ejecutando onLoginSuccess');
       if (props.onLoginSuccess) props.onLoginSuccess();
     }
   }, [isSignedIn, isInitializing, loading, usuario, props.onLoginSuccess]);
@@ -244,18 +231,7 @@ export const Login: React.FC<LoginProps> = ({ msalReady = true, ...props }) => {
     background: props.boxBackgroundColor || styles.loginBox.background,
   };
 
-  // Log de depuración de estado de autenticación y carga
-  console.log('[Login] Render', {
-    isSignedIn,
-    isInitializing,
-    loading,
-    error,
-    errorAD,
-    errorRoles,
-    usuario,
-    usuarioAD,
-    roles
-  });
+  // Debug info available if needed
 
   return (
     <div style={pageContainerStyles}>

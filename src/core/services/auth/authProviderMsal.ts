@@ -43,19 +43,8 @@ export function initializeMsal(): Promise<void> {
     if (!msalConfig) {
       throw new Error('MSAL config not initialized. Call initializeMsalConfig() after setCoreEnvConfig.');
     }
-    // Agregar logs detallados para depuración
-    console.log("Iniciando inicialización de MSAL...");
-    console.log("Variables de entorno disponibles:", {
-      CLIENT_ID: GetMsalClientId() || 'No disponible',
-      AUTHORITY: GetMsalAuthority() || 'No disponible',
-      CLIENT_ID_ALT: GetMsalClientId() || 'No disponible',
-      AUTHORITY_ALT: GetMsalAuthority() || 'No disponible',
-      REDIRECT_URI: GetMsalClientId() || 'No disponible',
-      ENVIRONMENT: GetMsalAuthority() || 'No disponible'
-    });
+    // Inicialización de MSAL
     
-    // Verificar si hay alguna variable de entorno disponible en general
-    console.log("Todas las variables de entorno:", GetMsalClientId());
 
     initializationPromise = (async () => {
       try {
@@ -66,65 +55,28 @@ export function initializeMsal(): Promise<void> {
 
         // Verificar que la configuración sea válida
         if (!msalConfig.auth.clientId || !msalConfig.auth.authority) {
-          console.error('Error: No se encontró configuración válida para MSAL. Verifica las variables de entorno.');
-          console.error('Valores actuales de configuración:', {
-            clientId: msalConfig.auth.clientId || 'No disponible',
-            authority: msalConfig.auth.authority || 'No disponible',
-            redirectUri: msalConfig.auth.redirectUri || 'No disponible'
-          });
           throw new Error('Configuración de autenticación incompleta');
         }
         
-        console.log("Configuración MSAL válida, procediendo a crear instancia...");
         msalInstance = new PublicClientApplication(msalConfig);
-        
-        console.log("Instancia MSAL creada, iniciando inicialización...");
         try {
           // Importante: esperar a que MSAL se inicialice completamente
           await msalInstance.initialize();
-          console.log("Inicialización de MSAL completada exitosamente");
         } catch (initErrorUnknown) {
           // Añadir anotación de tipo para manejar el error desconocido
           const initError = initErrorUnknown as Error;
-          console.error("Error durante la inicialización de MSAL:", initError);
-          console.error("Detalles del error:", {
-            name: initError.name || 'No disponible',
-            message: initError.message || 'No disponible',
-            stack: initError.stack || 'No disponible'
-          });
           throw initError; // Re-lanzar para mantener el flujo original
         }
         
         // Esto ayudará a mantener consistencia entre loginRedirect y logoutRedirect
         const cachedAuthMethod = sessionStorage.getItem('authMethod');
-        console.log("Método de autenticación detectado en caché:", cachedAuthMethod || 'No disponible');
         
         if (cachedAuthMethod === 'redirect') {
           useRedirectFlow = true;
-          console.log("Se usará flujo de redirección basado en caché");
         }
       } catch (errorUnknown) {
         // Añadir anotación de tipo para manejar el error desconocido
         const error = errorUnknown as Error;
-        console.error('Error al inicializar MSAL:', error);
-        
-        // Agregamos más información detallada sobre el error
-        console.error('Nombre del error:', error.name || 'No disponible');
-        console.error('Mensaje del error:', error.message || 'No disponible');
-        console.error('Stack trace:', error.stack || 'No disponible');
-        
-        // Verificar si es un error relacionado con la red
-        if (error.message?.includes('network') || error.message?.includes('conexión') || 
-            error.message?.includes('connection') || error.message?.includes('red')) {
-          console.error('Parece ser un error de red. Verifica la conexión a internet o VPN');
-        }
-        
-        // Verificar si es un error de formato de URL
-        if (error.message?.includes('URL') || error.message?.includes('uri') || 
-            error.message?.includes('redirect')) {
-          console.error('Posible error en el formato de la URL de redirección');
-        }
-        
         msalInstance = null;
         throw new Error('No se pudo inicializar la autenticación: ' + (error.message || String(errorUnknown)));
       }
@@ -179,7 +131,6 @@ export class AuthProvider {
           (activeAccount.username || activeAccount.localAccountId);
         
         if (!isValidAccount) {
-          console.warn('[AuthProvider] Cuenta inválida detectada, limpiando...');
           await this.clearAccounts();
           localStorage.removeItem('isLogin');
           return false;
@@ -203,7 +154,6 @@ export class AuthProvider {
       
       return isAuthenticated;
     } catch (error) {
-      console.error('[AuthProvider] Error al verificar autenticación:', error);
       return false;
     }
   }
@@ -220,13 +170,11 @@ export class AuthProvider {
         if (accounts.length > 0) {
           activeAccount = accounts[0];
           instance.setActiveAccount(activeAccount);
-          console.log('[AuthProvider] Estableciendo cuenta activa:', activeAccount.username);
         }
       }
       
       return activeAccount;
     } catch (error) {
-      console.error('[AuthProvider] Error al obtener cuenta activa:', error);
       return null;
     }
   }
@@ -239,11 +187,9 @@ export class AuthProvider {
       
       for (const account of accounts) {
         // Solo intentamos limpiar aquí, no hacemos logout todavía
-        console.log(`Limpiando cuenta: ${account.username}`);
         instance.setActiveAccount(null);
       }
     } catch (error) {
-      console.error('Error al limpiar cuentas:', error);
     }
   }
 
@@ -279,7 +225,6 @@ export class AuthProvider {
           prompt: 'select_account',
         });
         
-        console.log('Login exitoso con respuesta:', loginResponse);
         
         // Guardar estado de autenticación en localStorage
         if (loginResponse && loginResponse.account) {
@@ -287,7 +232,6 @@ export class AuthProvider {
         }
       }
     } catch (error) {
-      console.error('Error durante login:', error);
       throw error;
     }
   }
@@ -307,7 +251,6 @@ export class AuthProvider {
         prompt: 'select_account',
       });
     } catch (error) {
-      console.error('Error durante loginRedirect:', error);
       throw error;
     }
   }
@@ -320,7 +263,6 @@ export class AuthProvider {
       
       // Si obtenemos una respuesta válida, asegurémonos de guardar el estado
       if (response && response.account) {
-        console.log("Autenticación por redirección completada, cuenta:", response.account.username);
         localStorage.setItem('isLogin', 'true');
         
         // Guardar método de autenticación para consistencia
@@ -329,7 +271,6 @@ export class AuthProvider {
       
       return response;
     } catch (error) {
-      console.error('Error al manejar redirección:', error);
       return null;
     }
   }
@@ -362,12 +303,10 @@ export class AuthProvider {
           window.location.href = `${window.location.origin}/login`;
         }
       } else {
-        console.warn('No hay cuenta activa para cerrar sesión');
         // Redirección manual al login
         window.location.href = `${window.location.origin}/login`;
       }
     } catch (error) {
-      console.error('Error durante logout:', error);
       // Asegurar la limpieza y redirección incluso en caso de error
       localStorage.removeItem('isLogin');
       localStorage.removeItem('usuario');
@@ -400,12 +339,10 @@ export class AuthProvider {
         
         await instance.logoutRedirect(logoutRequest);
       } else {
-        console.warn('No hay cuenta activa para cerrar sesión');
         // Redirección manual al login
         window.location.href = `${window.location.origin}/login`;
       }
     } catch (error) {
-      console.error('Error durante logoutRedirect:', error);
       // Asegurar la limpieza y redirección incluso en caso de error
       localStorage.removeItem('isLogin');
       localStorage.removeItem('usuario');
@@ -424,7 +361,6 @@ export class AuthProvider {
       const account = await this.getActiveAccount();
       
       if (!account) {
-        console.error('[AuthProvider] No hay cuenta activa para obtener token');
         //Intentar verificar si realmente está autenticado
         const isAuth = await this.isAuthenticated();
         if (!isAuth) {
@@ -449,26 +385,20 @@ export class AuthProvider {
       };
       
       try {
-        console.log('[AuthProvider] Intentando obtener token silenciosamente...');
         const response: AuthenticationResult = await instance.acquireTokenSilent(tokenRequest);
-        console.log('[AuthProvider] Token obtenido exitosamente');
         return response.accessToken;
       } catch (silentError) {
-        console.warn('[AuthProvider] Fallo token silencioso, intentando método interactivo:', silentError);
         
         if (useRedirectFlow) {
           // Si estamos en flujo de redirección, no podemos esperar una respuesta inmediata
           await instance.acquireTokenRedirect(tokenRequest);
           throw new Error('Redirect in progress for token acquisition');
         } else {
-          console.log('[AuthProvider] Intentando token con popup...');
           const response = await instance.acquireTokenPopup(tokenRequest);
-          console.log('[AuthProvider] Token obtenido con popup exitosamente');
           return response.accessToken;
         }
       }
     } catch (error) {
-      console.error('[AuthProvider] Error al obtener access token:', error);
       throw error;
     }
   }
