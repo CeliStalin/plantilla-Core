@@ -1,11 +1,12 @@
 import { ExternalLink } from '../types';
+import { getMiIntranetUrl, getPortalConsaludUrl } from '@/core/utils/externalLinksUtils';
 
 export const EXTERNAL_LINKS: ExternalLink[] = [
   {
     id: 'mi-intranet',
     title: 'Mi Intranet',
     logoSrc: '', // No se usa ya que se renderiza el componente SVG directamente
-    url: 'https://www.consalud.cl',
+    url: getMiIntranetUrl(),
     alt: 'Mi Intranet',
     fallbackSrc: '' // No se usa ya que se renderiza el componente SVG directamente
   },
@@ -13,7 +14,7 @@ export const EXTERNAL_LINKS: ExternalLink[] = [
     id: 'portal-consalud',
     title: 'Portal Consalud',
     logoSrc: '', // No se usa ya que se renderiza el componente SVG directamente
-    url: 'https://www.consalud.cl',
+    url: getPortalConsaludUrl(),
     alt: 'Portal Consalud',
     fallbackSrc: '' // No se usa ya que se renderiza el componente SVG directamente
   },

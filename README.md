@@ -382,6 +382,37 @@ VITE_APP_CLIENT_ID=tu-client-id-azure
 VITE_APP_AUTHORITY=https://login.microsoftonline.com/tu-tenant-id
 ```
 
+### 🔗 URLs Dinámicas de Accesos Directos
+
+El core soporta URLs dinámicas para los accesos directos basadas en el ambiente. La variable `VITE_AMBIENTE` (o `VITE_APP_AMBIENTE`) determina qué URLs se mostrarán en la página de inicio:
+
+#### Configuración por Ambiente
+
+**Desarrollo** (`.env.development`):
+```env
+VITE_AMBIENTE=Desarrollo
+# Portal Consalud: http://betaportal.consalud.des/login.aspx
+```
+
+**Testing** (`.env.test`):
+```env
+VITE_AMBIENTE=Testing
+# Portal Consalud: http://betaportal.consalud.tes/login.aspx
+```
+
+**Producción** (`.env.production`):
+```env
+VITE_AMBIENTE=Produccion
+# Portal Consalud: http://betaportal.consalud.net/login.aspx
+```
+
+#### URLs Configuradas
+
+- **Mi Intranet**: `https://intranet.consalud.cl` (fija para todos los ambientes)
+- **Portal Consalud**: URL variable según el ambiente (ver tabla arriba)
+
+📖 **Documentación completa**: Ver [EXTERNAL_LINKS_URLS.md](./src/core/docs/EXTERNAL_LINKS_URLS.md) para más detalles sobre el uso y personalización.
+
 ## 🔧 Solución de problemas comunes
 
 ### Problema con tipos de Babel
