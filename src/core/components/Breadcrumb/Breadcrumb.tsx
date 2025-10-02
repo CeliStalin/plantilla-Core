@@ -18,21 +18,15 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // Log de entrada de items
-  console.log('[Breadcrumb] items prop:', items);
-
   const handleItemClick = (item: BreadcrumbItem, index: number, event: React.MouseEvent) => {
     if (onItemClick) {
       event.preventDefault();
       onItemClick(item, index);
-    } else if (item.path && !item.isActive) {
-      navigate(item.path);
+    } else if (item.path && !item.isActive) {      navigate(item.path);
     }
   };
 
   const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
-    // Log en el render de cada label
-    console.log('[Breadcrumb] renderItem label:', item.label);
     const itemClasses = [
       'breadcrumb-item',
       itemClassName,
@@ -66,8 +60,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
         aria-current={isLast ? 'page' : undefined}
       >
         {content}
-      </span>
-    );
+      </span>    );
   };
 
   const renderSeparator = (index: number) => (
@@ -81,8 +74,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
     ...item,
     label: typeof item.label === 'string' ? item.label.replace(/^\/+/, '') : item.label
   }));
-  // Log después de la limpieza
-  console.log('[Breadcrumb] processedItems:', processedItems);
 
   // Verificar si ya existe un ítem "Inicio" o "Home" en la lista
   const hasHomeItem = processedItems.some(item => 
@@ -119,7 +110,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
       lastItem.isActive = true;
     }
   }
-
   const breadcrumbClasses = [
     'breadcrumb',
     className
@@ -128,8 +118,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   if (processedItems.length === 0) {
     return null;
   }
-  // Log antes del render final
-  console.log('[Breadcrumb] rendering items:', processedItems);
 
   return (
     <nav className={breadcrumbClasses} aria-label="Navegación de migas de pan">

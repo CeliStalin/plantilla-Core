@@ -23,11 +23,10 @@ function PrivateRoute({ msalReady = true, allowedRoles = [], ...props }: Private
     if (!isInitializing && !loading && !isSignedIn) {
       try {
         const currentPath = location.pathname + location.search;
-        // Guardar la ruta actual para redireccionar después del login
-        sessionStorage.setItem('redirectAfterLogin', currentPath);
+        // Guardar la ruta actual para redireccionar después del login        sessionStorage.setItem('redirectAfterLogin', currentPath);
         navigate('/login', { replace: true });
       } catch (error) {
-        console.error('Error during navigation to login:', error);
+        // Fallback en caso de error
         navigate('/login', { replace: true });
       }
       return;
@@ -37,12 +36,11 @@ function PrivateRoute({ msalReady = true, allowedRoles = [], ...props }: Private
     if (!isInitializing && !loading && isSignedIn && allowedRoles.length > 0) {
       try {
         const userHasPermission = hasAnyRole(allowedRoles);
-        if (!userHasPermission) {
-          navigate('/unauthorized', { replace: true });
+        if (!userHasPermission) {          navigate('/unauthorized', { replace: true });
           return;
         }
       } catch (error) {
-        console.error('Error checking roles:', error);
+        // Error silencioso en verificación de roles
       }
     }
   }, [isSignedIn, isInitializing, loading, hasAnyRole, allowedRoles, navigate, location]);

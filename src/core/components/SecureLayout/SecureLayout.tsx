@@ -42,14 +42,11 @@ const SecureLayout: React.FC<SecureLayoutProps> = ({
         state: { from: location } 
       });
       return;
-    }
-
-    // Si está autenticado, verificar roles
+    }    // Si está autenticado, verificar roles
     if (isSignedIn && !isInitializing && !loading) {
       const hasPermission = hasAnyRole(allowedRoles);
       
       if (!hasPermission) {
-        console.log(`Usuario sin acceso a ruta protegida: ${location.pathname}. Roles requeridos: ${allowedRoles.join(', ')}`);
         navigate('/unauthorized', { 
           replace: true,
           state: { from: location } 

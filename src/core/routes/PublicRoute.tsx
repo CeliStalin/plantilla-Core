@@ -28,11 +28,9 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ msalReady = true, ...props })
         if (savedPath) {
           sessionStorage.removeItem('redirectAfterLogin');
         }
-        
-        navigate(targetPath, { replace: true });
+          navigate(targetPath, { replace: true });
       } catch (error) {
-        console.error('Error during navigation:', error);
-        // Fallback a la ruta por defecto
+        // Fallback a la ruta por defecto en caso de error
         navigate(props.redirectPath || '/home', { replace: true });
       }
     }

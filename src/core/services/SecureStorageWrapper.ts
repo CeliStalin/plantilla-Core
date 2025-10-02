@@ -33,16 +33,13 @@ export class SecureStorageWrapper {
       localStorage.setItem(LOCAL_AUTH_FLAG, isAuthenticated ? 'true' : 'false');
       
       // Almacenar detalles adicionales en sessionStorage (más seguro)
-      const currentData = this.getSecureData() || {};
-      this.saveSecureData({
+      const currentData = this.getSecureData() || {};      this.saveSecureData({
         ...currentData,
         isAuthenticated,
         expiryTime: Date.now() + AUTH_EXPIRY_TIME
       });
-      
-      console.log(`Estado de autenticación establecido: ${isAuthenticated}`);
     } catch (error) {
-      console.error('Error al establecer estado de autenticación:', error);
+      // Error silencioso - el sistema de logging manejará esto si es necesario
     }
   }
   
@@ -69,10 +66,9 @@ export class SecureStorageWrapper {
         this.clearAuthData();
         return false;
       }
-      
-      return true;
+        return true;
     } catch (error) {
-      console.error('Error al verificar autenticación:', error);
+      // Error silencioso - retornar false en caso de error
       return false;
     }
   }
@@ -97,10 +93,9 @@ export class SecureStorageWrapper {
           : currentData.rolesHash,
         expiryTime: Date.now() + AUTH_EXPIRY_TIME
       };
-      
-      this.saveSecureData(secureData);
+        this.saveSecureData(secureData);
     } catch (error) {
-      console.error('Error al guardar información básica de usuario:', error);
+      // Error silencioso
     }
   }
   
@@ -135,11 +130,8 @@ export class SecureStorageWrapper {
   static clearAuthData(): void {
     // Limpiar localStorage (mantener compatibilidad)
     localStorage.removeItem(LOCAL_AUTH_FLAG);
-    
-    // Limpiar sessionStorage (datos seguros)
+      // Limpiar sessionStorage (datos seguros)
     sessionStorage.removeItem(SESSION_AUTH_DATA);
-    
-    console.log('Datos de autenticación eliminados');
   }
   
   /**
@@ -170,11 +162,9 @@ export class SecureStorageWrapper {
   private static getSecureData(): SecureAuthData | null {
     const dataStr = sessionStorage.getItem(SESSION_AUTH_DATA);
     if (!dataStr) return null;
-    
-    try {
+      try {
       return JSON.parse(dataStr) as SecureAuthData;
     } catch (error) {
-      console.error('Error al parsear datos seguros:', error);
       return null;
     }
   }

@@ -9,9 +9,9 @@ export interface MenuCollapseContextType {
 
 const defaultContext: MenuCollapseContextType = {
   isMenuCollapsed: false,
-  collapseMenu: () => console.warn('MenuCollapseContext: Provider not found'),
-  expandMenu: () => console.warn('MenuCollapseContext: Provider not found'),
-  setIsMenuCollapsed: () => console.warn('MenuCollapseContext: Provider not found'),
+  collapseMenu: () => {},
+  expandMenu: () => {},
+  setIsMenuCollapsed: () => {},
 };
 
 const MenuCollapseContext = createContext<MenuCollapseContextType>(defaultContext);
@@ -20,7 +20,7 @@ MenuCollapseContext.displayName = 'MenuCollapseContext';
 export function useMenuCollapse() {
   const context = useContext(MenuCollapseContext);
   if (import.meta.env.DEV && context === defaultContext) {
-    console.warn('useMenuCollapse must be used within a MenuCollapseProvider');
+    // Warning silencioso - el contexto debe usarse dentro del provider
   }
   return context;
 }
@@ -43,14 +43,10 @@ export const MenuCollapseProvider = ({
   useEffect(() => {
     localStorage.setItem('menu-collapsed-state', isMenuCollapsed ? 'true' : 'false');
   }, [isMenuCollapsed]);
-
   const collapseMenu = useCallback(() => {
-    console.log('[MenuCollapseContext] Colapsando menú');
     setIsMenuCollapsed(true);
   }, []);
-
   const expandMenu = useCallback(() => {
-    console.log('[MenuCollapseContext] Expandiendo menú');
     setIsMenuCollapsed(false);
   }, []);
 

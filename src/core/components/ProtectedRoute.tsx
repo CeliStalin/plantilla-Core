@@ -33,11 +33,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Use allowedRoles if provided, otherwise fall back to roles for backwards compatibility
   const rolesToCheck = allowedRoles.length > 0 ? allowedRoles : roles;
-
   // Validate props - either component or children must be provided
   if (!Component && !children) {
-    console.error('ProtectedRoute: Either "component" prop or "children" must be provided');
-    return <div>Error: ProtectedRoute requires either component prop or children</div>;
+    if (import.meta.env.DEV) {
+      return <div>Error: ProtectedRoute requires either component prop or children</div>;
+    }
+    return null;
   }
 
   // Mostrar loading mientras se inicializa la autenticación

@@ -55,12 +55,14 @@ class Logger {
       
       // Enviar a servicio de logging externo en producción
       if (GetAmbiente() === 'production' && level === 'error') {
-        this.sendToExternalService(entry);
-      }
+        this.sendToExternalService(entry);      }
     } catch (err) {
       // Fallback seguro en caso de error en el logger
-      console.error('Error en sistema de logging:', 
-        err instanceof Error ? err.message : 'Error desconocido');
+      // Solo en desarrollo mostramos el error del logger
+      if (GetAmbiente() === 'development') {
+        console.error('Error en sistema de logging:', 
+          err instanceof Error ? err.message : 'Error desconocido');
+      }
     }
   }
   
@@ -142,11 +144,10 @@ class Logger {
     }
     return undefined;
   }
-  
-  private sendToExternalService(entry: LogEntry): void {
+    private sendToExternalService(entry: LogEntry): void {
     // Aquí se implementa la integración con un servicio de logging externo
     // como Sentry, LogRocket, etc.
-    console.log('Log externo pendiente de implementar:', entry.level, entry.message);
+    // TODO: Implementar integración con servicio externo de logging
   }
 }
 
