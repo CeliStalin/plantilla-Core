@@ -32,6 +32,28 @@ export const getPortalConsaludUrl = (): string => {
 };
 
 /**
+ * Obtiene la URL de Sucursal Digital basada en el ambiente.
+ * La URL varía según el ambiente configurado.
+ * @returns URL de Sucursal Digital según el ambiente
+ */
+export const getSucursalDigitalUrl = (): string => {
+  const ambiente = GetAmbiente().toLowerCase();
+  
+  // Mapeo de ambientes a URLs
+  const urlMap: Record<string, string> = {
+    'desarrollo': 'https://tclientes.consalud.cl/#/login',
+    'development': 'https://tclientes.consalud.cl/#/login',
+    'testing': 'https://tclientes.consalud.cl/#/login',
+    'test': 'https://tclientes.consalud.cl/#/login',
+    'produccion': 'https://clientes.consalud.cl/#/login',
+    'production': 'https://clientes.consalud.cl/#/login',
+  };
+  
+  // Retornar la URL correspondiente al ambiente, o la de testing por defecto
+  return urlMap[ambiente] || urlMap['testing'];
+};
+
+/**
  * Obtiene todas las URLs de accesos directos basadas en el ambiente actual.
  * @returns Objeto con las URLs de todos los accesos directos
  */
@@ -39,5 +61,6 @@ export const getExternalLinksUrls = () => {
   return {
     miIntranet: getMiIntranetUrl(),
     portalConsalud: getPortalConsaludUrl(),
+    sucursalDigital: getSucursalDigitalUrl(),
   };
 };

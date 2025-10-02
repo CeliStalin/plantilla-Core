@@ -15,6 +15,8 @@ export * from './components/ErrorBoundary';
 export * from './components/ErrorMessage';
 export * from './components/Footer';
 export * from './components/HomePage';
+// Exportar también las constantes y funciones de HomePage
+export { getExternalLinks, EXTERNAL_LINKS } from './components/HomePage/constants/externalLinks';
 export * from './components/Layout';
 export * from './components/Loading';
 export * from './components/Login';

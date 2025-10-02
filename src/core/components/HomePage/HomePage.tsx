@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Layout } from '@/core/components/Layout/Layout';
 import { WelcomeSection } from './components/WelcomeSection';
 import { ApplicationsGrid } from './components/ApplicationsGrid';
@@ -9,7 +9,7 @@ import { getFirstName } from './utils';
 import { homePageStyles, responsiveHomePageStyles } from './styles/HomePage.styles';
 import { HomePageProps } from './types';
 import './styles/animations.css';
-import { EXTERNAL_LINKS as defaultExternalLinks } from './constants/externalLinks';
+import { getExternalLinks } from './constants/externalLinks';
 import { useMenuConfig } from '@/core/hooks';
 import { useMenuCollapse } from '../../context/MenuCollapseContext';
 import { MenuCollapseProvider } from '@/core/context/MenuCollapseContext';
@@ -45,13 +45,15 @@ const HomePageInner: React.FC<HomePageWithLayoutProps> = ({
   animationDuration = 300,
   menuCollapsed,
   ...rest
-}) => {
-  // Hooks
+}) => {  // Hooks
   const { usuario } = useAuth();
   const { menuItems, loading } = useMenuItems();
   const { isMobile, isTablet } = useResponsive();
   const { navigateToApp, openExternalLink } = useNavigation();
 
+  // Memoizar los external links para que se evalúen dinámicamente pero no en cada render
+  const defaultExternalLinks = useMemo(() => getExternalLinks(), []);
+  
   const firstName = getFirstName(usuario?.displayName);
   const linksToUse = externalLinks || defaultExternalLinks;
 

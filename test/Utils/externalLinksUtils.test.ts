@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { getMiIntranetUrl, getPortalConsaludUrl, getExternalLinksUrls } from '../externalLinksUtils';
-import { setCoreEnvConfig } from '../GetEnvVariables';
+import { getMiIntranetUrl, getPortalConsaludUrl, getSucursalDigitalUrl, getExternalLinksUrls } from '../../src/core/utils/externalLinksUtils';
+import { setCoreEnvConfig } from '../../src/core/utils/GetEnvVariables';
 
 describe('externalLinksUtils', () => {
   // Guardar la configuración original
@@ -94,6 +94,58 @@ describe('externalLinksUtils', () => {
     });
   });
 
+  describe('getSucursalDigitalUrl', () => {
+    it('debe retornar URL de testing cuando VITE_AMBIENTE es "Desarrollo"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'Desarrollo' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de testing cuando VITE_AMBIENTE es "development"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'development' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de testing cuando VITE_AMBIENTE es "Testing"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'Testing' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de testing cuando VITE_AMBIENTE es "test"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'test' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de producción cuando VITE_AMBIENTE es "Produccion"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'Produccion' });
+      expect(getSucursalDigitalUrl()).toBe('https://clientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de producción cuando VITE_AMBIENTE es "production"', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'production' });
+      expect(getSucursalDigitalUrl()).toBe('https://clientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de testing por defecto cuando el ambiente no está configurado', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: '' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe retornar URL de testing por defecto cuando el ambiente no es reconocido', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'unknown' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+    });
+
+    it('debe ser case-insensitive', () => {
+      setCoreEnvConfig({ VITE_AMBIENTE: 'DESARROLLO' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+      
+      setCoreEnvConfig({ VITE_AMBIENTE: 'TESTING' });
+      expect(getSucursalDigitalUrl()).toBe('https://tclientes.consalud.cl/#/login');
+      
+      setCoreEnvConfig({ VITE_AMBIENTE: 'PRODUCCION' });
+      expect(getSucursalDigitalUrl()).toBe('https://clientes.consalud.cl/#/login');
+    });
+  });
   describe('getExternalLinksUrls', () => {
     it('debe retornar objeto con todas las URLs para ambiente de desarrollo', () => {
       setCoreEnvConfig({ VITE_AMBIENTE: 'Desarrollo' });
@@ -101,8 +153,10 @@ describe('externalLinksUtils', () => {
       
       expect(urls).toHaveProperty('miIntranet');
       expect(urls).toHaveProperty('portalConsalud');
+      expect(urls).toHaveProperty('sucursalDigital');
       expect(urls.miIntranet).toBe('https://intranet.consalud.cl');
       expect(urls.portalConsalud).toBe('http://betaportal.consalud.des/login.aspx');
+      expect(urls.sucursalDigital).toBe('https://tclientes.consalud.cl/#/login');
     });
 
     it('debe retornar objeto con todas las URLs para ambiente de testing', () => {
@@ -111,6 +165,7 @@ describe('externalLinksUtils', () => {
       
       expect(urls.miIntranet).toBe('https://intranet.consalud.cl');
       expect(urls.portalConsalud).toBe('http://betaportal.consalud.tes/login.aspx');
+      expect(urls.sucursalDigital).toBe('https://tclientes.consalud.cl/#/login');
     });
 
     it('debe retornar objeto con todas las URLs para ambiente de producción', () => {
@@ -119,6 +174,7 @@ describe('externalLinksUtils', () => {
       
       expect(urls.miIntranet).toBe('https://intranet.consalud.cl');
       expect(urls.portalConsalud).toBe('http://betaportal.consalud.net/login.aspx');
+      expect(urls.sucursalDigital).toBe('https://clientes.consalud.cl/#/login');
     });
   });
 });

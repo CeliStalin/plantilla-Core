@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DirectAccessGridProps } from '../../types';
 import { AccessCard } from './AccessCard';
 import { LoadingCard } from '@/core/components/LoadingPlaceholder';
 import { directAccessGridStyles } from './DirectAccessGrid.styles';
-import { EXTERNAL_LINKS, EXTERNAL_LINKS_DELAYS } from '../../constants';
+import { getExternalLinks, EXTERNAL_LINKS_DELAYS } from '../../constants';
 import { AccesoDirectoIcon } from '@/core/components/HomePage/icons/AccesoDirectoIcon';
 import '../../styles/animations.css';
 import './DirectAccessGrid.css';
@@ -12,8 +12,11 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
   loading, 
   onExternalLinkClick,
   className = '',
-  externalLinks = EXTERNAL_LINKS // Usar valor por defecto si no se proporciona
+  externalLinks // Si se pasa externalLinks, usamos ese; si no, evaluamos dinámicamente
 }) => {
+  // Evaluar links dinámicamente solo si no se pasaron como prop
+  const defaultLinks = useMemo(() => getExternalLinks(), []);
+  const linksToUse = externalLinks || defaultLinks;
   return (
     <div className={`direct-access-section ${className}`} style={directAccessGridStyles.container}>
       <div style={directAccessGridStyles.sectionHeader}>
@@ -40,8 +43,7 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
           boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
         }}
       ></div>
-      
-      <div style={directAccessGridStyles.grid}>
+        <div style={directAccessGridStyles.grid}>
         {loading ? (
           <>
             <LoadingCard height="120px" />
@@ -50,7 +52,7 @@ export const DirectAccessGrid: React.FC<DirectAccessGridProps> = ({
             <LoadingCard height="120px" />
           </>
         ) : (
-          externalLinks.map((link, index) => (
+          linksToUse.map((link, index) => (
             <AccessCard
               key={link.id}
               title={link.title}

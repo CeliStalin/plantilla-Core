@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'node',
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest',{
       jsx: 'react-jsx'
@@ -13,8 +13,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons']
-  },
-  moduleNameMapper: {
+  },  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/fileMock.js'
   }
 };
