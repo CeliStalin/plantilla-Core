@@ -52,6 +52,16 @@ export * from './services/auth';
 // Exportaciones de utilidades
 export * from './utils';
 
+// Exportaciones de assets (SVG Components)
+export { default as Logo } from '../assets/Logo';
+export { default as FooterLogo } from '../assets/FooterLogo';
+export { default as MiIntranet } from '../assets/MiIntranet';
+export { default as PortalConsalud } from '../assets/PortalConsalud';
+export { default as AccesConsalud } from '../assets/AccesConsalud';
+export { default as SucursalDigital } from '../assets/SucursalDigital';
+export { default as IconUserSesion } from '../assets/IconUserSesion';
+export { default as LogoutIcon } from '../assets/LogoutIcon';
+
 // Exportaciones de configuración
 export * from './config/development.config';
 export * from './config/build.config';

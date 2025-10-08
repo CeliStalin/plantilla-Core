@@ -8,6 +8,8 @@ export { default as MiIntranet } from './MiIntranet';
 export { default as PortalConsalud } from './PortalConsalud';
 export { default as AccesConsalud } from './AccesConsalud';
 export { default as SucursalDigital } from './SucursalDigital';
+export { default as IconUserSesion } from './IconUserSesion';
+export { default as LogoutIcon } from './LogoutIcon';
 
 // Types for SVG components
 export interface LogoProps extends React.SVGProps<SVGSVGElement> {

@@ -4,9 +4,10 @@ import useAuth from '../../hooks/useAuth';
 import { AuthProvider } from '../../services/auth/authProviderMsal';
 import { LoadingDots } from '../Login/components/LoadingDots';
 import IconUserSesion from '../../../assets/IconUserSesion';
+import LogoutIcon from '../../../assets/LogoutIcon';
 
 interface UserLoginAppProps {
-  logoutIconSrc: string;
+  logoutIconSrc?: string; // Ahora es opcional, se usa LogoutIcon por defecto
   msalReady?: boolean;
 }
 
@@ -207,9 +208,7 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
             </div>
           )}
         </div>
-      )}
-
-      <button
+      )}      <button
         onClick={handleLogout}
         disabled={isProcessingLogout || isLoggingOut}
         style={{
@@ -235,14 +234,25 @@ const UserLoginApp: React.FC<UserLoginAppProps> = ({ msalReady = true, logoutIco
           e.currentTarget.style.backgroundColor = 'transparent';
         }}
       >
-        <img 
-          src={logoutIconSrc}
-          alt="logout icon"
-          style={{
-            width: '30px',
-            height: '30px',
-          }}
-        />
+        {logoutIconSrc ? (
+          <img 
+            src={logoutIconSrc}
+            alt="logout icon"
+            style={{
+              width: '30px',
+              height: '30px',
+            }}
+          />
+        ) : (
+          <LogoutIcon 
+            width="30" 
+            height="30"
+            style={{
+              width: '30px',
+              height: '30px',
+            }}
+          />
+        )}
         {isProcessingLogout || isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
       </button>
 

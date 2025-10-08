@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ logoUrl, altText, pageTitle }) =
           </>
         )}
       </div>
-      <UserLoginApp logoutIconSrc="/logout.svg" />
+      <UserLoginApp />
     </header>
   );
 };
