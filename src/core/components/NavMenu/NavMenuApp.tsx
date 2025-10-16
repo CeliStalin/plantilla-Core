@@ -11,6 +11,7 @@ import { LoadingDots } from '../Login/components/LoadingDots';
 import { theme } from '../../styles/theme';
 import { injectMenuStyles } from './utils/styleInjector';
 import { AplicacionesIcon } from '../HomePage/icons/AplicacionesIcon';
+import { getPrimaryRole, hasValidRole } from '../../utils/roleUtils';
 
 interface NavMenuAppProps {
   onToggle?: (collapsed: boolean) => void;
@@ -71,9 +72,9 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
     };
   }, []);
 
-  // Verificar si el usuario tiene el rol 
-  const hasDevelopersRole = useMemo(() => {
-    return roles.some(role => role.Rol === "Developers");
+  // Verificar si el usuario tiene algún rol válido
+  const hasAnyValidRole = useMemo(() => {
+    return hasValidRole(roles);
   }, [roles]);
 
   // Verificar si estamos en desarrollo del core
@@ -130,8 +131,8 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
         return;
       }
 
-      // Determinar el rol actual
-      const currentRole = hasDevelopersRole ? 'Developers' : '';
+      // Determinar el rol actual dinámicamente
+      const currentRole = getPrimaryRole(roles);
 
       // Si ya hemos cargado con el mismo rol, no volver a cargar
       if (hasLoadedRef.current && lastRoleRef.current === currentRole) {
@@ -151,7 +152,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
           const items = await ApiGetMenus(currentRole);
           setMenuItems(items || []);
         } else {
-          // Si no tiene rol Developers, dejar el menú vacío
+          // Si no tiene roles válidos, dejar el menú vacío
           setMenuItems([]);
         }
         
@@ -166,7 +167,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
     };
   
     fetchMenu();
-  }, [hasDevelopersRole, roles, enableDynamicMenu, isSignedIn]);
+  }, [hasAnyValidRole, roles, enableDynamicMenu, isSignedIn]);
 
   useEffect(() => {
     // Si la ruta es de aplicaciones y no es home, colapsa el menú
@@ -324,7 +325,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
               </MenuSection>
 
               {/* Menú Dinámico */}
-              {enableDynamicMenu && hasDevelopersRole && menuItems.length > 0 && (
+              {enableDynamicMenu && hasAnyValidRole && menuItems.length > 0 && (
                 <MenuSection title={
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
                     <AplicacionesIcon width={16} height={16} />
@@ -332,7 +333,7 @@ const NavMenuApp: React.FC<NavMenuAppProps> = ({ onToggle, appIconSrc, onAnimati
                   </span>
                 }>
                   {/* Librería Core - Solo visible en desarrollo del core */}
-                  {hasDevelopersRole && isCoreDevelopment && (
+                  {hasAnyValidRole && isCoreDevelopment && (
                     <MenuItem 
                       key="library"
                       to="/library"

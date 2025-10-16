@@ -4,6 +4,7 @@ import { ApiGetMenus } from '@/core/services/GetApiArq';
 import { useAuth } from '@/core/hooks/useAuth';
 import { EXTERNAL_LINKS_DELAYS } from '../constants';
 import { useMenuConfig } from '@/core/hooks';
+import { getPrimaryRole } from '@/core/utils/roleUtils';
 
 export const useMenuItems = () => {
   const { roles, isSignedIn } = useAuth();
@@ -36,9 +37,8 @@ export const useMenuItems = () => {
         return;
       }
 
-      // Determinar el rol actual
-      const currentRole = roles.find(r => r.Rol === 'Developers')?.Rol || 
-                         (roles.length > 0 ? roles[0].Rol : '');
+      // Determinar el rol actual dinámicamente
+      const currentRole = getPrimaryRole(roles);
 
       // Si ya hemos cargado con el mismo rol, no volver a cargar
       if (hasLoadedRef.current && lastRoleRef.current === currentRole) {

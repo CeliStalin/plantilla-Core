@@ -106,3 +106,12 @@ export {
   GetMsalClientId
 };
 export type { CoreEnvConfig };
+
+// Re-exportar utilidades de roles
+export { 
+  getPrimaryRole, 
+  hasRole, 
+  hasAnyRole, 
+  getRoleNames, 
+  hasValidRole 
+} from './roleUtils';

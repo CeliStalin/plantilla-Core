@@ -13,21 +13,18 @@ export const routes: RouteConfig[] = [
   {
     path: "/",
     component: React.lazy(() => import('../components/HomePage/HomePage')),
-    roles: ['Developers'],
     title: "Inicio",
     breadcrumbLabel: "Inicio"
   },
   {
     path: "/home",
     component: React.lazy(() => import('../components/HomePage/HomePage')),
-    roles: ['Developers'],
     title: "Inicio",
     breadcrumbLabel: "Inicio"
   },
   {
     path: "/dashboard",
     component: React.lazy(() => import('../components/Dashboard/DashboardPage')),
-    roles: ['Developers'],
     title: "Dashboard",
     breadcrumbLabel: "Panel de Control"
   },

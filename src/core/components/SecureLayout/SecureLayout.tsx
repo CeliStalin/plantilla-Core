@@ -17,7 +17,7 @@ interface SecureLayoutProps {
 const SecureLayout: React.FC<SecureLayoutProps> = ({ 
   children, 
   pageTitle, 
-  allowedRoles = ['Developers'],
+  allowedRoles = [], // Por defecto vacío para permitir cualquier rol autenticado
   // Valores por defecto para transiciones
   enableTransitions = true,
   transitionType = 'fadeSlide',
