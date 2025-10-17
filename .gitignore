@@ -11,6 +11,34 @@ node_modules
 dist
 dist-ssr
 
+# Build artifacts
+build/
+.turbo
+.next
+.cache
+
+# Build artifacts - NPM packages
+# Nota: consalud-core-*.tgz es necesario para consumo desde apps externas
+*.tar.gz
+
+# Backup and temporary files
+*.bak
+*.backup
+*.old
+*_old.*
+*-old.*
+*.swp
+*.swo
+*~
+
+# Test and example files
+*Test.tsx
+*Test.ts
+test-*.js
+verify-*.js
+*.example.js
+*.example.ts
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -21,3 +49,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files (keep templates only)
+.env.local
+.env.*.local
+
+# Coverage and reports
+coverage/
+.nyc_output/
+*.lcov
