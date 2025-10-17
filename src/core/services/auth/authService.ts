@@ -165,6 +165,7 @@ export class AuthService {
       try {
         const sistema = GetSistema();
         const apiUrl = `${GetApiArquitectura()}/Rol/mail/${email}/app/${sistema.codigo}`;
+        
         const headers = {
           [GetNameApiKey()]: GetKeyApiKey(),
           "Content-Type": "application/json; charset=utf-8",
@@ -173,11 +174,14 @@ export class AuthService {
           method: "GET",
           headers
         });
+        
         if (!response.ok) {
           throw new Error(`${response.status} - ${response.statusText}`);
         }
         const rawData = await response.json();
+        
         const mappedData = mapRawArrayToRolResponseArray(rawData);
+        
         return mappedData;
       } catch (error) {
         const errorMessage = error instanceof Error 

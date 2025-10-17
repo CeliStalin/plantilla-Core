@@ -23,10 +23,19 @@ const mapRawToRolResponse = (rawData: RawRolResponse): RolResponse => {
   };
   
   
-  const mapRawArrayToRolResponseArray = (rawDataArray: RawRolResponse[]): RolResponse[] => {
-    return Array.isArray(rawDataArray)
-      ? rawDataArray.map(mapRawToRolResponse)
-      : [];
-  };
+const mapRawArrayToRolResponseArray = (rawDataArray: RawRolResponse[] | RawRolResponse): RolResponse[] => {
+  // Si es un array, mapear cada elemento
+  if (Array.isArray(rawDataArray)) {
+    return rawDataArray.map(mapRawToRolResponse);
+  }
+  
+  // Si es un objeto único (la API a veces devuelve un solo rol), convertirlo a array
+  if (rawDataArray && typeof rawDataArray === 'object') {
+    return [mapRawToRolResponse(rawDataArray)];
+  }
+  
+  // Si no es ni array ni objeto, devolver array vacío
+  return [];
+};
   
   export { mapRawToRolResponse, mapRawArrayToRolResponseArray };

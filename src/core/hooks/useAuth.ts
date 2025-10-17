@@ -63,6 +63,11 @@ export const useAuth = (): UseAuthReturn => {
   const [authAttempts, setAuthAttempts] = useState<number>(0);
   const maxAuthAttempts = 3; // Máximo número de intentos
   const cache = useRef(new Map());
+  
+  // Ref para trackear intentos de loadUserData y evitar loops
+  const loadUserDataAttemptsRef = useRef(0);
+  const maxLoadUserDataAttempts = 3;
+  const hasRolesBeenLoadedRef = useRef(false); // Flag para saber si ya intentamos cargar roles
 
   // Inicialización y verificación de estado de autenticación
   useEffect(() => {
@@ -119,6 +124,24 @@ export const useAuth = (): UseAuthReturn => {
   }, []);
 
   const loadUserData = useCallback(async () => {
+    // IMPORTANTE: Verificar límite de intentos para evitar loop infinito
+    if (loadUserDataAttemptsRef.current >= maxLoadUserDataAttempts) {
+      // Si llegamos aquí sin roles, es porque la API no los devuelve
+      if (roles.length === 0) {
+        hasRolesBeenLoadedRef.current = true; // Marcar como intentado
+        setError("No se pudieron cargar los roles del usuario");
+        setLoading(false);
+        
+        // Redirigir a unauthorized después de un breve delay
+        setTimeout(() => {
+          window.location.href = '/unauthorized';
+        }, 1000);
+      }
+      return;
+    }
+    
+    loadUserDataAttemptsRef.current += 1;
+    
     if (!isSignedIn) {
       setUsuario(null);
       setUsuarioAD(null);
@@ -126,11 +149,20 @@ export const useAuth = (): UseAuthReturn => {
       setError(null);
       setErrorAD(null);
       setErrorRoles(null);
+      loadUserDataAttemptsRef.current = 0;
+      hasRolesBeenLoadedRef.current = false;
       return;
     }
     
-    // Si ya tenemos todos los datos, no volvemos a cargarlos
-    if (usuario && usuarioAD && roles.length > 0 && !loading) {
+    // CRÍTICO: Si tenemos usuario pero NO roles, forzar recarga
+    // Esto soluciona el problema de datos viejos en localStorage
+    if (usuario && roles.length === 0 && !hasRolesBeenLoadedRef.current) {
+      // NO hacer return, continuar con la carga de roles
+    }
+    // Si ya tenemos todos los datos (incluyendo roles), no volvemos a cargarlos
+    else if (usuario && usuarioAD && roles.length > 0 && !loading) {
+      hasRolesBeenLoadedRef.current = true; // Marcar como cargado exitosamente
+      loadUserDataAttemptsRef.current = 0; // Resetear contador
       // PERO verificar si falta la foto y obtenerla si es necesario
       if (usuario && !usuario.photo) {
         try {
@@ -220,6 +252,7 @@ export const useAuth = (): UseAuthReturn => {
         });
         
         const email = userData.mail || userData.userPrincipalName;
+        
         if (email) {
 
           //Ejecutar llamadas en paralelo para mejorar rendimiento
@@ -238,17 +271,25 @@ export const useAuth = (): UseAuthReturn => {
 
           // Procesar resultado de roles
           if (rolesDataResult.status === 'fulfilled') {
-            setRoles(rolesDataResult.value);
-            setErrorRoles(null);
             
-            //Guardar nombres de rol (no sensibles)
             if (rolesDataResult.value && rolesDataResult.value.length > 0) {
+              setRoles(rolesDataResult.value);
+              setErrorRoles(null);
+              hasRolesBeenLoadedRef.current = true; // Marcar como cargado exitosamente
+              loadUserDataAttemptsRef.current = 0; // Resetear contador de intentos
+              
+              //Guardar nombres de rol (no sensibles)
               const roleNames = rolesDataResult.value.map(role => role.Rol);
               SecureStorageWrapper.saveUserBasicInfo({
                 roles: roleNames
               });
+            } else {
+              hasRolesBeenLoadedRef.current = true; // Marcar como intentado
+              setRoles([]); // Asegurar que está vacío
+              setErrorRoles("El usuario no tiene roles asignados");
             }
           } else {
+            hasRolesBeenLoadedRef.current = true; // Marcar como intentado (aunque falló)
             setErrorRoles(rolesDataResult.reason instanceof Error ? rolesDataResult.reason.message : String(rolesDataResult.reason));
           }
         } else {
@@ -273,14 +314,39 @@ export const useAuth = (): UseAuthReturn => {
     } finally {
       setLoading(false);
     }
-  }, [isSignedIn, usuario, usuarioAD, roles.length, loading, setIsSignedIn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedIn, usuario, usuarioAD, roles.length, setIsSignedIn]); // Removemos 'loading' para evitar el loop
 
   // Asegurarnos de que loadUserData se llame cuando el usuario inicie sesión
   useEffect(() => {
-    if (isSignedIn && !loading) {
-      loadUserData();
+    // NO verificar roles si estamos en /unauthorized para evitar loop de redirección
+    const isUnauthorizedPage = window.location.pathname === '/unauthorized';
+    
+    // Si estamos en /unauthorized, NO hacer nada para evitar loop
+    if (isUnauthorizedPage) {
+      return;
     }
-  }, [isSignedIn, loadUserData]);
+    
+    // Solo cargar si:
+    // 1. Está autenticado
+    // 2. No está cargando
+    // 3. No tenemos usuario O no tenemos roles
+    // 4. NO hemos intentado cargar roles previamente (evita loop si la API no devuelve roles)
+    if (isSignedIn && !loading && (!usuario || roles.length === 0) && !hasRolesBeenLoadedRef.current) {
+      // Cargar si no tenemos datos de usuario O si no tenemos roles
+      loadUserData();
+    } else if (isSignedIn && !loading && hasRolesBeenLoadedRef.current && roles.length === 0 && loadUserDataAttemptsRef.current >= maxLoadUserDataAttempts) {
+      // Si ya intentamos cargar roles MÚLTIPLES veces pero no hay, redirigir a unauthorized
+      setTimeout(() => {
+        window.location.href = '/unauthorized';
+      }, 500);
+    } else if (isSignedIn && !loading && hasRolesBeenLoadedRef.current && roles.length === 0 && loadUserDataAttemptsRef.current < maxLoadUserDataAttempts) {
+      // Estado inconsistente: marcado como cargado pero sin roles y sin haber llegado al límite
+      // Resetear para reintentar
+      hasRolesBeenLoadedRef.current = false;
+      loadUserDataAttemptsRef.current = 0;
+    }
+  }, [isSignedIn, loading, usuario, loadUserData, roles.length]);
 
   const checkAuthentication = useCallback(async () => {
     try {
@@ -304,6 +370,9 @@ export const useAuth = (): UseAuthReturn => {
           setUsuarioAD(null);
           setRoles([]);
           cache.current.clear();
+          // Resetear refs de tracking
+          loadUserDataAttemptsRef.current = 0;
+          hasRolesBeenLoadedRef.current = false;
         }
       }
       
@@ -350,6 +419,10 @@ export const useAuth = (): UseAuthReturn => {
       
       //Limpiar datos de SecureStorageWrapper
       SecureStorageWrapper.clearAuthData();
+      
+      // Resetear refs de tracking
+      loadUserDataAttemptsRef.current = 0;
+      hasRolesBeenLoadedRef.current = false;
       
       // Limpiar estado local ANTES del logout de MSAL
       localStorage.removeItem('isLogin');

@@ -1,6 +1,6 @@
 import { theme } from '@/core/styles/theme';
 
-export const headerStyles = {
+export const mainPageHeaderStyles = {
   backgroundColor: theme.colors.primary,
   padding: '0.8rem',
   width: '100%',

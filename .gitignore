@@ -58,3 +58,5 @@ verify-*.js
 coverage/
 .nyc_output/
 *.lcov
+*.tgz
+.backup-*

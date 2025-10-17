@@ -10,6 +10,7 @@ import { ElementMenu } from '../interfaces/IMenusElementos'
 
 const ApiRoles = async(mail: string): Promise<RolResponse[]> => {
   const ApiUrl = `${GetApiArquitectura()}/Rol/mail/${mail}/app/${GetSistema().codigo}`;
+  
   try {
       const Response = await FetchWithTimeout(ApiUrl, {
           method: "GET",
